@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOT_FILES=(.tmux-rename-session .tmux.conf .vimrc)
+DOT_FILES=(.tmux-rename-session .tmux.conf .vimrc .zprezto .zlogin .zlogout .zprofile .zshenv .zshrc)
 
 for file in ${DOT_FILES[@]}; do
   if [ -e $HOME/$file ]; then
