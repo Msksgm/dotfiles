@@ -140,6 +140,7 @@ bindkey "^A" beginning-of-line
 bindkey "^E" end-of-line
 bindkey "^F" forward-char
 bindkey "^B" backword-char
+bindkey "^D" delete-char-or-list
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
