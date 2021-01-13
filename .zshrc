@@ -120,3 +120,33 @@ PS1='$(show_virtual_env)'$PS1
 if [ -e ".envrc" ]; then
     direnv reload
 fi
+
+source /Users/sugimotomasaki/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# 補完
+zinit light zsh-users/zsh-autosuggestions
+
+# シンタックスハイライト
+zinit light zdharma/fast-syntax-highlighting
+
+# Ctrl+r でコマンド履歴を検索
+zinit light zdharma/history-search-multi-word
+
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+
+bindkey "^P" up-line-or-search
+bindkey "^N" down-line-or-search
+bindkey "^A" beginning-of-line
+bindkey "^E" end-of-line
+bindkey "^F" forward-char
+bindkey "^B" backword-char
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
