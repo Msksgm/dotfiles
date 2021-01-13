@@ -139,7 +139,7 @@ bindkey "^N" down-line-or-search
 bindkey "^A" beginning-of-line
 bindkey "^E" end-of-line
 bindkey "^F" forward-char
-bindkey "^B" backword-char
+bindkey "^B" backward-char
 bindkey "^D" delete-char-or-list
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
