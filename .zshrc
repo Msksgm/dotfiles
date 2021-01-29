@@ -151,3 +151,6 @@ bindkey "^D" delete-char-or-list
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
+# mysql 5.7.31
+export PATH=/usr/local/mysql/bin:$PATH
