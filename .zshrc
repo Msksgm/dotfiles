@@ -141,6 +141,7 @@ bindkey "^E" end-of-line
 bindkey "^F" forward-char
 bindkey "^B" backward-char
 bindkey "^D" delete-char-or-list
+bindkey "^Y" yank
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
