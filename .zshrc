@@ -155,3 +155,5 @@ fi
 
 # mysql 5.7.31
 export PATH=/usr/local/mysql/bin:$PATH
+
+alias c='code'
