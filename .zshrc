@@ -28,8 +28,6 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-# 20200507
-alias jnote='jupyter-notebook'
 
 # 20200615
 export PATH="$HOME/.anyenv/bin:$PATH"
