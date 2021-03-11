@@ -28,11 +28,6 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-# 20191128
-alias push='git push'
-alias pull='git pull'
-alias g='git'
-
 # 20200507
 alias jnote='jupyter-notebook'
 
