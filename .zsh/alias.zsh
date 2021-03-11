@@ -17,3 +17,6 @@ alias de='docker exec -it $(docker ps | peco | cut -d " " -f 1) /bin/bash'
 
 # .DS_Storeを削除
 alias dsstore="find . -name '*.DS_Store' -type f -ls -delete"
+
+# vscode
+alias c='code'
