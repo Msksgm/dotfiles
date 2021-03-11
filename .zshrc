@@ -40,7 +40,6 @@ if [ -f '/Users/sugimotomasaki/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/sugimotomasaki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugimotomasaki/google-cloud-sdk/completion.zsh.inc'; fi
 
-alias dsstore="find . -name '*.DS_Store' -type f -ls -delete"
 export PATH="/usr/local/opt/tcl-tk/bin:$PATH"
 export LDFLAGS="-L/usr/local/opt/tcl-tk/lib"
 export CPPFLAGS="-I/usr/local/opt/tcl-tk/include"

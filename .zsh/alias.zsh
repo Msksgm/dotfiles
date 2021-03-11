@@ -14,3 +14,6 @@ alias -g lb='`git branch | peco --prompt "GIT BRANCH>" | head -n 1 | sed -e "s/^
 
 ## dockerコンテナに入る。deで実行できる
 alias de='docker exec -it $(docker ps | peco | cut -d " " -f 1) /bin/bash'
+
+# .DS_Storeを削除
+alias dsstore="find . -name '*.DS_Store' -type f -ls -delete"
