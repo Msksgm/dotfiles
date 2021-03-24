@@ -20,3 +20,6 @@ alias dsstore="find . -name '*.DS_Store' -type f -ls -delete"
 
 # vscode
 alias c='code'
+
+# open
+alias o='open'
