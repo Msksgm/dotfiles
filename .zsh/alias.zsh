@@ -23,3 +23,6 @@ alias c='code'
 
 # open
 alias o='open'
+
+# chrome
+alias chrome='open /Applications/Google\ Chrome.app/'
