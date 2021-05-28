@@ -1,0 +1,32 @@
+[[plugins]]
+repo = 'fatih/vim-go'
+
+[[plugins]]
+repo = 'junegunn/fzf'
+build_on = '''
+./install -all
+'''
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+
+[[plugins]]
+repo = 'previm/previm'
+
+[[plugins]]
+repo = 'mattn/vim-maketable'
+
+[[plugins]]
+repo = 'vim-jp/vimdoc-ja'
+
+[[plugins]]
+repo = 'skanehira/translate.vim'
+
+[[plugins]]
+repo = 'skanehira/docker.vim'
+
+[[plugins]] # easy-motion
+repo = 'easymotion/vim-easymotion'
+
+[[plugin]]
+repo = 'itchyny/lightline.vim'
