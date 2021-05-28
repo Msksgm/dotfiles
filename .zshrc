@@ -1,3 +1,15 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+
 #
 # Executes commands at the start of an interactive session.
 #
@@ -117,7 +129,6 @@ zinit light zdharma/fast-syntax-highlighting
 # Ctrl+r でコマンド履歴を検索
 zinit light zdharma/history-search-multi-word
 
-zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 bindkey "^P" up-line-or-search
 bindkey "^N" down-line-or-search
@@ -128,15 +139,6 @@ bindkey "^B" backward-char
 bindkey "^D" delete-char-or-list
 bindkey "^Y" yank
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
 
 # mysql 5.7.31
 export PATH=/usr/local/mysql/bin:$PATH
