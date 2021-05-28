@@ -9,3 +9,5 @@ do
 
     ln -snfv "$DOTPATH/$f" "$HOME"/"$f"
 done
+
+ln -snfv "$DOTPATH"/dein.toml "$HOME"/dein.toml
