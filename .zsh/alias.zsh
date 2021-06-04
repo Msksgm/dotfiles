@@ -26,3 +26,6 @@ alias o='open'
 
 # chrome
 alias chrome='open /Applications/Google\ Chrome.app/'
+
+# .env
+alias export-dotenv='export $(cat .env | grep -v ^# | xargs)'
