@@ -152,3 +152,36 @@ if [ -d $ZSHHOME -a -r $ZSHHOME -a \
             [ \( -f $i -o -h $i \) -a -r $i ] && . $i
     done
 fi
+
+# For phpenv install php
+
+# bison
+export PATH="/usr/local/opt/bison/bin:$PATH"
+
+# bzip2
+export PATH="/usr/local/opt/bzip2/bin:$PATH"
+# For compilers to find bzip2
+# export LDFLAGS="-L/usr/local/opt/bzip2/lib"
+# export CPPFLAGS="-I/usr/local/opt/bzip2/include"
+
+# libiconv
+export PATH="/usr/local/opt/libiconv/bin:$PATH"
+# For compilers to find libiconv
+# export LDFLAGS="-L/usr/local/opt/libiconv/lib"
+# export CPPFLAGS="-I/usr/local/opt/libiconv/include"
+
+# libedit
+export LDFLAGS="-L/usr/local/opt/libedit/lib"
+export CPPFLAGS="-I/usr/local/opt/libedit/include"
+# For pkg-config to find libedit
+# export PKG_CONFIG_PATH="/usr/local/opt/libedit/lib/pkgconfig"
+
+# libxml2
+export PATH="/usr/local/opt/libxml2/bin:$PATH"
+
+export CFLAGS="-Wno-error=implicit-function-declaratiion -DU_DEFINE_FALSE_AND_TRUE=1"
+export CXXFLAGS="-Wno-error=implicit-function-declaratiion -DU_DEFINE_FALSE_AND_TRUE=1"
+
+export PATH="/usr/local/opt/openssl/bin:$PATH"
+export LDFLAGS="-L/usr/local/opt/openssl/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl/include"
