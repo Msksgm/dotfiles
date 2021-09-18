@@ -185,3 +185,8 @@ export CXXFLAGS="-Wno-error=implicit-function-declaratiion -DU_DEFINE_FALSE_AND_
 export PATH="/usr/local/opt/openssl/bin:$PATH"
 export LDFLAGS="-L/usr/local/opt/openssl/lib"
 export CPPFLAGS="-I/usr/local/opt/openssl/include"
+
+# For goenv
+eval "$(goenv init -)"
+export PATH="$GOROOT/bin/$PATH"
+export PATH="$PATH:$GOPATH/bin"
