@@ -29,3 +29,11 @@ alias chrome='open /Applications/Google\ Chrome.app/'
 
 # .env
 alias export-dotenv='export $(cat .env | grep -v ^# | xargs)'
+
+# terraform
+alias tf="terraform"
+alias tfi="terraform init"
+alias tfp="terraform plan"
+alias tfa="terraform apply"
+alias tfv="terraform validate"
+alias tff="terraform fmt -recursive"
