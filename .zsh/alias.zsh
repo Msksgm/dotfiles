@@ -43,3 +43,10 @@ alias tff="terraform fmt -recursive"
 
 # sail
 alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
+
+# docker
+alias d='docker'
+alias dp='docker ps'
+alias dc='docker compose'
+alias dcu='docker compose up'
+alias dcd='docker compose down'
