@@ -40,3 +40,6 @@ alias tfd="terraform destroy"
 alias tfda="terraform destroy -auto-approve"
 alias tfv="terraform validate"
 alias tff="terraform fmt -recursive"
+
+# sail
+alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
