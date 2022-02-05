@@ -127,7 +127,7 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
 
 # Ctrl+r でコマンド履歴を検索
-zinit light zdharma/history-search-multi-word
+# zinit light zdharma/history-search-multi-word
 
 
 bindkey "^P" up-line-or-search
