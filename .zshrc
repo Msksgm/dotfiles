@@ -118,7 +118,7 @@ if [ -e ".envrc" ]; then
     direnv reload
 fi
 
-source /Users/sugimotomasaki/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source /Users/sugimotomasaki/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # 補完
 zinit light zsh-users/zsh-autosuggestions
