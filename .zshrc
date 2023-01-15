@@ -195,3 +195,5 @@ source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.
 
 # ocaml
 eval $(opam env)
+
+setopt nonomatch
