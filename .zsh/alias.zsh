@@ -53,6 +53,7 @@ alias dcd='docker compose down'
 
 # gnu
 alias awk='gawk'
+alias sed='gsed'
 
 # man
 alias man='env LANG=ja_JP.UTF-8 man'
