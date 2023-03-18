@@ -52,9 +52,9 @@ alias dcu='docker compose up'
 alias dcd='docker compose down'
 
 # gnu
-alias awk='gawk'
-alias sed='gsed'
-alias grep='ggrep'
+alias -g awk='gawk'
+alias -g sed='gsed'
+alias -g grep='ggrep'
 
 # man
 alias man='env LANG=ja_JP.UTF-8 man'
