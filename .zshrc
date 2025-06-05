@@ -42,8 +42,6 @@ zinit light-mode for \
 
 
 # 20200615
-export PATH="$HOME/.anyenv/bin:$PATH"
-eval "$(anyenv init -)"
 export PATH=$(brew --prefix openssl)/bin:$PATH
 
 # The next line updates PATH for the Google Cloud SDK.
@@ -101,9 +99,6 @@ function peco-cdr() {
 zle -N peco-cdr
 bindkey '^t' peco-cdr
 
-
-# rbenv
-eval "$(rbenv init -)"
 
 # direnv
 eval "$(direnv hook zsh)"
