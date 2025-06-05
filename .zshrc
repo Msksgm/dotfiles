@@ -197,3 +197,5 @@ source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.
 eval $(opam env)
 
 setopt nonomatch
+
+eval "$(/usr/local/bin/mise activate zsh)"
