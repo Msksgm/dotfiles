@@ -202,3 +202,11 @@ setopt interactivecomments
 
 export PATH=/Users/sugimotomasaki/go/bin:/Users/sugimotomasaki/.local/share/mise/installs/node/22.16.0/bin:/Users/sugimotomasaki/.local/share/mise/installs/npm/11.4.1/bin:/Users/sugimotomasaki/.local/share/mise/installs/python/3.13.6/bin:/Users/sugimotomasaki/.local/share/mise/installs/uv/0.8.8/uv-x86_64-apple-darwin:/Users/sugimotomasaki/.opam/default/bin:/usr/local/Caskroom/gcloud-cli/latest/google-cloud-sdk/bin:/Users/sugimotomasaki/google-cloud-sdk/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/X11/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/Applications/TeXLive/Library/texlive/2016/bin/x86_64-darwin:/Applications/TeXLive/Library/mactexaddons/bin:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Postgres.app/Contents/Versions/latest/bin:/usr/local/Caskroom/gcloud-cli/latest/google-cloud-sdk/bin:/Users/sugimotomasaki/google-cloud-sdk/bin:/Users/sugimotomasaki/.zinit/polaris/bin:/Applications/iTerm.app/Contents/Resources/utilities
 
+# bun completions
+[ -s "/Users/sugimotomasaki/.bun/_bun" ] && source "/Users/sugimotomasaki/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# export ANTHROPIC_MODEL="claude-opus-4-1-20250805"
