@@ -42,7 +42,7 @@ zinit light-mode for \
 
 
 # 20200615
-export PATH=$(brew --prefix openssl)/bin:$PATH
+# export PATH=$(brew --prefix openssl)/bin:$PATH
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/sugimotomasaki/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sugimotomasaki/google-cloud-sdk/path.zsh.inc'; fi
@@ -50,10 +50,10 @@ if [ -f '/Users/sugimotomasaki/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/sugimotomasaki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugimotomasaki/google-cloud-sdk/completion.zsh.inc'; fi
 
-export PATH="/usr/local/opt/tcl-tk/bin:$PATH"
+# export PATH="/usr/local/opt/tcl-tk/bin:$PATH"
 export LDFLAGS="-L/usr/local/opt/tcl-tk/lib"
 export CPPFLAGS="-I/usr/local/opt/tcl-tk/include"
-export PKG_CONFIG_PATH="/usr/local/opt/tcl-tk/lib/pkgconfig"
+# export PKG_CONFIG_PATH="/usr/local/opt/tcl-tk/lib/pkgconfig"
 export PYTHON_CONFIGURE_OPTS="--with-tcltk-includes='-I/usr/local/opt/tcl-tk/include' --with-tcltk-libs='-L/usr/local/opt/tcl-tk/lib -ltcl8.6 -ltk8.6'"
 
 # lsの色を変更
@@ -136,7 +136,7 @@ bindkey "^Y" yank
 
 
 # mysql 5.7.31
-export PATH=/usr/local/mysql/bin:$PATH
+# export PATH=/usr/local/mysql/bin:$PATH
 
 ZSHHOME="${HOME}/dotfiles/.zsh"
 
@@ -151,16 +151,16 @@ fi
 # For phpenv install php
 
 # bison
-export PATH="/usr/local/opt/bison/bin:$PATH"
+# export PATH="/usr/local/opt/bison/bin:$PATH"
 
 # bzip2
-export PATH="/usr/local/opt/bzip2/bin:$PATH"
+# export PATH="/usr/local/opt/bzip2/bin:$PATH"
 # For compilers to find bzip2
 # export LDFLAGS="-L/usr/local/opt/bzip2/lib"
 # export CPPFLAGS="-I/usr/local/opt/bzip2/include"
 
 # libiconv
-export PATH="/usr/local/opt/libiconv/bin:$PATH"
+# export PATH="/usr/local/opt/libiconv/bin:$PATH"
 # For compilers to find libiconv
 # export LDFLAGS="-L/usr/local/opt/libiconv/lib"
 # export CPPFLAGS="-I/usr/local/opt/libiconv/include"
@@ -172,17 +172,17 @@ export CPPFLAGS="-I/usr/local/opt/libedit/include"
 # export PKG_CONFIG_PATH="/usr/local/opt/libedit/lib/pkgconfig"
 
 # libxml2
-export PATH="/usr/local/opt/libxml2/bin:$PATH"
+# export PATH="/usr/local/opt/libxml2/bin:$PATH"
 
-export CFLAGS="-Wno-error=implicit-function-declaratiion -DU_DEFINE_FALSE_AND_TRUE=1"
-export CXXFLAGS="-Wno-error=implicit-function-declaratiion -DU_DEFINE_FALSE_AND_TRUE=1"
+export CFLAGS="-Wno-error=implicit-function-declaration -DU_DEFINE_FALSE_AND_TRUE=1"
+export CXXFLAGS="-Wno-error=implicit-function-declaration -DU_DEFINE_FALSE_AND_TRUE=1"
 
-export PATH="/usr/local/opt/openssl/bin:$PATH"
+# export PATH="/usr/local/opt/openssl/bin:$PATH"
 export LDFLAGS="-L/usr/local/opt/openssl/lib"
 export CPPFLAGS="-I/usr/local/opt/openssl/include"
 
 export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+# export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 # gcloud
 source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
@@ -194,3 +194,11 @@ eval $(opam env)
 setopt nonomatch
 
 eval "$(/usr/local/bin/mise activate zsh)"
+
+export PATH=$(echo $PATH | sed "s|Applications/IntelliJ IDEA.app/Contents/MacOS':|/Applications/IntelliJ IDEA.app/Contents/MacOS:|g")
+
+# enable comment on command line mode
+setopt interactivecomments
+
+export PATH=/Users/sugimotomasaki/go/bin:/Users/sugimotomasaki/.local/share/mise/installs/node/22.16.0/bin:/Users/sugimotomasaki/.local/share/mise/installs/npm/11.4.1/bin:/Users/sugimotomasaki/.local/share/mise/installs/python/3.13.6/bin:/Users/sugimotomasaki/.local/share/mise/installs/uv/0.8.8/uv-x86_64-apple-darwin:/Users/sugimotomasaki/.opam/default/bin:/usr/local/Caskroom/gcloud-cli/latest/google-cloud-sdk/bin:/Users/sugimotomasaki/google-cloud-sdk/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/X11/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/Applications/TeXLive/Library/texlive/2016/bin/x86_64-darwin:/Applications/TeXLive/Library/mactexaddons/bin:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Postgres.app/Contents/Versions/latest/bin:/usr/local/Caskroom/gcloud-cli/latest/google-cloud-sdk/bin:/Users/sugimotomasaki/google-cloud-sdk/bin:/Users/sugimotomasaki/.zinit/polaris/bin:/Applications/iTerm.app/Contents/Resources/utilities
+
