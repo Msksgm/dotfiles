@@ -2,12 +2,11 @@
 
 DOTPATH=~/dotfiles
 
-for f in .??*
-do
-    [[ "$f" == ".git" ]] && continue
-    [[ "$f" == ".DS_Store" ]] && continue
+for f in .??*; do
+  [[ "$f" == ".git" ]] && continue
+  [[ "$f" == ".DS_Store" ]] && continue
 
-    ln -snfv "$DOTPATH/$f" "$HOME"/"$f"
+  ln -snfv "$DOTPATH/$f" "$HOME"/"$f"
 done
 
 ln -snfv "$DOTPATH"/dein.toml "$HOME"/dein.toml

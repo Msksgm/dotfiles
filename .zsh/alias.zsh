@@ -59,3 +59,6 @@ alias -g grep='ggrep'
 # man
 alias man='env LANG=ja_JP.UTF-8 man'
 alias eman='env LANG=C man'
+
+# kubectl
+alias k='kubectl'

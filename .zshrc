@@ -48,7 +48,7 @@ zinit light-mode for \
 if [ -f '/Users/sugimotomasaki/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sugimotomasaki/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/sugimotomasaki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugimotomasaki/google-cloud-sdk/completion.zsh.inc'; fi
+# if [ -f '/Users/sugimotomasaki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sugimotomasaki/google-cloud-sdk/completion.zsh.inc'; fi
 
 # export PATH="/usr/local/opt/tcl-tk/bin:$PATH"
 export LDFLAGS="-L/usr/local/opt/tcl-tk/lib"
@@ -185,15 +185,15 @@ export GOPATH=$HOME/go
 # export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 # gcloud
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 
 # ocaml
 eval $(opam env)
 
 setopt nonomatch
 
-eval "$(/usr/local/bin/mise activate zsh)"
+eval "$(~/.local/bin/mise activate zsh)"
 
 export PATH=$(echo $PATH | sed "s|Applications/IntelliJ IDEA.app/Contents/MacOS':|/Applications/IntelliJ IDEA.app/Contents/MacOS:|g")
 
@@ -209,4 +209,29 @@ export PATH=/Users/sugimotomasaki/go/bin:/Users/sugimotomasaki/.local/share/mise
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# export ANTHROPIC_MODEL="claude-opus-4-1-20250805"
+## ghqとの連携。ghqの管理化にあるリポジトリを一覧表示する。ctrl - ]にバインド。
+function peco-src () {
+  local selected_dir=$(ghq list -p | peco --prompt="repositories >" --query "$LBUFFER")
+  if [ -n "$selected_dir" ]; then
+    BUFFER="cd ${selected_dir}"
+    zle accept-line
+  fi
+  zle clear-screen
+}
+zle -N peco-src
+bindkey '^]' peco-src
+
+export ANDROID_HOME=$(mise where android-sdk)
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+export PATH="/Applications/IntelliJ IDEA.app/Contents/MacOS:$PATH"
+export VISUAL=nvim
+export EDITOR=nvim
+
+################################################################################
+# cage コマンドの設定とか
+################################################################################
+export XDG_CONFIG_HOME="$HOME/.config"
+
+. "$HOME/.cargo/env"
