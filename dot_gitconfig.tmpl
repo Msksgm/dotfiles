@@ -1,8 +1,8 @@
 [user]
 	name = Msksgm
-	email = msksgm3124@gmail.com
+	email = {{ .email }}
 [core]
-	excludesfile = /Users/sugimotomasaki/.gitignore_global
+	excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
 	editor = vim
 	quotepath = false
 	ignorecase = false
