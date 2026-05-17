@@ -16,6 +16,9 @@ presets:
       - "$HOME/.ansible/tmp"
       - "/dev/tty"
       - "/dev/ttys*"
+      # Claude Code で nvim で操作するときのために必要
+      - "$HOME/.local/state/nvim"
+      - "$HOME/.local/share/nvim"
     allow-keychain: true
     allow-git: true
 
