@@ -13,7 +13,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_zsh/alias.zsh` | `~/.zsh/alias.zsh` |
 | `dot_tmux.conf` | `~/.tmux.conf` |
 | `executable_dot_tmux-rename-session` | `~/.tmux-rename-session` |
-| `dot_gitconfig` | `~/.gitconfig` |
+| `dot_gitconfig.tmpl` | `~/.gitconfig` |
 | `dot_ideavimrc` | `~/.ideavimrc` |
 | `dot_config/nvim/` | `~/.config/nvim/` |
 
@@ -31,8 +31,12 @@ ghq get git@github.com:Msksgm/dotfiles.git    # → ~/workspace/github.com/Msksg
 
 # 4. Configure chezmoi source
 mkdir -p ~/.config/chezmoi
-printf 'sourceDir = "~/workspace/github.com/Msksgm/dotfiles"\n' \
-  > ~/.config/chezmoi/chezmoi.toml
+cat > ~/.config/chezmoi/chezmoi.toml <<'EOF'
+sourceDir = "~/workspace/github.com/Msksgm/dotfiles"
+
+[data]
+  email = "your@email.com"  # used in ~/.gitconfig
+EOF
 
 # 5. Apply dotfiles
 chezmoi apply
