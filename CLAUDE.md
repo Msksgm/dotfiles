@@ -18,7 +18,8 @@ chezmoi による macOS dotfiles リポジトリ。source dir は `~/workspace/g
 ## テンプレート変数
 
 `dot_gitconfig.tmpl` で使用中:
-- `{{ .email }}` — `~/.config/chezmoi/chezmoi.toml` の `[data] email` から注入
+- `{{ .github_username }}` — `~/.config/chezmoi/chezmoi.toml` の `[data] github_username` から注入（GitHub アカウント名 = git の user.name）
+- `{{ .github_email }}` — `~/.config/chezmoi/chezmoi.toml` の `[data] github_email` から注入（GitHub アカウントに紐づく email = git の user.email）
 - `{{ .chezmoi.homeDir }}` — chezmoi が自動提供するホームディレクトリパス
 
 新たにテンプレートを使う場合はファイル名に `.tmpl` を付けて同じ変数を参照できる。
@@ -59,4 +60,4 @@ grep -iE '(token|secret|password|api.?key)' dot_config/foo/bar.conf
 
 - **このリポジトリは public**。機密情報（token、email 等）は直接書かず `{{ .variable }}` でテンプレート化すること
 - ハードコードされたパスは `$HOME`（シェルスクリプト内）または `{{ .chezmoi.homeDir }}`（テンプレート内）を使用すること
-- `dot_gitconfig.tmpl` の `{{ .email }}` は `~/.config/chezmoi/chezmoi.toml` の `[data] email` で注入する。新規マシンでは apply 前にこの設定が必要
+- `dot_gitconfig.tmpl` の `{{ .github_username }}` / `{{ .github_email }}` は `~/.config/chezmoi/chezmoi.toml` の `[data] github_username` / `[data] github_email` で注入する。新規マシンでは apply 前にこの設定が必要
