@@ -21,6 +21,16 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_config/helm/repositories.yaml` | `~/.config/helm/repositories.yaml` |
 | `dot_config/cage/presets.yml` | `~/.config/cage/presets.yml` |
 
+## Excluded from management
+
+以下は認証トークンや機密情報を含むため管理対象外。
+
+| パス | 理由 |
+|---|---|
+| `~/.config/gh/` | GitHub CLI 認証トークン |
+| `~/.config/github-copilot/` | GitHub Copilot 認証トークン |
+| `~/.config/configstore/` | 各種ツールの認証情報 |
+
 ## New machine setup
 
 ```sh
