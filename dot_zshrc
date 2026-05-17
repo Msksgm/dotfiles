@@ -138,7 +138,7 @@ bindkey "^Y" yank
 # mysql 5.7.31
 # export PATH=/usr/local/mysql/bin:$PATH
 
-ZSHHOME="${HOME}/dotfiles/.zsh"
+ZSHHOME="${HOME}/.zsh"
 
 if [ -d $ZSHHOME -a -r $ZSHHOME -a \
      -x $ZSHHOME ]; then
