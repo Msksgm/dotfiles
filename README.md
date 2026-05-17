@@ -27,6 +27,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 
 | パス | 理由 |
 |---|---|
+| `~/.config/chezmoi/` | chezmoi 設定ファイル (`sourceDir` / `[data] email` を含む) |
 | `~/.config/gh/` | GitHub CLI 認証トークン |
 | `~/.config/github-copilot/` | GitHub Copilot 認証トークン |
 | `~/.config/configstore/` | 各種ツールの認証情報 |
