@@ -1,0 +1,15 @@
+[tools]
+node = "24.11.1"
+npm = "11.4.1"
+python = "3.13.6"
+terraform = "1.14.1"
+uv = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = []
+experimental = true
+
+[tools."http:profilecli"]
+version = "2.0.1"
+url = "https://github.com/grafana/pyroscope/releases/download/v{{version}}/profilecli_{{version}}_darwin_arm64.tar.gz"
+checksum = "sha256:2cee2f7a6b695ac6545ed4b284505290485778c43cf720ad468e42e10e2ce2c9"

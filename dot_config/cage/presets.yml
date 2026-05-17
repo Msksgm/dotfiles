@@ -1,0 +1,25 @@
+presets:
+  claude-code:
+    allow:
+      - "."
+      - path: "/tmp"
+        eval-symlinks: true
+      - "$HOME/.npm"
+      - "$HOME/.npm-global"
+      - "$HOME/.gradle"
+      - "$HOME/.claude"
+      - "$HOME/.claude.json"
+      - "$HOME/.config/claude"
+      - "$HOME/.mcp-auth"
+      - "$HOME/.m2"
+      - "$HOME/.rustup"
+      - "$HOME/.ansible/tmp"
+      - "/dev/tty"
+      - "/dev/ttys*"
+    allow-keychain: true
+    allow-git: true
+
+auto-presets:
+  - command: claude
+    presets:
+      - claude-code

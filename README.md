@@ -16,6 +16,10 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_gitconfig.tmpl` | `~/.gitconfig` |
 | `dot_ideavimrc` | `~/.ideavimrc` |
 | `dot_config/nvim/` | `~/.config/nvim/` |
+| `dot_config/karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json` |
+| `dot_config/mise/config.toml` | `~/.config/mise/config.toml` |
+| `dot_config/helm/repositories.yaml` | `~/.config/helm/repositories.yaml` |
+| `dot_config/cage/presets.yml` | `~/.config/cage/presets.yml` |
 
 ## New machine setup
 
