@@ -4,3 +4,4 @@ Brewfile
 _archive
 _archive/**
 .gitignore
+.config/nvim/lazyvim.json

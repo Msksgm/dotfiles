@@ -54,7 +54,17 @@ grep -iE '(token|secret|password|api.?key)' dot_config/foo/bar.conf
 
 ## .chezmoiignore
 
-`README.md` / `Brewfile` / `_archive/` / `.gitignore` / `CLAUDE.md` は chezmoi の管理外（home に展開されない）。新たに管理外ファイルを追加する場合はこのファイルに記載する。
+**パスは target 基準** (`dot_` プレフィックスを付けず、home からの相対パス)。例: source の `dot_config/nvim/lazyvim.json` を除外したい場合は `.config/nvim/lazyvim.json` と書く。
+
+除外対象に追加すべき典型ケース:
+- **リポジトリのメタファイル** (`README.md` / `CLAUDE.md` / `.gitignore` 等) — home に展開する意味がないもの
+- **ツールが自動更新するファイル** (LazyVim の `lazyvim.json` 等) — apply のたびに diff が出続けて煩わしく、source 側の値で上書きされると挙動が壊れる
+- **`_archive/`** — 退避用ディレクトリ。`_archive/**` も併記する
+- **機密情報を含むファイル** — `~/.config/gh/` や `~/.config/chezmoi/` 等の認証トークン類
+
+追加後は **README.md の "Excluded from management" テーブルに理由付きで追記** すること。"Managed files" 配下のディレクトリ (例: `dot_config/nvim/`) から個別ファイルを除外した場合も同様に Excluded 側に明記する (テーブルを見ただけで除外理由が分かるようにするため)。
+
+source 側にファイルが残っていると死蔵されるので、`.chezmoiignore` への追記と同時に `rm dot_config/...` で source ファイルも削除する。
 
 ## 注意事項
 

@@ -31,6 +31,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `~/.config/gh/` | GitHub CLI 認証トークン |
 | `~/.config/github-copilot/` | GitHub Copilot 認証トークン |
 | `~/.config/configstore/` | 各種ツールの認証情報 |
+| `~/.config/nvim/lazyvim.json` | LazyVim が自動更新する既読状態ファイル |
 
 ## New machine setup
 
