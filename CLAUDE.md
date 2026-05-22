@@ -24,9 +24,12 @@ chezmoi による macOS dotfiles リポジトリ。source dir は `~/workspace/g
 
 新たにテンプレートを使う場合はファイル名に `.tmpl` を付けて同じ変数を参照できる。
 
-## run_once スクリプト
+## run_once / run_onchange スクリプト
 
-`run_once_setup.sh` は `chezmoi apply` 時に**一度だけ**実行される（chezmoi の state DB に実行済みとして記録）。内容変更時は再実行される。現在は `rustup-init` の初期化のみ。
+- `run_once_setup.sh` — `chezmoi apply` 時に**一度だけ**実行される（chezmoi の state DB に実行済みとして記録）。内容変更時は再実行される。現在は `rustup-init` の初期化のみ。
+- `run_onchange_install-packages.sh.tmpl` — `chezmoi apply` 時、**スクリプト内容が変わるたび**に実行される。先頭コメントに `{{ include "Brewfile" | sha256sum }}` で Brewfile のハッシュを埋め込んでいるため、**Brewfile を編集すると次の apply で `brew bundle` が自動実行**される。`.tmpl` なので Go template として評価される。
+
+依存パッケージ（`powerlevel10k` 等）は必ず Brewfile に追加すること。`dot_zshrc` から参照するだけで Brewfile に無いと、新規マシンで未インストールになり壊れる。
 
 ## よく使うコマンド
 
