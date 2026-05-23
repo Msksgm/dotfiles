@@ -20,6 +20,12 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_config/mise/config.toml` | `~/.config/mise/config.toml` |
 | `dot_config/helm/repositories.yaml` | `~/.config/helm/repositories.yaml` |
 | `dot_config/cage/presets.yml` | `~/.config/cage/presets.yml` |
+| `dot_claude/settings.json` | `~/.claude/settings.json` |
+| `dot_claude/empty_CLAUDE.md` | `~/.claude/CLAUDE.md` |
+| `dot_claude/plugins/config.json` | `~/.claude/plugins/config.json` |
+| `dot_claude/plugins/known_marketplaces.json` | `~/.claude/plugins/known_marketplaces.json` |
+| `dot_claude/plugins/private_installed_plugins.json` | `~/.claude/plugins/installed_plugins.json` |
+| `dot_claude/plugins/private_blocklist.json` | `~/.claude/plugins/blocklist.json` |
 
 ## Excluded from management
 
@@ -32,6 +38,14 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `~/.config/github-copilot/` | GitHub Copilot 認証トークン |
 | `~/.config/configstore/` | 各種ツールの認証情報 |
 | `~/.config/nvim/lazyvim.json` | LazyVim が自動更新する既読状態ファイル |
+| `~/.claude.json` | Claude Code OAuth/セッション情報 (253 KB、自動 backup あり) |
+| `~/.claude/sessions/` | アクティブセッション (mode 700、トークン含む) |
+| `~/.claude/projects/` | プロジェクト別トランスクリプト (79 MB、機密含む) |
+| `~/.claude/history.jsonl` | プロンプト履歴 (機密含む) |
+| `~/.claude/paste-cache/`, `shell-snapshots/`, `image-cache/`, `file-history/` | ペースト/環境変数/画像/編集履歴キャッシュ (機密の可能性大) |
+| `~/.claude/cache/`, `backups/`, `plans/`, `tasks/`, `todos/`, `session-env/`, `debug/`, `ide/` | ランタイム生成物。再生成可能 |
+| `~/.claude/statsig/`, `telemetry/`, `stats-cache.json`, `mcp-needs-auth-cache.json` | テレメトリ / SDK キャッシュ |
+| `~/.claude/plugins/cache/`, `plugins/data/`, `plugins/marketplaces/`, `plugins/repos/` | clone 済みプラグインリポジトリ / LSP データ。Claude Code 起動時に再生成 |
 
 ## Template variables
 
@@ -94,4 +108,10 @@ chezmoi apply -v
 
 # Pull remote changes and apply
 chezmoi update
+
+# Claude Code 設定を source 側に同期 (drift したとき)
+chezmoi re-add ~/.claude/settings.json ~/.claude/plugins/known_marketplaces.json \
+               ~/.claude/plugins/installed_plugins.json ~/.claude/plugins/blocklist.json
 ```
+
+> **Note (Claude Code 設定の drift):** `settings.json` の `feedbackSurveyState` や `plugins/installed_plugins.json` の git SHA / タイムスタンプは Claude Code が自動更新するため、`chezmoi diff` で差分が出ることがある。上記 `chezmoi re-add` で source 側を最新に揃えてからコミットすること。
