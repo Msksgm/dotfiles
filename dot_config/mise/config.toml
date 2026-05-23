@@ -5,6 +5,7 @@ python = "3.13.6"
 terraform = "1.14.1"
 uv = "latest"
 java = "21.0.2"
+android-sdk = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []
