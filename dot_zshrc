@@ -44,11 +44,6 @@ zinit light-mode for \
 # 20200615
 # export PATH=$(brew --prefix openssl)/bin:$PATH
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
-
-# The next line enables shell command completion for gcloud.
-# if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
 # export PATH="/usr/local/opt/tcl-tk/bin:$PATH"
 export LDFLAGS="-L/usr/local/opt/tcl-tk/lib"
@@ -184,9 +179,6 @@ export CPPFLAGS="-I/usr/local/opt/openssl/include"
 export GOPATH=$HOME/go
 # export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
-# gcloud
-# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 
 setopt nonomatch
 
@@ -197,7 +189,7 @@ export PATH=$(echo $PATH | sed "s|Applications/IntelliJ IDEA.app/Contents/MacOS'
 # enable comment on command line mode
 setopt interactivecomments
 
-export PATH=$HOME/go/bin:$HOME/.local/share/mise/installs/node/22.16.0/bin:$HOME/.local/share/mise/installs/npm/11.4.1/bin:$HOME/.local/share/mise/installs/python/3.13.6/bin:$HOME/.local/share/mise/installs/uv/0.8.8/uv-x86_64-apple-darwin:/usr/local/Caskroom/gcloud-cli/latest/google-cloud-sdk/bin:$HOME/google-cloud-sdk/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/X11/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/Applications/TeXLive/Library/texlive/2016/bin/x86_64-darwin:/Applications/TeXLive/Library/mactexaddons/bin:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Postgres.app/Contents/Versions/latest/bin:/usr/local/Caskroom/gcloud-cli/latest/google-cloud-sdk/bin:$HOME/google-cloud-sdk/bin:$HOME/.zinit/polaris/bin:/Applications/iTerm.app/Contents/Resources/utilities
+export PATH=$HOME/go/bin:$HOME/.local/share/mise/installs/node/22.16.0/bin:$HOME/.local/share/mise/installs/npm/11.4.1/bin:$HOME/.local/share/mise/installs/python/3.13.6/bin:$HOME/.local/share/mise/installs/uv/0.8.8/uv-x86_64-apple-darwin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/X11/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/Applications/TeXLive/Library/texlive/2016/bin/x86_64-darwin:/Applications/TeXLive/Library/mactexaddons/bin:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Postgres.app/Contents/Versions/latest/bin:$HOME/.zinit/polaris/bin:/Applications/iTerm.app/Contents/Resources/utilities
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
