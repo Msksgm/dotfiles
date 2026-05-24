@@ -11,6 +11,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_zprofile` | `~/.zprofile` |
 | `dot_p10k.zsh` | `~/.p10k.zsh` |
 | `dot_zsh/alias.zsh` | `~/.zsh/alias.zsh` |
+| `dot_zsh/brew_drift_check.zsh` | `~/.zsh/brew_drift_check.zsh` |
 | `dot_tmux.conf` | `~/.tmux.conf` |
 | `executable_dot_tmux-rename-session` | `~/.tmux-rename-session` |
 | `dot_gitconfig.tmpl` | `~/.gitconfig` |
@@ -112,6 +113,10 @@ chezmoi update
 # Claude Code 設定を source 側に同期 (drift したとき)
 chezmoi re-add ~/.claude/settings.json ~/.claude/plugins/known_marketplaces.json \
                ~/.claude/plugins/installed_plugins.json ~/.claude/plugins/blocklist.json
+
+# brew drift: インストール済みだが Brewfile にない formula を追加
+brewfile-add <formula>
+brewfile-add --cask <cask>
 ```
 
 > **Note (Claude Code 設定の drift):** `settings.json` の `feedbackSurveyState` や `plugins/installed_plugins.json` の git SHA / タイムスタンプは Claude Code が自動更新するため、`chezmoi diff` で差分が出ることがある。上記 `chezmoi re-add` で source 側を最新に揃えてからコミットすること。
