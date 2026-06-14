@@ -7,6 +7,8 @@ presets:
       - "$HOME/.npm"
       - "$HOME/.npm-global"
       - "$HOME/.gradle"
+      # Knative 用
+      - "$HOME/.konan"
       - "$HOME/.claude"
       - "$HOME/.claude.json"
       - "$HOME/.config/claude"
