@@ -34,6 +34,8 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 
 > **Note (agent skills):** [`skills`](https://github.com/vercel-labs/skills) CLI で導入する skill の正本は `~/.agents/skills/` (store)。`~/.claude/skills` はそこへの symlink で、Claude Code から同じ skill を共有する。`~/.agents/.skill-lock.json` (どの GitHub ソースから入れたかの記録) を管理対象にしており、これが変わると `run_onchange_after_install-skills.sh` が `chezmoi apply` 時に各 skill を `skills add` で再取得する (Brewfile と同じ仕組み)。skill を追加/削除したら `cp ~/.agents/.skill-lock.json dot_agents/dot_skill-lock.json` で lock を source へ同期してコミットする。store 本体 (`~/.agents/skills/**`) は再生成可能なので `.chezmoiignore` で除外。
 
+> **Note (Claude Code plugins):** プラグインは静的メタデータのみ管理する。`known_marketplaces.json` (登録マーケットプレイス) / `installed_plugins.json` (導入済み plugin の version・cache パス) / `settings.json` の `enabledPlugins` (有効化) の3点で、本体 (`~/.claude/plugins/cache/**`・`marketplaces/**`) は `.chezmoiignore` 済み・Claude Code が起動時にメタデータを見て GitHub から再 clone する。現在は公式 LSP (`gopls-lsp` / `rust-analyzer-lsp` @ `claude-plugins-official`) と [`ecc`](https://github.com/affaan-m/ECC) (`ecc@ecc`) を管理 (ecc は **Claude Code CLI ≥ v2.1.0** 必須)。メタデータが drift したら cheatsheet の `chezmoi re-add` で source へ取り込む。
+
 ## Excluded from management
 
 以下は認証トークンや機密情報を含むため管理対象外。
