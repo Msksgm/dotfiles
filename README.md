@@ -25,6 +25,8 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
 | `dot_claude/agents/*.md` | `~/.claude/agents/*.md` (user-level subagent) |
 | `dot_claude/rules/*.md` | `~/.claude/rules/*.md` (CLAUDE.md から `@`-import するコーディング規約) |
+| `dot_claude/rules/golang/*.md` | `~/.claude/rules/golang/*.md` (Go 固有ルール。`@`-import せず参照用) |
+| `dot_claude/rules/kotlin/*.md` | `~/.claude/rules/kotlin/*.md` (Kotlin 固有ルール。`@`-import せず参照用) |
 | `dot_claude/plugins/config.json` | `~/.claude/plugins/config.json` |
 | `dot_claude/plugins/known_marketplaces.json` | `~/.claude/plugins/known_marketplaces.json` |
 | `dot_claude/plugins/private_installed_plugins.json` | `~/.claude/plugins/installed_plugins.json` |
