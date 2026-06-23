@@ -1,4 +1,3 @@
-tap "derailed/k9s"
 tap "k1low/tap"
 tap "kayac/tap"
 tap "reviewdog/tap"
