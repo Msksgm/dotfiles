@@ -27,6 +27,10 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_claude/plugins/known_marketplaces.json` | `~/.claude/plugins/known_marketplaces.json` |
 | `dot_claude/plugins/private_installed_plugins.json` | `~/.claude/plugins/installed_plugins.json` |
 | `dot_claude/plugins/private_blocklist.json` | `~/.claude/plugins/blocklist.json` |
+| `dot_claude/symlink_skills` | `~/.claude/skills` → `~/.agents/skills` (symlink) |
+| `dot_agents/dot_skill-lock.json` | `~/.agents/.skill-lock.json` |
+
+> **Note (agent skills):** [`skills`](https://github.com/vercel-labs/skills) CLI で導入する skill の正本は `~/.agents/skills/` (store)。`~/.claude/skills` はそこへの symlink で、Claude Code から同じ skill を共有する。`~/.agents/.skill-lock.json` (どの GitHub ソースから入れたかの記録) を管理対象にしており、これが変わると `run_onchange_after_install-skills.sh` が `chezmoi apply` 時に各 skill を `skills add` で再取得する (Brewfile と同じ仕組み)。skill を追加/削除したら `cp ~/.agents/.skill-lock.json dot_agents/dot_skill-lock.json` で lock を source へ同期してコミットする。store 本体 (`~/.agents/skills/**`) は再生成可能なので `.chezmoiignore` で除外。
 
 ## Excluded from management
 
@@ -39,6 +43,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `~/.config/github-copilot/` | GitHub Copilot 認証トークン |
 | `~/.config/configstore/` | 各種ツールの認証情報 |
 | `~/.config/nvim/lazyvim.json` | LazyVim が自動更新する既読状態ファイル |
+| `~/.agents/skills/` | skills CLI が GitHub から取得する store。lock から再生成可能 (`run_onchange_after_install-skills.sh`) |
 | `~/.claude.json` | Claude Code OAuth/セッション情報 (253 KB、自動 backup あり) |
 | `~/.claude/sessions/` | アクティブセッション (mode 700、トークン含む) |
 | `~/.claude/projects/` | プロジェクト別トランスクリプト (79 MB、機密含む) |
@@ -61,6 +66,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `.github_email` | 手動 | `dot_gitconfig.tmpl` | `[data] github_email` → git の `user.email` (GitHub に紐づく email) |
 | `.chezmoi.homeDir` | 自動 | `dot_gitconfig.tmpl` | ホームディレクトリのパス (`excludesfile` に使用) |
 | `.chezmoi.sourceDir` | 自動 | `run_onchange_install-packages.sh.tmpl` | source ディレクトリのパス (`Brewfile` の場所に使用) |
+| `include "..."` | 自動 (関数) | `run_onchange_install-packages.sh.tmpl` / `run_onchange_after_install-skills.sh.tmpl` | source 相対のファイル内容を埋め込む。`sha256sum` と組み合わせ Brewfile / skill-lock の変更検知に使用 |
 
 新たにテンプレートを追加する場合、ファイル名に `.tmpl` を付ければ上記の変数を参照できる。手動変数を増やしたときは**この表と step 4 を更新**すること。
 

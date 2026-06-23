@@ -5,3 +5,4 @@ _archive
 _archive/**
 .gitignore
 .config/nvim/lazyvim.json
+.agents/skills/**

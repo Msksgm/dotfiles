@@ -1,0 +1,39 @@
+#!/bin/bash
+# Restore agent skills from the skills lock file (~/.agents/.skill-lock.json).
+# Re-runs on `chezmoi apply` whenever the lock changes (the hash below changes
+# with it, so chezmoi detects a new script — same trick as the Brewfile).
+#
+# Skills are installed into the canonical store ~/.agents/skills/. ~/.claude/skills
+# is a symlink to that store (managed by chezmoi via dot_claude/symlink_skills), so
+# `-a claude-code` writes land in the store. `after_` guarantees that symlink is
+# created before this script runs.
+#
+# skill-lock hash: {{ include "dot_agents/dot_skill-lock.json" | sha256sum }}
+set -e
+
+# Make brew + mise-managed node/npx available in this non-interactive shell.
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
+if ! command -v npx >/dev/null 2>&1; then
+  echo "skills: npx not found (run 'mise install' first); skipping skill restore" >&2
+  exit 0
+fi
+
+LOCK="$HOME/.agents/.skill-lock.json"
+[ -f "$LOCK" ] || exit 0
+
+# `skills add` always (re)writes the store at ~/.agents/skills/ and fetches the
+# latest version from each skill's GitHub source (the lock pins the source, not an
+# exact hash — same reproducibility model as the Brewfile).
+node -e '
+  const fs = require("fs");
+  const lock = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+  for (const [name, meta] of Object.entries(lock.skills || {})) {
+    if (meta && meta.source) console.log(name + " " + meta.source);
+  }
+' "$LOCK" | while read -r name source; do
+  [ -n "$name" ] || continue
+  echo "skills: installing $name from $source"
+  npx -y skills@1.5.13 add "$source" -g -s "$name" -a claude-code -y
+done
