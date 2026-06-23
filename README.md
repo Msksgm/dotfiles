@@ -22,7 +22,9 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_config/helm/repositories.yaml` | `~/.config/helm/repositories.yaml` |
 | `dot_config/cage/presets.yml` | `~/.config/cage/presets.yml` |
 | `dot_claude/settings.json` | `~/.claude/settings.json` |
-| `dot_claude/empty_CLAUDE.md` | `~/.claude/CLAUDE.md` |
+| `dot_claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
+| `dot_claude/agents/*.md` | `~/.claude/agents/*.md` (user-level subagent) |
+| `dot_claude/rules/*.md` | `~/.claude/rules/*.md` (CLAUDE.md から `@`-import するコーディング規約) |
 | `dot_claude/plugins/config.json` | `~/.claude/plugins/config.json` |
 | `dot_claude/plugins/known_marketplaces.json` | `~/.claude/plugins/known_marketplaces.json` |
 | `dot_claude/plugins/private_installed_plugins.json` | `~/.claude/plugins/installed_plugins.json` |

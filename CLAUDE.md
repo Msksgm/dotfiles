@@ -72,6 +72,12 @@ grep -iE '(token|secret|password|api.?key)' dot_config/foo/bar.conf
 
 source 側にファイルが残っていると死蔵されるので、`.chezmoiignore` への追記と同時に `rm dot_config/...` で source ファイルも削除する。
 
+## Claude Code の user-level 設定 (`dot_claude/`)
+
+- `dot_claude/CLAUDE.md` (→ `~/.claude/CLAUDE.md`) — 全プロジェクト共通の指示。`@rules/*.md` で `~/.claude/rules/` 配下を `@`-import する。
+- `dot_claude/agents/*.md` (→ `~/.claude/agents/*.md`) — user-level subagent (architect / code-reviewer / pm-reviewer / qa-reviewer)。frontmatter に `name` / `description` / `tools` / `model` を持つ通常の Markdown。skills のような symlink/lock 機構の対象外で、ファイルを置くだけで反映される。
+- `dot_claude/rules/*.md` (→ `~/.claude/rules/*.md`) — コーディング規約 docs。`dot_claude/CLAUDE.md` から参照される。
+
 ## 注意事項
 
 - **このリポジトリは public**。機密情報（token、email 等）は直接書かず `{{ .variable }}` でテンプレート化すること
