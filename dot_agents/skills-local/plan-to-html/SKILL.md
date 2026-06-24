@@ -16,7 +16,7 @@ description: plan を HTML でも出力する。Claude Code の plan（~/.claude
 
 ### 2. 雛形の読み込み
 
-スキルフォルダ内の `template.html` を Read ツールで読み込み、`<style>` ブロックをそのまま流用する。
+スキルフォルダ内の `template.html` を Read ツールで読み込む。`<!-- TITLE -->` と `<!-- CONTENT -->` の 2 箇所だけ差し替える。`<style>`・テーマ切り替えボタン（`.theme-toggle`）・インライン `<script>` はそのまま流用する。
 
 ### 3. Markdown → HTML 変換
 
@@ -25,7 +25,7 @@ description: plan を HTML でも出力する。Claude Code の plan（~/.claude
 #### 基本規則
 
 - `<` `>` `&` は必ず HTML エスケープ（`&lt;` `&gt;` `&amp;`）
-- 外部依存ゼロ：`<script>` なし、Web フォントなし、外部 CSS/画像なし
+- 外部依存ゼロ（外部 CSS/画像/Web フォント/CDN なし）。JS は `template.html` 同梱のテーマ切り替え用インラインスクリプトのみ
 - `[[memory-token]]` 等のメモリ参照記法は素のテキストとしてレンダリング
 
 #### 要素変換
@@ -80,22 +80,12 @@ description: plan を HTML でも出力する。Claude Code の plan（~/.claude
 
 ### 4. HTML の組み立て
 
-```html
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>（plan タイトル）</title>
-  <!-- template.html の <style> をそのまま貼る -->
-</head>
-<body>
-<main>
-  <!-- 変換した本文 HTML -->
-</main>
-</body>
-</html>
-```
+`template.html` の 2 箇所のプレースホルダを置換する:
+
+- `<!-- TITLE -->` → plan のタイトル文字列（HTML エスケープ済み）
+- `<!-- CONTENT -->` → 手順 3 で変換した本文 HTML
+
+`<style>`・テーマ切り替えボタン・`<script>` は template.html のものをそのまま使うため、生成 HTML には自動的に含まれる。
 
 ### 5. 書き出し
 

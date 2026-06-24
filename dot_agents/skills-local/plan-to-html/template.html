@@ -5,18 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><!-- TITLE --></title>
   <style>
+    /* ---- Light theme (default) ---- */
     :root {
       --bg: #ffffff; --fg: #1f2328; --muted: #59636e; --border: #d1d9e0;
       --accent: #0969da; --accent-bg: #ddf4ff; --code-bg: #f6f8fa;
       --warn-bg: #fff8c5; --warn-border: #d4a72c; --green: #1a7f37; --red: #cf222e;
     }
+
+    /* ---- Dark theme: OS preference (only when not manually overridden to light) ---- */
     @media (prefers-color-scheme: dark) {
-      :root {
+      :root:not([data-theme="light"]) {
         --bg: #0d1117; --fg: #e6edf3; --muted: #9198a1; --border: #30363d;
         --accent: #4493f8; --accent-bg: #121d2f; --code-bg: #161b22;
         --warn-bg: #2d2611; --warn-border: #bb8009; --green: #3fb950; --red: #f85149;
       }
     }
+
+    /* ---- Dark theme: manually forced (beats OS light setting) ---- */
+    :root[data-theme="dark"] {
+      --bg: #0d1117; --fg: #e6edf3; --muted: #9198a1; --border: #30363d;
+      --accent: #4493f8; --accent-bg: #121d2f; --code-bg: #161b22;
+      --warn-bg: #2d2611; --warn-border: #bb8009; --green: #3fb950; --red: #f85149;
+    }
+
     * { box-sizing: border-box; }
     body {
       background: var(--bg); color: var(--fg);
@@ -66,11 +77,37 @@
     .no { color: var(--red); font-weight: 600; }
     hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
     .meta { font-size: 0.85rem; color: var(--muted); margin-top: -0.4rem; }
+
+    /* ---- Theme toggle button ---- */
+    .theme-toggle {
+      position: fixed; top: 1rem; right: 1rem; z-index: 10;
+      background: var(--code-bg); color: var(--fg);
+      border: 1px solid var(--border); border-radius: 999px;
+      padding: 0.4rem 0.8rem; font: inherit; font-size: 0.8rem; cursor: pointer;
+    }
+    .theme-toggle:hover { border-color: var(--accent); }
   </style>
 </head>
 <body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-label="テーマ切り替え">🌓 テーマ</button>
 <main>
   <!-- CONTENT -->
 </main>
+<script>
+  (function () {
+    var root = document.documentElement, KEY = "plan-theme";
+    // Restore saved preference on load
+    try { var s = localStorage.getItem(KEY); if (s === "dark" || s === "light") root.dataset.theme = s; } catch (e) {}
+    function current() {
+      return root.dataset.theme
+        || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    }
+    document.getElementById("theme-toggle").addEventListener("click", function () {
+      var next = current() === "dark" ? "light" : "dark";
+      root.dataset.theme = next;
+      try { localStorage.setItem(KEY, next); } catch (e) {}
+    });
+  })();
+</script>
 </body>
 </html>
