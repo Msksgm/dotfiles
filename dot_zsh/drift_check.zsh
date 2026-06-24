@@ -2,9 +2,13 @@ _dotfiles_drift_check() {
   local cache="${TMPDIR:-/tmp}dotfiles-drift-check"
   local today
   today=$(date +%Y-%m-%d)
+  local force=0
+  [[ "$1" == "--force" || "$1" == "-f" ]] && force=1
 
-  # 1日1回のみ実行
-  [[ -f "$cache" && "$(cat "$cache")" == "$today" ]] && return
+  # 1日1回のみ実行（--force/-f で強制実行するとスキップ）
+  if (( force == 0 )); then
+    [[ -f "$cache" && "$(cat "$cache")" == "$today" ]] && return
+  fi
   echo "$today" > "$cache"
 
   local repo
@@ -35,7 +39,13 @@ _dotfiles_drift_check() {
     for w in "${warnings[@]}"; do
       echo "  · $w"
     done
+  elif (( force == 1 )); then
+    # 強制実行かつ drift なしの場合は明示的に通知
+    echo "\033[32m[dotfiles drift]\033[0m drift なし"
   fi
 }
 
 _dotfiles_drift_check
+
+# 手動で強制実行する（1日1回キャッシュを無視）
+dotfiles-drift() { _dotfiles_drift_check --force; }

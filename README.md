@@ -129,6 +129,11 @@ chezmoi re-add ~/.claude/settings.json ~/.claude/plugins/known_marketplaces.json
 # brew drift: インストール済みだが Brewfile にない formula を追加
 brewfile-add <formula>
 brewfile-add --cask <cask>
+
+# drift チェックを手動で強制実行（1日1回キャッシュを無視）
+# ※ source して関数として呼ぶ必要がある（スクリプト直接実行では --force が届かない）
+source ~/.zsh/brew_drift_check.zsh && brew-drift       # Brewfile との差分を確認
+source ~/.zsh/drift_check.zsh && dotfiles-drift        # git・chezmoi の差分を確認
 ```
 
 > **Note (Claude Code 設定の drift):** `settings.json` の `feedbackSurveyState` や `plugins/installed_plugins.json` の git SHA / タイムスタンプは Claude Code が自動更新するため、`chezmoi diff` で差分が出ることがある。上記 `chezmoi re-add` で source 側を最新に揃えてからコミットすること。

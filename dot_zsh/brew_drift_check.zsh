@@ -2,9 +2,13 @@ _brew_drift_check() {
   local cache="${TMPDIR:-/tmp/}dotfiles-brew-drift-check"
   local today
   today=$(date +%Y-%m-%d)
+  local force=0
+  [[ "$1" == "--force" || "$1" == "-f" ]] && force=1
 
-  # 1日1回のみ実行
-  [[ -f "$cache" && "$(cat "$cache")" == "$today" ]] && return
+  # 1日1回のみ実行（--force/-f で強制実行するとスキップ）
+  if (( force == 0 )); then
+    [[ -f "$cache" && "$(cat "$cache")" == "$today" ]] && return
+  fi
   echo "$today" > "$cache"
 
   command -v brew &>/dev/null || return
@@ -54,9 +58,15 @@ _brew_drift_check() {
       echo "      $l"
     done
   fi
+
+  # 強制実行かつ drift なしの場合は明示的に通知
+  (( force == 1 && found_drift == 0 )) && echo "\033[32m[brew drift]\033[0m drift なし"
 }
 
 _brew_drift_check
+
+# 手動で強制実行する（1日1回キャッシュを無視）
+brew-drift() { _brew_drift_check --force; }
 
 # Brewfile に formula / cask を1行追加するヘルパー
 # 使い方: brewfile-add <formula>  or  brewfile-add --cask <cask>
