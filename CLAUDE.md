@@ -29,6 +29,7 @@ chezmoi による macOS dotfiles リポジトリ。source dir は `~/workspace/g
 - `run_once_setup.sh` — `chezmoi apply` 時に**一度だけ**実行される（chezmoi の state DB に実行済みとして記録）。内容変更時は再実行される。現在は `rustup-init` の初期化のみ。
 - `run_onchange_install-packages.sh.tmpl` — `chezmoi apply` 時、**スクリプト内容が変わるたび**に実行される。先頭コメントに `{{ include "Brewfile" | sha256sum }}` で Brewfile のハッシュを埋め込んでいるため、**Brewfile を編集すると次の apply で `brew bundle` が自動実行**される。`.tmpl` なので Go template として評価される。
 - `run_onchange_after_install-skills.sh.tmpl` — 同じ仕組みで、`{{ include "dot_agents/dot_skill-lock.json" | sha256sum }}` のハッシュ埋め込みにより **`dot_agents/dot_skill-lock.json` が変わると次の apply で skill が再インストール**される。lock の各 skill を `skills add <source> -g -a claude-code -y` で取得し、正本 store `~/.agents/skills/` を再生成する。`after_` プレフィックスは `~/.claude/skills` symlink (`dot_claude/symlink_skills`) が作られた**後**にスクリプトを走らせるため。node/npx は mise 経由なので、冒頭で `brew shellenv` + mise shims を PATH に通し、未検出時は apply を止めずスキップする。
+- `run_onchange_after_install-local-skills.sh.tmpl` — **自作 skill の第3チャネル**。`dot_agents/skills-local/*/` に置いたスキルを `~/.agents/skills/` へ `cp -R` でコピーする。先頭コメントに各スキルファイルの sha256sum を埋め込んでいるため、**自作スキルのファイルを編集すると次の apply でコピーが再実行**される。GitHub lock チャネル（`run_onchange_after_install-skills.sh.tmpl`）は lock 外のフォルダを削除しないため、両チャネルのスキルは `~/.agents/skills/` 内で別フォルダとして共存できる。自作スキルを追加・編集したら、対応する `SKILL.md` / サポートファイルを `dot_agents/skills-local/<name>/` に置いてコミットすること。
 
 依存パッケージ（`powerlevel10k` 等）は必ず Brewfile に追加すること。`dot_zshrc` から参照するだけで Brewfile に無いと、新規マシンで未インストールになり壊れる。
 

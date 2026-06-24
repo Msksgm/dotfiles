@@ -1,0 +1,33 @@
+#!/bin/bash
+# Copy locally-authored skills from source (dot_agents/skills-local/) to the
+# canonical store (~/.agents/skills/) so they are visible alongside skills
+# installed via the GitHub lock channel (run_onchange_after_install-skills.sh).
+#
+# Re-runs on `chezmoi apply` whenever any local skill file changes (the hashes
+# below change with them — same trick as the Brewfile / skill-lock mechanism).
+#
+# `after_` guarantees that the ~/.claude/skills symlink (managed by
+# dot_claude/symlink_skills) is already in place before this script runs.
+#
+# GitHub-sourced skills and local skills coexist because each occupies its own
+# subdirectory inside the store; `skills add` (the GitHub installer) only
+# touches the entries listed in the lock file and performs no prune of other
+# directories.
+#
+# local-skill hash: {{ include "dot_agents/skills-local/plan-to-html/SKILL.md" | sha256sum }} {{ include "dot_agents/skills-local/plan-to-html/template.html" | sha256sum }}
+set -e
+
+SRC="$HOME/.agents/skills-local"
+DEST="$HOME/.agents/skills"
+
+[ -d "$SRC" ] || exit 0
+
+mkdir -p "$DEST"
+
+for skill_dir in "$SRC"/*/; do
+  [ -d "$skill_dir" ] || continue
+  name="$(basename "$skill_dir")"
+  echo "local-skills: installing $name"
+  rm -rf "$DEST/$name"
+  cp -R "$skill_dir" "$DEST/$name"
+done
