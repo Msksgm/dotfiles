@@ -1,0 +1,22 @@
+#!/bin/bash
+# Install / update mise-managed tools from ~/.config/mise/config.toml.
+# Re-runs on `chezmoi apply` whenever config.toml changes (the hash below
+# changes with it, so chezmoi detects a new script — same trick as the Brewfile).
+#
+# `after_` guarantees this runs after run_onchange_install-packages.sh.tmpl,
+# so Homebrew has already installed the mise binary itself.
+#
+# config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+set -e
+
+# Make brew (and the brew-installed mise) available in this non-interactive shell.
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+if ! command -v mise >/dev/null 2>&1; then
+  echo "mise-tools: mise not found (run 'brew bundle' first); skipping tool install" >&2
+  exit 0
+fi
+
+# Installs everything declared in the global config (~/.config/mise/config.toml),
+# which chezmoi has already applied. Pinned versions make this reproducible.
+mise install
