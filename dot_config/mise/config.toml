@@ -41,6 +41,8 @@ go = "1.26.3"
 "aqua:kayac/ecspresso" = "2.8.4"       # ecspresso (tap: kayac/tap)
 "aqua:reviewdog/reviewdog" = "0.21.0"  # reviewdog (tap: reviewdog/tap)
 "aqua:k1LoW/git-wt" = "0.29.0"         # git-wt (tap: k1low/tap)
+"aqua:openai/codex" = "0.142.4"        # codex
+"aqua:anthropics/claude-code" = "2.1.198" # claude-code (brew cask から移行)
 
 [settings]
 idiomatic_version_file_enable_tools = []
