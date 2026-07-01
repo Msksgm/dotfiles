@@ -18,7 +18,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_ideavimrc` | `~/.ideavimrc` |
 | `dot_config/nvim/` | `~/.config/nvim/` |
 | `dot_config/karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json` |
-| `dot_config/mise/config.toml` | `~/.config/mise/config.toml`（言語ランタイム + aqua バックエンドの CLI ツール。`gh` 等） |
+| `dot_config/mise/config.toml` | `~/.config/mise/config.toml`（言語ランタイム + aqua バックエンドの主要 CLI ツール群 |
 | `dot_config/helm/repositories.yaml` | `~/.config/helm/repositories.yaml` |
 | `dot_config/cage/presets.yml` | `~/.config/cage/presets.yml` |
 | `dot_claude/settings.json` | `~/.claude/settings.json` |

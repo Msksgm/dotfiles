@@ -95,19 +95,6 @@ zle -N peco-cdr
 bindkey '^t' peco-cdr
 
 
-# direnv
-eval "$(direnv hook zsh)"
-show_virtual_env() {
-  if [ -n "$VIRTUAL_ENV" ]; then
-    echo "($(basename $VIRTUAL_ENV))"
-  fi
-}
-PS1='$(show_virtual_env)'$PS1
-# tmuxのために.envrcがあるときにreloadするように設定
-if [ -e ".envrc" ]; then
-    direnv reload
-fi
-
 # source $HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # 補完
@@ -183,6 +170,19 @@ export GOPATH=$HOME/go
 setopt nonomatch
 
 eval "$(mise activate zsh)"
+
+# direnv (mise activate の後に置くことで shims が PATH に入った状態で実行できる)
+eval "$(direnv hook zsh)"
+show_virtual_env() {
+  if [ -n "$VIRTUAL_ENV" ]; then
+    echo "($(basename $VIRTUAL_ENV))"
+  fi
+}
+PS1='$(show_virtual_env)'$PS1
+# tmuxのために.envrcがあるときにreloadするように設定
+if [ -e ".envrc" ]; then
+    direnv reload
+fi
 
 export PATH=$(echo $PATH | sed "s|Applications/IntelliJ IDEA.app/Contents/MacOS':|/Applications/IntelliJ IDEA.app/Contents/MacOS:|g")
 
