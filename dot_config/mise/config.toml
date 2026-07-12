@@ -44,6 +44,7 @@ go = "1.26.3"
 "aqua:k1LoW/git-wt" = "0.29.0"         # git-wt (tap: k1low/tap)
 "aqua:openai/codex" = "0.142.4"        # codex
 "aqua:anthropics/claude-code" = "2.1.201" # claude-code (brew cask から移行)
+"aqua:azu/dockerfile-pin" = "1.3.0"    # dockerfile-pin
 
 [settings]
 idiomatic_version_file_enable_tools = []
