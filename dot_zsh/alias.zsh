@@ -15,6 +15,10 @@ alias -g lb='`git branch | peco --prompt "GIT BRANCH>" | head -n 1 | sed -e "s/^
 ## dockerコンテナに入る。deで実行できる
 alias de='docker exec -it $(docker ps | peco | cut -d " " -f 1) /bin/bash'
 
+# ghtkn
+## ghtkn の App を fzf でインクリメンタル検索。ghtkn auth -p ga / ghtkn get ga のように使える
+alias -g ga='`yq ".apps[].name" "$HOME/.config/ghtkn/ghtkn.yaml" | sort | fzf`'
+
 # .DS_Storeを削除
 alias dsstore="find . -name '*.DS_Store' -type f -ls -delete"
 
