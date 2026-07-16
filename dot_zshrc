@@ -54,21 +54,21 @@ export PYTHON_CONFIGURE_OPTS="--with-tcltk-includes='-I/usr/local/opt/tcl-tk/inc
 # lsの色を変更
 export LSCOLORS=gxfxcxdxbxegedabagacad
 
-# peco settings
+# fzf settings
 # 過去に実行したコマンドを選択。ctrl-rにバインド
-function peco-select-history() {
-  BUFFER=$(\history -n -r 1 | peco --query "$LBUFFER")
+function fzf-select-history() {
+  BUFFER=$(\history -n -r 1 | fzf --height 40% --reverse --query "$LBUFFER")
   CURSOR=$#BUFFER
   zle clear-screen
 }
-zle -N peco-select-history
-bindkey '^r' peco-select-history
+zle -N fzf-select-history
+bindkey '^r' fzf-select-history
 
 # search a destination from cdr list
-function peco-get-destination-from-cdr() {
+function fzf-get-destination-from-cdr() {
   cdr -l | \
   sed -e 's/^[[:digit:]]*[[:blank:]]*//' | \
-  peco --query "$LBUFFER"
+  fzf --height 40% --reverse --query "$LBUFFER"
 }
 
 # cdr
@@ -82,8 +82,8 @@ if [[ -n $(echo ${^fpath}/chpwd_recent_dirs(N)) && -n $(echo ${^fpath}/cdr(N)) ]
 fi
 
 # 過去に移動したことのあるディレクトリを選択。ctrl-tにバインド
-function peco-cdr() {
-  local destination="$(peco-get-destination-from-cdr)"
+function fzf-cdr() {
+  local destination="$(fzf-get-destination-from-cdr)"
   if [ -n "$destination" ]; then
     BUFFER="cd $destination"
     zle accept-line
@@ -91,8 +91,8 @@ function peco-cdr() {
     zle reset-prompt
   fi
 }
-zle -N peco-cdr
-bindkey '^t' peco-cdr
+zle -N fzf-cdr
+bindkey '^t' fzf-cdr
 
 
 # source $HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -199,16 +199,16 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 ## ghqとの連携。ghqの管理化にあるリポジトリを一覧表示する。ctrl - ]にバインド。
-function peco-src () {
-  local selected_dir=$(ghq list -p | peco --prompt="repositories >" --query "$LBUFFER")
+function fzf-src () {
+  local selected_dir=$(ghq list -p | fzf --height 40% --reverse --prompt="repositories >" --query "$LBUFFER")
   if [ -n "$selected_dir" ]; then
     BUFFER="cd ${selected_dir}"
     zle accept-line
   fi
   zle clear-screen
 }
-zle -N peco-src
-bindkey '^]' peco-src
+zle -N fzf-src
+bindkey '^]' fzf-src
 
 export ANDROID_HOME=$(mise where android-sdk)
 

@@ -28,7 +28,6 @@ go = "1.26.3"
 "aqua:jesseduffield/lazydocker" = "0.25.2" # lazydocker
 "aqua:jesseduffield/lazygit" = "0.62.2" # lazygit
 "aqua:neovim/neovim" = "0.12.3"        # neovim
-"aqua:peco/peco" = "0.6.0"             # peco
 "aqua:suzuki-shunsuke/pinact" = "4.1.0" # pinact
 "aqua:dalance/procs" = "0.14.12"       # procs
 "aqua:BurntSushi/ripgrep" = "15.1.0"   # ripgrep (binary: rg)

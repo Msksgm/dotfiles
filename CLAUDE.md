@@ -45,6 +45,8 @@ chezmoi managed       # 管理対象ファイル一覧
 chezmoi update        # remote pull + apply
 ```
 
+> **`chezmoi diff` / `apply` / `update` などの home への適用操作はユーザーが実行する。** Claude は `dot_*` 等の source ファイルの編集までを担当し、apply の実行やコミット可否の判断はユーザーに委ねること。
+
 ## ファイルを新たに管理対象に追加する手順
 
 ```sh

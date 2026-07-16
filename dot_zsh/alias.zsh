@@ -8,12 +8,12 @@ alias g='git'
 # jupyter-notebook
 alias jnote='jupyter-notebook'
 
-# peco
+# fzf
 ## ブランチを簡単切り替え。git checkout lbで実行できる
-alias -g lb='`git branch | peco --prompt "GIT BRANCH>" | head -n 1 | sed -e "s/^\*\s*//g"`'
+alias -g lb='`git branch | fzf --prompt "GIT BRANCH>" | head -n 1 | sed -e "s/^\*\s*//g"`'
 
 ## dockerコンテナに入る。deで実行できる
-alias de='docker exec -it $(docker ps | peco | cut -d " " -f 1) /bin/bash'
+alias de='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
 
 # ghtkn
 ## ghtkn の App を fzf でインクリメンタル検索。ghtkn auth -p ga / ghtkn get ga のように使える
