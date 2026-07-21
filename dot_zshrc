@@ -54,10 +54,20 @@ export PYTHON_CONFIGURE_OPTS="--with-tcltk-includes='-I/usr/local/opt/tcl-tk/inc
 # lsの色を変更
 export LSCOLORS=gxfxcxdxbxegedabagacad
 
+# history settings
+# Ctrl+R (fzf-select-history) の候補から重複を消し、履歴ファイルもきれいに保つ
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt HIST_IGNORE_ALL_DUPS   # 履歴リスト内の重複を除去（\history を読む自作 widget にも効く）
+setopt HIST_SAVE_NO_DUPS      # 履歴ファイルへ重複を書き込まない
+setopt HIST_IGNORE_SPACE      # 先頭スペース付きコマンドは記録しない
+setopt HIST_REDUCE_BLANKS     # 余分な空白を整形して記録
+
 # fzf settings
 # 過去に実行したコマンドを選択。ctrl-rにバインド
 function fzf-select-history() {
-  BUFFER=$(\history -n -r 1 | fzf --height 40% --reverse --query "$LBUFFER")
+  BUFFER=$(\history -n -r 1 | awk '!a[$0]++' | fzf --height 40% --reverse --query "$LBUFFER")
   CURSOR=$#BUFFER
   zle clear-screen
 }
