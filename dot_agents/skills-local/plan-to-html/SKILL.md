@@ -1,6 +1,6 @@
 ---
 name: plan-to-html
-description: plan を HTML でも出力する。Claude Code の plan（~/.claude/plans/ 配下の Markdown）を、外部依存のない単一 HTML ファイルに変換する。「plan を html で」「プランを HTML 出力」「plan を html でも出力」等で発火。
+description: plan を HTML でも出力する。Claude Code の plan（~/.claude/plans/ 配下の Markdown）を、外部依存のない単一 HTML ファイルに変換する。「plan を html で」「プランを HTML 出力」「plan を html でも出力」等で発火。また、plan の md にユーザーの指摘を反映して改訂した際、同ディレクトリに同名 .html が既に存在する場合はその HTML も再生成して同期する。
 ---
 
 指定された plan の `.md` ファイルを、同ディレクトリ・同basename・拡張子 `.html` の単一 HTML ファイルとして書き出す。
@@ -96,3 +96,11 @@ description: plan を HTML でも出力する。Claude Code の plan（~/.claude
 ### 6. 完了報告
 
 生成した HTML の絶対パスをユーザーに報告する。
+
+## plan 更新時の HTML 同期
+
+ユーザーの指摘やレビューを反映して plan の `.md` を改訂した場合、**同ディレクトリに同 basename の `.html` が既に存在するときに限り**、手順 2〜5 をそのまま再実行して `.html` を同期する。
+
+- **対象外**: 同名 `.html` が存在しない plan。この場合は HTML を新規作成せず、何もしない（同期対象は「過去に一度でも HTML 出力した plan」のみ）。
+- **同期方法**: 改訂後の `.md` 全文を手順 2〜5 の変換規約でそのまま HTML に変換し直し、既存の `.html` を上書きする。差分パッチではなく全文再生成とする（`.md` が正本、`.html` は常にその写像）。
+- **報告**: 同期した `.html` の絶対パスを一言添える。
