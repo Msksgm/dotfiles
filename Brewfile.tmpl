@@ -25,7 +25,13 @@ brew "watch"
 brew "wget"
 brew "percona-toolkit"
 cask "warashi/tap/cage"
+# docker_desktop と orbstack は商用の規約があるため、フラグでインストールを制御する
+{{ if hasKey . "install_docker_desktop" -}}
+cask "docker-desktop"
+{{ end -}}
+{{ if hasKey . "install_orbstack" -}}
 cask "orbstack"
+{{ end -}}
 cask "visual-studio-code"
 vscode "3w36zj6.textlint"
 vscode "amandeepmittal.pug"

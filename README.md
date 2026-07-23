@@ -75,9 +75,11 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `.private_tool_repo` | 手動 (任意) | `dot_config/mise/config.toml.tmpl` | private GitHub repo のツールの `owner/repo`。github バックエンドの tool spec に使用。設定時のみ導入 (hasKey ゲート) |
 | `.op_account` | 手動 (任意) | `run_onchange_after_install-mise-tools.sh.tmpl` | op-vault の `OP_ACCOUNT` (1Password アカウント識別子) |
 | `.private_tool_token_ref` | 手動 (任意) | `run_onchange_after_install-mise-tools.sh.tmpl` | private repo を読める GitHub PAT の `op://<Vault>/<Item>/<field>` 参照 |
+| `install_orbstack` | 手動 (任意) | `Brewfile.tmpl` | 設定したマシンでのみ `cask "orbstack"` を install (`hasKey` ゲート) |
+| `install_docker_desktop` | 手動 (任意) | `Brewfile.tmpl` | 設定したマシンでのみ `cask "docker-desktop"` を install (`hasKey` ゲート) |
 | `.chezmoi.homeDir` | 自動 | `dot_gitconfig.tmpl` | ホームディレクトリのパス (`excludesfile` に使用) |
-| `.chezmoi.sourceDir` | 自動 | `run_onchange_install-packages.sh.tmpl` | source ディレクトリのパス (`Brewfile` の場所に使用) |
-| `include "..."` | 自動 (関数) | `run_onchange_install-packages.sh.tmpl` / `run_onchange_after_install-skills.sh.tmpl` / `run_onchange_after_install-mise-tools.sh.tmpl` | source 相対のファイル内容を埋め込む。`sha256sum` と組み合わせ Brewfile / skill-lock / mise config の変更検知に使用 |
+| `.chezmoi.sourceDir` | 自動 | `run_onchange_install-packages.sh.tmpl` | source ディレクトリのパス (`Brewfile.tmpl` の場所に使用) |
+| `include "..."` | 自動 (関数) | `run_onchange_install-packages.sh.tmpl` / `run_onchange_after_install-skills.sh.tmpl` / `run_onchange_after_install-mise-tools.sh.tmpl` | source 相対のファイル内容を埋め込む。`sha256sum` と組み合わせ Brewfile.tmpl / skill-lock / mise config の変更検知に使用 |
 
 新たにテンプレートを追加する場合、ファイル名に `.tmpl` を付ければ上記の変数を参照できる。手動変数を増やしたときは**この表と step 4 を更新**すること。
 
@@ -106,6 +108,10 @@ sourceDir = "~/workspace/github.com/Msksgm/dotfiles"
   private_tool_repo       = "<owner>/<repo>"
   op_account              = "<1Password アカウント識別子>"
   private_tool_token_ref  = "op://<Vault>/<Item>/<field>"
+  # container runtime cask はマシンごとに入れ分ける（任意・どちらか一方 or 両方）。
+  # 設定したキーの cask だけが `brew bundle` で install される。
+  # install_orbstack       = true
+  # install_docker_desktop = true
 EOF
 
 # 5. Apply dotfiles

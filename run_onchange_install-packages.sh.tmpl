@@ -2,8 +2,17 @@
 # Install / update Homebrew packages from the Brewfile.
 # Re-runs on `chezmoi apply` whenever the Brewfile changes
 # (the hash below changes with it, so chezmoi detects a new script).
-# Brewfile hash: {{ include "Brewfile" | sha256sum }}
+#
+# Brewfile.tmpl はマシン依存の cask（orbstack / docker-desktop）を
+# {{`{{ if hasKey . "install_*" }}`}} ゲートで囲んでいるため、bundle 前に
+# chezmoi execute-template でレンダリングする（[data] のキーでゲートを解決）。
+# chezmoi は apply 実行中のバイナリ自身なので必ず存在する。
+# Brewfile hash: {{ include "Brewfile.tmpl" | sha256sum }}
 set -e
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
-brew bundle --file="{{ .chezmoi.sourceDir }}/Brewfile"
+
+BREWFILE="$(mktemp)"
+trap 'rm -f "$BREWFILE"' EXIT
+chezmoi execute-template < "{{ .chezmoi.sourceDir }}/Brewfile.tmpl" > "$BREWFILE"
+brew bundle --file="$BREWFILE"
