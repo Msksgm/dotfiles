@@ -8,6 +8,9 @@ java = "21.0.2"
 android-sdk = "latest"
 go = "1.26.3"
 "github:sunakan/op-vault" = "0.3.1" # op-vault
+{{- if hasKey . "private_tool_repo" }}
+"github:{{ .private_tool_repo }}" = "0.21.0" # private CLI tool (github backend; GITHUB_TOKEN via op-vault)
+{{- end }}
 # CLI ツールは aqua 管理
 "aqua:cli/cli" = "2.95.0"              # gh
 "aqua:tkuchiki/alp" = "1.0.21"         # alp
@@ -51,7 +54,9 @@ go = "1.26.3"
 idiomatic_version_file_enable_tools = []
 experimental = true
 
+# NOTE: URL の {{`{{version}}`}} は mise のプレースホルダ。chezmoi テンプレートに評価
+# されないよう {{`...`}} でエスケープし、リテラルの {{`{{version}}`}} を出力する。
 [tools."http:profilecli"]
 version = "2.0.1"
-url = "https://github.com/grafana/pyroscope/releases/download/v{{version}}/profilecli_{{version}}_darwin_arm64.tar.gz"
+url = "https://github.com/grafana/pyroscope/releases/download/v{{`{{version}}`}}/profilecli_{{`{{version}}`}}_darwin_arm64.tar.gz"
 checksum = "sha256:2cee2f7a6b695ac6545ed4b284505290485778c43cf720ad468e42e10e2ce2c9"

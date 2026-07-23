@@ -22,7 +22,12 @@ chezmoi による macOS dotfiles リポジトリ。source dir は `~/workspace/g
 - `{{ .github_email }}` — `~/.config/chezmoi/chezmoi.toml` の `[data] github_email` から注入（GitHub アカウントに紐づく email = git の user.email）
 - `{{ .chezmoi.homeDir }}` — chezmoi が自動提供するホームディレクトリパス
 
-新たにテンプレートを使う場合はファイル名に `.tmpl` を付けて同じ変数を参照できる。
+`dot_config/mise/config.toml.tmpl` / `run_onchange_after_install-mise-tools.sh.tmpl` で使用中（private GitHub repo のツール導入用。任意。public repo に内部参照＝対象 repo 名を残さないためテンプレート化）:
+- `{{ .private_tool_repo }}` — private tool の `owner/repo`（プレースホルダ `<owner>/<repo>`）。github バックエンドの tool spec に使用。`hasKey` ゲートで設定マシンのみ導入
+- `{{ .op_account }}` — op-vault の `OP_ACCOUNT`（1Password アカウント識別子）
+- `{{ .private_tool_token_ref }}` — private repo を読める GitHub PAT の `op://<Vault>/<Item>/<field>` 参照
+
+新たにテンプレートを使う場合はファイル名に `.tmpl` を付けて同じ変数を参照できる。手動変数を増やしたら README の "Template variables" 表と New machine setup step 4 も更新すること。
 
 ## run_once / run_onchange スクリプト
 
@@ -30,9 +35,9 @@ chezmoi による macOS dotfiles リポジトリ。source dir は `~/workspace/g
 - `run_onchange_install-packages.sh.tmpl` — `chezmoi apply` 時、**スクリプト内容が変わるたび**に実行される。先頭コメントに `{{ include "Brewfile" | sha256sum }}` で Brewfile のハッシュを埋め込んでいるため、**Brewfile を編集すると次の apply で `brew bundle` が自動実行**される。`.tmpl` なので Go template として評価される。
 - `run_onchange_after_install-skills.sh.tmpl` — 同じ仕組みで、`{{ include "dot_agents/dot_skill-lock.json" | sha256sum }}` のハッシュ埋め込みにより **`dot_agents/dot_skill-lock.json` が変わると次の apply で skill が再インストール**される。lock の各 skill を `skills add <source> -g -a claude-code -y` で取得し、正本 store `~/.agents/skills/` を再生成する。`after_` プレフィックスは `~/.claude/skills` symlink (`dot_claude/symlink_skills`) が作られた**後**にスクリプトを走らせるため。node/npx は mise 経由なので、冒頭で `brew shellenv` + mise shims を PATH に通し、未検出時は apply を止めずスキップする。
 - `run_onchange_after_install-local-skills.sh.tmpl` — **自作 skill の第3チャネル**。`dot_agents/skills-local/*/` に置いたスキルを `~/.agents/skills/` へ `cp -R` でコピーする。先頭コメントに各スキルファイルの sha256sum を埋め込んでいるため、**自作スキルのファイルを編集すると次の apply でコピーが再実行**される。GitHub lock チャネル（`run_onchange_after_install-skills.sh.tmpl`）は lock 外のフォルダを削除しないため、両チャネルのスキルは `~/.agents/skills/` 内で別フォルダとして共存できる。自作スキルを追加・編集したら、対応する `SKILL.md` / サポートファイルを `dot_agents/skills-local/<name>/` に置いてコミットすること。
-- `run_onchange_after_install-mise-tools.sh.tmpl` — 同じ仕組みで、`{{ include "dot_config/mise/config.toml" | sha256sum }}` のハッシュ埋め込みにより **`dot_config/mise/config.toml` が変わると次の apply で `mise install` が走る**。`after_` プレフィックスで `run_onchange_install-packages.sh.tmpl`（brew が mise 本体を入れる）の**後**に実行し、mise バイナリの存在を保証する。aqua バックエンドへ移行した CLI ツール群はここでインストールされる。mise 未検出時は apply を止めずスキップ。
+- `run_onchange_after_install-mise-tools.sh.tmpl` — 同じ仕組みで、`{{ include "dot_config/mise/config.toml.tmpl" | sha256sum }}` のハッシュ埋め込みにより **`dot_config/mise/config.toml.tmpl` が変わると次の apply で `mise install` が走る**。`after_` プレフィックスで `run_onchange_install-packages.sh.tmpl`（brew が mise 本体を入れる）の**後**に実行し、mise バイナリの存在を保証する。aqua バックエンドへ移行した CLI ツール群はここでインストールされる。mise 未検出時は apply を止めずスキップ。private GitHub repo のツールを github バックエンドで入れるため、`mise install` の直前に op-vault (`mise exec "github:sunakan/op-vault"`) で 1Password から `GITHUB_TOKEN` を解決・export する。この処理は `{{ if hasKey . "private_tool_repo" }}` ゲートで囲まれ、変数を設定したマシンでだけ有効（未設定マシンでは private tool 行が config にも出ず、apply は通常成功）。トークンを解決できなければ apply を**中断**する（他ツールも止まるが silent skip はしない）。
 
-依存パッケージ（`powerlevel10k` 等）は必ず Brewfile に追加すること。`dot_zshrc` から参照するだけで Brewfile に無いと、新規マシンで未インストールになり壊れる。主要な single-binary CLI ツール群は Homebrew から aqua バックエンドへ移行済み。新規 CLI ツールは原則 Brewfile ではなく `dot_config/mise/config.toml` の `[tools]` に `"aqua:<owner>/<repo>" = "<version>"` 形式で追加すること。`brew info --json=v2 <formula>` で上流 owner/repo を確認し、`mise ls-remote aqua:<id>` でバージョン実在を確認してから追記する。GNU/system 系・bootstrap ツール（chezmoi/mise）・等価性が曖昧なもの（tmux/aws-vault/coreutils）は引き続き Homebrew が担う。
+依存パッケージ（`powerlevel10k` 等）は必ず Brewfile に追加すること。`dot_zshrc` から参照するだけで Brewfile に無いと、新規マシンで未インストールになり壊れる。主要な single-binary CLI ツール群は Homebrew から aqua バックエンドへ移行済み。新規 CLI ツールは原則 Brewfile ではなく `dot_config/mise/config.toml.tmpl` の `[tools]` に `"aqua:<owner>/<repo>" = "<version>"` 形式で追加すること。`brew info --json=v2 <formula>` で上流 owner/repo を確認し、`mise ls-remote aqua:<id>` でバージョン実在を確認してから追記する。GNU/system 系・bootstrap ツール（chezmoi/mise）・等価性が曖昧なもの（tmux/aws-vault/coreutils）は引き続き Homebrew が担う。**private repo のツールは例外**として、aqua レジストリに載らないため github バックエンド（`"github:<owner>/<repo>" = "<version>"`）で入れ、認証用 `GITHUB_TOKEN` を op-vault 経由で解決する。対象 repo 名・op 参照はテンプレート変数（`private_tool_repo` 等）で注入し public repo に残さず、`hasKey` ゲートで設定マシンのみ opt-in にする（上記の mise-tools スクリプトとテンプレート変数を参照）。
 
 agent skill を追加/削除したら、`~/.agents/.skill-lock.json` を `dot_agents/dot_skill-lock.json` へ同期 (`cp`) してコミットすること。lock が source 側に反映されないと、新規マシンで skill が復元されない。
 

@@ -6,7 +6,13 @@
 # `after_` guarantees this runs after run_onchange_install-packages.sh.tmpl,
 # so Homebrew has already installed the mise binary itself.
 #
-# config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+# private な CLI tool は mise の github バックエンドで入れるため GITHUB_TOKEN が要る。
+# apply 時に 1Password から op-vault 経由でトークンを解決し `mise install` の直前に
+# export する。op アカウント / シークレット参照 / 対象 repo は chezmoi の [data] から
+# 注入するので、public repo にシークレットや内部参照を残さない。private_tool_repo を
+# 設定したマシンでだけ有効（hasKey ゲート）。
+#
+# config hash: {{ include "dot_config/mise/config.toml.tmpl" | sha256sum }}
 set -e
 
 # Make brew (and the brew-installed mise) available in this non-interactive shell.
@@ -17,6 +23,18 @@ if ! command -v mise >/dev/null 2>&1; then
   exit 0
 fi
 
+{{ if hasKey . "private_tool_repo" -}}
+# private な CLI tool を github バックエンドで入れるための GITHUB_TOKEN を
+# 1Password から op-vault (github:sunakan/op-vault, public) 経由で取得する。
+# `mise exec` で op-vault をオンデマンド解決し、インストール順序 / shim PATH 問題を避ける。
+GITHUB_TOKEN="$(OP_ACCOUNT="{{ .op_account }}" mise exec "github:sunakan/op-vault" -- op-vault read '{{ .private_tool_token_ref }}')"
+if [ -z "$GITHUB_TOKEN" ]; then
+  echo "mise-tools: failed to resolve GITHUB_TOKEN via op-vault; aborting" >&2
+  exit 1
+fi
+export GITHUB_TOKEN
+
+{{ end -}}
 # Installs everything declared in the global config (~/.config/mise/config.toml),
 # which chezmoi has already applied. Pinned versions make this reproducible.
 mise install
