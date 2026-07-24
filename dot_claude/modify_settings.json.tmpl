@@ -1,0 +1,69 @@
+#!/bin/bash
+# chezmoi modify_ script for ~/.claude/settings.json.
+#
+# settings.json is a HYBRID file: part hand-curated config (env / permissions /
+# model / hooks / deny …) and part Claude-Code-owned runtime state that it
+# rewrites on its own (enabledPlugins / extraKnownMarketplaces /
+# feedbackSurveyState, plus key re-ordering). Managing it as a static file made
+# those runtime keys drift on every `chezmoi diff`.
+#
+# A modify_ script receives the CURRENT file on stdin and its stdout becomes the
+# new file. We enforce only the keys we curate and preserve everything Claude
+# owns by spreading the current object first — JS spread keeps existing keys at
+# their original position (so no cosmetic re-order diff) and only overrides the
+# values we manage. Result: on an existing machine the output is byte-identical
+# to the live file, so no diff; on a fresh machine we seed enabledPlugins.
+set -e
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
+# Safety: the stdout of this script becomes the file. If node is missing or the
+# input is unparseable, pass the current content through UNCHANGED rather than
+# risk writing an empty/corrupt settings.json.
+if ! command -v node >/dev/null 2>&1; then
+  cat
+  exit 0
+fi
+
+# Rendered by chezmoi first, so homeDir is baked in. Passed via env to avoid
+# quote-nesting inside the node script.
+export HERDR_HOOK_CMD="bash '{{ .chezmoi.homeDir }}/.claude/hooks/herdr-agent-state.sh' session"
+
+node -e '
+  const fs = require("fs");
+  const raw = fs.readFileSync(0, "utf8").trim();
+  let cur;
+  try {
+    cur = raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    process.stdout.write(raw ? raw + "\n" : ""); // never corrupt on parse failure
+    process.exit(0);
+  }
+  const managed = {
+    "$schema": "https://json.schemastore.org/claude-code-settings.json",
+    env: { EDITOR: "nvim", DISABLE_AUTOUPDATER: "1" },
+    permissions: { defaultMode: "bypassPermissions" },
+    model: "opus[1m]",
+    hooks: {
+      SessionStart: [
+        { matcher: "*", hooks: [ { type: "command", command: process.env.HERDR_HOOK_CMD, timeout: 10 } ] },
+      ],
+    },
+    alwaysThinkingEnabled: true,
+    skipDangerousModePermissionPrompt: true,
+    deny: [ "Read(./.env)", "Read(./.env.*)" ],
+  };
+  // Spread cur first: preserves Claude-owned keys (enabledPlugins /
+  // extraKnownMarketplaces / feedbackSurveyState) and their key order; managed
+  // keys override values in place.
+  const out = { ...cur, ...managed };
+  // Seed for a fresh machine (Claude has not written its plugin state yet).
+  if (!out.enabledPlugins) out.enabledPlugins = {
+    "gopls-lsp@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "ecc@ecc": true,
+    "crit@crit": true,
+  };
+  process.stdout.write(JSON.stringify(out, null, 2) + "\n");
+'

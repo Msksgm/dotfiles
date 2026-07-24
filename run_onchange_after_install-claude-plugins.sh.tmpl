@@ -1,0 +1,61 @@
+#!/bin/bash
+# Materialize Claude Code plugin caches so declared plugins actually load.
+#
+# The marketplaces / plugins below are the SINGLE source of truth. The runtime
+# files that Claude Code writes (~/.claude/plugins/known_marketplaces.json and
+# installed_plugins.json) are `.chezmoiignore`d — Claude Code owns them, so
+# chezmoi no longer tracks them and they never show up as drift. Instead this
+# script re-creates the plugin state from the manifest, exactly like
+# run_onchange_after_install-skills.sh.tmpl regenerates the ignored skills store.
+#
+# Claude Code marks a plugin "enabled" from settings.json but does NOT clone or
+# extract it into ~/.claude/plugins/cache/ on its own — only `claude plugin
+# install` materializes that cache. Without this step a declared plugin shows as
+# enabled yet its skills/hooks never load.
+#
+# Being a run_onchange script, editing the manifest below changes this file's
+# content, so chezmoi re-runs it on the next apply. `after_` guarantees mise has
+# already installed the `claude` binary (run_onchange_after_install-mise-tools).
+set -e
+
+# Make brew + mise-managed claude available in this non-interactive shell.
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
+if ! command -v claude >/dev/null 2>&1; then
+  echo "claude-plugins: claude not found (run 'mise install' first); skipping" >&2
+  exit 0
+fi
+
+# --- manifest (edit here to add/remove plugins; this is the only source) ------
+MARKETPLACES=(               # "name repo"
+  "claude-plugins-official anthropics/claude-plugins-official"
+  "ecc affaan-m/ECC"
+  "crit tomasz-tomczyk/crit"
+)
+PLUGINS=(                    # "<plugin>@<marketplace>"
+  "gopls-lsp@claude-plugins-official"
+  "rust-analyzer-lsp@claude-plugins-official"
+  "ecc@ecc"
+  "crit@crit"
+)
+# ------------------------------------------------------------------------------
+
+# 1. Ensure each marketplace is registered and cloned. `add` fails if it already
+#    exists, so fall back to `update` to keep it fresh.
+for entry in "${MARKETPLACES[@]}"; do
+  # shellcheck disable=SC2086
+  set -- $entry
+  name="$1"; repo="$2"
+  echo "claude-plugins: ensuring marketplace $name ($repo)"
+  claude plugin marketplace add "$repo" 2>/dev/null \
+    || claude plugin marketplace update "$name" \
+    || true
+done
+
+# 2. Install each plugin. Idempotent: a no-op when the cache already exists, and
+#    clones/extracts it (the missing piece) when it does not.
+for plugin in "${PLUGINS[@]}"; do
+  echo "claude-plugins: installing $plugin"
+  claude plugin install "$plugin" || true
+done

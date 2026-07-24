@@ -6,3 +6,5 @@ _archive/**
 .gitignore
 .config/nvim/lazyvim.json
 .agents/skills/**
+.claude/plugins/known_marketplaces.json
+.claude/plugins/installed_plugins.json

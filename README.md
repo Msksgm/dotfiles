@@ -23,7 +23,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_config/cage/presets.yml` | `~/.config/cage/presets.yml` |
 | `dot_config/herdr/config.toml` | `~/.config/herdr/config.toml`（キーバインドを `dot_tmux.conf` に合わせた herdr 設定。prefix=`C-j`、分割 `\|`/`-`、ペイン移動 h/j/k/l、タブ移動 `C-h`/`C-l`、デタッチ `prefix+d`、workspace リネーム `prefix+Space`） |
 | `dot_config/herdr/executable_rename-workspace.sh` | `~/.config/herdr/rename-workspace.sh`（実行ビット付き。focused workspace を git リポジトリ名にリネームする。tmux の `~/.tmux-rename-session` の herdr 版で、config.toml の `[[keys.command]]` から `prefix+Space` で呼ぶ） |
-| `dot_claude/settings.json.tmpl` | `~/.claude/settings.json`（`{{ .chezmoi.homeDir }}` で herdr SessionStart フックのパスを展開するため tmpl 化） |
+| `dot_claude/modify_settings.json.tmpl` | `~/.claude/settings.json`（chezmoi `modify_` スクリプト。自分が管理するキー（env/permissions/model/hooks/deny 等）だけ強制し、Claude Code が実行時に書き換えるキー（`enabledPlugins`/`extraKnownMarketplaces`/`feedbackSurveyState`）は実ファイルから保持してドリフトを防ぐ。herdr フックパスは `{{ .chezmoi.homeDir }}` で展開） |
 | `dot_claude/hooks/executable_herdr-agent-state.sh` | `~/.claude/hooks/herdr-agent-state.sh`（実行ビット付き。settings.json の SessionStart フックが呼ぶ herdr の Claude 連携スクリプト。**herdr が自動管理し integration 更新時に上書きするため source はスナップショット**。更新時は再 `cp` で同期する） |
 | `dot_claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
 | `dot_claude/agents/*.md` | `~/.claude/agents/*.md` (user-level subagent) |
@@ -31,8 +31,6 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_claude/rules/golang/*.md` | `~/.claude/rules/golang/*.md` (Go 固有ルール。`@`-import せず参照用) |
 | `dot_claude/rules/kotlin/*.md` | `~/.claude/rules/kotlin/*.md` (Kotlin 固有ルール。`@`-import せず参照用) |
 | `dot_claude/plugins/config.json` | `~/.claude/plugins/config.json` |
-| `dot_claude/plugins/known_marketplaces.json` | `~/.claude/plugins/known_marketplaces.json` |
-| `dot_claude/plugins/private_installed_plugins.json` | `~/.claude/plugins/installed_plugins.json` |
 | `dot_claude/plugins/private_blocklist.json` | `~/.claude/plugins/blocklist.json` |
 | `dot_claude/symlink_skills` | `~/.claude/skills` → `~/.agents/skills` (symlink) |
 | `dot_agents/dot_skill-lock.json` | `~/.agents/.skill-lock.json` |
@@ -41,7 +39,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 
 > **Note (agent skills):** skill の導入チャネルは2種類ある。① **GitHub lock チャネル**: [`skills`](https://github.com/vercel-labs/skills) CLI で導入する skill の正本は `~/.agents/skills/` (store)。`~/.claude/skills` はそこへの symlink で、Claude Code から同じ skill を共有する。`~/.agents/.skill-lock.json` (どの GitHub ソースから入れたかの記録) を管理対象にしており、これが変わると `run_onchange_after_install-skills.sh` が `chezmoi apply` 時に各 skill を `skills add` で再取得する (Brewfile と同じ仕組み)。skill を追加/削除したら `cp ~/.agents/.skill-lock.json dot_agents/dot_skill-lock.json` で lock を source へ同期してコミットする。② **自作 skill チャネル**: `dot_agents/skills-local/<name>/` に `SKILL.md`（とサポートファイル）を置き、`run_onchange_after_install-local-skills.sh` が `chezmoi apply` 時に `~/.agents/skills/<name>/` へコピーする。GitHub チャネルは lock 外のフォルダを削除しないため両チャネルは共存できる。store 本体 (`~/.agents/skills/**`) は再生成可能なので `.chezmoiignore` で除外（自作スキルの source は `dot_agents/skills-local/` に残る）。
 
-> **Note (Claude Code plugins):** プラグインは静的メタデータのみ管理する。`known_marketplaces.json` (登録マーケットプレイス) / `installed_plugins.json` (導入済み plugin の version・cache パス) / `settings.json` の `enabledPlugins` (有効化) の3点で、本体 (`~/.claude/plugins/cache/**`・`marketplaces/**`) は `.chezmoiignore` 済み・Claude Code が起動時にメタデータを見て GitHub から再 clone する。現在は公式 LSP (`gopls-lsp` / `rust-analyzer-lsp` @ `claude-plugins-official`) と [`ecc`](https://github.com/affaan-m/ECC) (`ecc@ecc`) を管理 (ecc は **Claude Code CLI ≥ v2.1.0** 必須)。メタデータが drift したら cheatsheet の `chezmoi re-add` で source へ取り込む。
+> **Note (Claude Code plugins):** プラグインの導入は `run_onchange_after_install-claude-plugins.sh.tmpl` の **inline manifest**（`MARKETPLACES` / `PLUGINS` 配列）が唯一の source of truth。`chezmoi apply` 時にこのスクリプトが `claude plugin marketplace add` + `claude plugin install` を冪等に流し、marketplace の clone と cache 本体を再生成する（skills store と同じ「ignore して run_onchange で再生成」方式）。Claude Code が実行時に所有する `known_marketplaces.json` / `installed_plugins.json` は `.chezmoiignore` 済みで**追跡しない**（タイムスタンプ等のドリフトが出ない）。有効化状態 `enabledPlugins` は `modify_settings.json.tmpl` が新規マシン用に seed し、以降は Claude Code の値を保持する。現在は公式 LSP (`gopls-lsp` / `rust-analyzer-lsp` @ `claude-plugins-official`) と [`ecc`](https://github.com/affaan-m/ECC) (`ecc@ecc`)、[`crit`](https://github.com/tomasz-tomczyk/crit) (`crit@crit`) を管理 (ecc は **Claude Code CLI ≥ v2.1.0** 必須)。プラグインを増減するときは manifest 配列を編集するだけ（JSON への手動反映や `chezmoi re-add` は不要）。
 
 ## Excluded from management
 
@@ -63,6 +61,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `~/.claude/cache/`, `backups/`, `plans/`, `tasks/`, `todos/`, `session-env/`, `debug/`, `ide/` | ランタイム生成物。再生成可能 |
 | `~/.claude/statsig/`, `telemetry/`, `stats-cache.json`, `mcp-needs-auth-cache.json` | テレメトリ / SDK キャッシュ |
 | `~/.claude/plugins/cache/`, `plugins/data/`, `plugins/marketplaces/`, `plugins/repos/` | clone 済みプラグインリポジトリ / LSP データ。Claude Code 起動時に再生成 |
+| `~/.claude/plugins/known_marketplaces.json`, `plugins/installed_plugins.json` | Claude Code が実行時に所有・書き換える（タイムスタンプ等が drift する）。`run_onchange_after_install-claude-plugins.sh` の manifest から `claude plugin install` で再生成 |
 
 ## Template variables
 
@@ -155,9 +154,10 @@ chezmoi apply -v
 # Pull remote changes and apply
 chezmoi update
 
-# Claude Code 設定を source 側に同期 (drift したとき)
-chezmoi re-add ~/.claude/settings.json ~/.claude/plugins/known_marketplaces.json \
-               ~/.claude/plugins/installed_plugins.json ~/.claude/plugins/blocklist.json
+# Claude Code の blocklist / config を source 側に同期 (drift したとき)
+# settings.json は modify_ が、plugins の marketplaces/installed は run_onchange が
+# 面倒を見るので re-add 不要。手動編集したときだけ blocklist/config を取り込む。
+chezmoi re-add ~/.claude/plugins/blocklist.json ~/.claude/plugins/config.json
 
 # brew drift: インストール済みだが Brewfile にない formula を追加
 brewfile-add <formula>
@@ -169,4 +169,4 @@ source ~/.zsh/brew_drift_check.zsh && brew-drift       # Brewfile との差分�
 source ~/.zsh/drift_check.zsh && dotfiles-drift        # git・chezmoi の差分を確認
 ```
 
-> **Note (Claude Code 設定の drift):** `settings.json` の `feedbackSurveyState` や `plugins/installed_plugins.json` の git SHA / タイムスタンプは Claude Code が自動更新するため、`chezmoi diff` で差分が出ることがある。上記 `chezmoi re-add` で source 側を最新に揃えてからコミットすること。
+> **Note (Claude Code 設定の drift):** `settings.json` の `feedbackSurveyState` / `enabledPlugins` / `extraKnownMarketplaces`（Claude Code が実行時に書き換えるキー）は `modify_settings.json.tmpl` が実ファイルの値を保持するため diff は出ない。`plugins/known_marketplaces.json` / `installed_plugins.json` は `.chezmoiignore` 済みで追跡しない。→ 以前のようにタイムスタンプや git SHA で `chezmoi diff` が出続けることはない。
