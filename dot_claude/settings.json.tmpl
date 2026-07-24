@@ -7,11 +7,20 @@
   "permissions": {
     "defaultMode": "bypassPermissions"
   },
-  "model": "opusplan",
+  "model": "opus[1m]",
   "enabledPlugins": {
     "gopls-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "ecc@ecc": true
+    "ecc@ecc": true,
+    "crit@crit": true
+  },
+  "extraKnownMarketplaces": {
+    "crit": {
+      "source": {
+        "source": "github",
+        "repo": "tomasz-tomczyk/crit"
+      }
+    }
   },
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true,
@@ -23,6 +32,18 @@
     "Read(./.env.*)"
   ],
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '{{ .chezmoi.homeDir }}/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "Notification": [
       {
         "matcher": "",

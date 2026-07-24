@@ -23,7 +23,8 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_config/cage/presets.yml` | `~/.config/cage/presets.yml` |
 | `dot_config/herdr/config.toml` | `~/.config/herdr/config.toml`（キーバインドを `dot_tmux.conf` に合わせた herdr 設定。prefix=`C-j`、分割 `\|`/`-`、ペイン移動 h/j/k/l、タブ移動 `C-h`/`C-l`、デタッチ `prefix+d`、workspace リネーム `prefix+Space`） |
 | `dot_config/herdr/executable_rename-workspace.sh` | `~/.config/herdr/rename-workspace.sh`（実行ビット付き。focused workspace を git リポジトリ名にリネームする。tmux の `~/.tmux-rename-session` の herdr 版で、config.toml の `[[keys.command]]` から `prefix+Space` で呼ぶ） |
-| `dot_claude/settings.json` | `~/.claude/settings.json` |
+| `dot_claude/settings.json.tmpl` | `~/.claude/settings.json`（`{{ .chezmoi.homeDir }}` で herdr SessionStart フックのパスを展開するため tmpl 化） |
+| `dot_claude/hooks/executable_herdr-agent-state.sh` | `~/.claude/hooks/herdr-agent-state.sh`（実行ビット付き。settings.json の SessionStart フックが呼ぶ herdr の Claude 連携スクリプト。**herdr が自動管理し integration 更新時に上書きするため source はスナップショット**。更新時は再 `cp` で同期する） |
 | `dot_claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
 | `dot_claude/agents/*.md` | `~/.claude/agents/*.md` (user-level subagent) |
 | `dot_claude/rules/*.md` | `~/.claude/rules/*.md` (CLAUDE.md から `@`-import するコーディング規約) |
