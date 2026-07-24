@@ -7,7 +7,9 @@ uv = "latest"
 java = "21.0.2"
 android-sdk = "latest"
 go = "1.26.3"
+# aqua レジストリ未登録のツールは github backend
 "github:sunakan/op-vault" = "0.4.0" # op-vault
+"github:tomasz-tomczyk/crit" = "0.18.1" # crit
 {{- if hasKey . "private_tool_repo" }}
 "github:{{ .private_tool_repo }}" = "0.21.0" # private CLI tool (github backend; GITHUB_TOKEN via op-vault)
 {{- end }}

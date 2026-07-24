@@ -18,7 +18,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_ideavimrc` | `~/.ideavimrc` |
 | `dot_config/nvim/` | `~/.config/nvim/` |
 | `dot_config/karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json` |
-| `dot_config/mise/config.toml.tmpl` | `~/.config/mise/config.toml`（言語ランタイム + aqua バックエンドの主要 CLI ツール群。private tool は github バックエンド + op-vault トークンで導入） |
+| `dot_config/mise/config.toml.tmpl` | `~/.config/mise/config.toml`（言語ランタイム + aqua バックエンドの主要 CLI ツール群。aqua 未登録のツールは github バックエンド、private tool はさらに op-vault トークンで導入） |
 | `dot_config/helm/repositories.yaml` | `~/.config/helm/repositories.yaml` |
 | `dot_config/cage/presets.yml` | `~/.config/cage/presets.yml` |
 | `dot_config/herdr/config.toml` | `~/.config/herdr/config.toml`（キーバインドを `dot_tmux.conf` に合わせた herdr 設定。prefix=`C-j`、分割 `\|`/`-`、ペイン移動 h/j/k/l、タブ移動 `C-h`/`C-l`、デタッチ `prefix+d`、workspace リネーム `prefix+Space`） |

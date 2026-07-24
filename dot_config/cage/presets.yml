@@ -9,6 +9,7 @@ presets:
       - "$HOME/.gradle"
       # Knative 用
       - "$HOME/.konan"
+      - "$HOME/.crit"
       - "$HOME/.agents"
       - "$HOME/.claude"
       - "$HOME/.claude.json"
