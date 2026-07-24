@@ -33,11 +33,14 @@ navigate_workspace_down = "j"
 # agent 移動 — herdr の agents は独立タブでなくサイドバーの agent パネル。
 # workspace のような navigate mode（j/k 連打）は agent には存在しない
 # （navigate mode の方向キーは workspace 選択と pane フォーカスのみ）。
-# 代替として prefix 前提の 1 ショットで割当。prefix+j/k は focus_pane_down/up が
-# 占有するため衝突を避け、agent の a を基点にした prefix+a 系を使う。
+# next_agent/previous_agent は単発トグル。prefix+j/k は focus_pane_down/up が
+# 占有するため、agent の a を基点にした prefix+a 系を使う。
+# focus_agent は「N 番目の agent へ直接フォーカス」する indexed binding で、
+# 末尾に 1..9 の数字レンジが必須（herdr default 例: "prefix+alt+1..9"）。
+# 文字キー（prefix+ctrl+a）は無効化されるため、prefix+ctrl+1〜9 に割当。
 next_agent = "prefix+a"
 previous_agent = "prefix+shift+a"
-focus_agent = "prefix+ctrl+a"
+focus_agent = "prefix+ctrl+1..9"
 
 # デタッチ — tmux: prefix d（herdr default は prefix+q。prefix+d は空きで close_workspace=shift+d と非衝突）
 detach = "prefix+d"
