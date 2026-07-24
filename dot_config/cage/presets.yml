@@ -25,7 +25,7 @@ presets:
       # Claude Code の MCP 認証ログを残す場所。MCP系でエラーが出る可能性があるため追加
       - "$HOME/Library/Caches/claude-cli-nodejs"
       # uv 実行時のキャッシュへの書き込み権限
-      - "$HOME/.cache/uv"
+      - "$HOME/.cache"
     allow-keychain: true
     allow-git: true
 
