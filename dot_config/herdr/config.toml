@@ -17,9 +17,27 @@ focus_pane_right = "prefix+l"
 split_vertical = "prefix+|"
 split_horizontal = "prefix+minus"
 
-# タブ移動 = tmux のウィンドウ切替 C-h/C-l
-previous_tab = "prefix+ctrl+h"
-next_tab = "prefix+ctrl+l"
+# タブ移動 — tmux の next-window/previous-window（prefix+n / prefix+p、tmux 標準）に対応。
+# herdr default とも一致する。
+previous_tab = "prefix+p"
+next_tab = "prefix+n"
+
+# workspace 切替 — tmux: prefix+w（choose-tree でセッション/ウィンドウ一覧）と対応。
+# prefix+w で workspace セレクタ（navigate mode）を開く（herdr default と一致）。
+# セレクタ内の上下移動はデフォルト up/down だが、tmux choose-tree の vi 風移動に合わせて
+# navigate mode 専用キー（prefix 不要の素の j/k）を割当。
+workspace_picker = "prefix+w"
+navigate_workspace_up = "k"
+navigate_workspace_down = "j"
+
+# agent 移動 — herdr の agents は独立タブでなくサイドバーの agent パネル。
+# workspace のような navigate mode（j/k 連打）は agent には存在しない
+# （navigate mode の方向キーは workspace 選択と pane フォーカスのみ）。
+# 代替として prefix 前提の 1 ショットで割当。prefix+j/k は focus_pane_down/up が
+# 占有するため衝突を避け、agent の a を基点にした prefix+a 系を使う。
+next_agent = "prefix+a"
+previous_agent = "prefix+shift+a"
+focus_agent = "prefix+ctrl+a"
 
 # デタッチ — tmux: prefix d（herdr default は prefix+q。prefix+d は空きで close_workspace=shift+d と非衝突）
 detach = "prefix+d"
