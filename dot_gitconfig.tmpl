@@ -7,9 +7,7 @@
 	quotepath = false
 	ignorecase = false
 	autocrlf = input
-  # pager = delta
-[delta]
-    side-by-side = true
+	pager = hunk pager
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
@@ -38,6 +36,8 @@
 	mr = merge --no-ff
 	mrff = merge --ff
 	graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
+	hdiff = -c core.pager=\"hunk pager\" diff
+	hshow = -c core.pager=\"hunk pager\" show
 [push]
 	default = simple
 [filter "lfs"]
