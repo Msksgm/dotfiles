@@ -55,3 +55,25 @@ description = "rename workspace to git repo name"
 #   - リサイズ: tmux は H/J/K/L のワンショット、herdr は resize_mode(prefix+r)。
 #   - レイアウト循環: tmux prefix+Space(next-layout) は herdr に該当機能なし（分割タイリングのみ）。
 #   - copy mode: herdr 0.7.5 では [keys] の再マップ対象外（コピーモード内の vi 風 v/y は既定で tmux 同様）。
+
+# テーマ設定。herdr がアプリ内でのテーマ変更時に home 側 config へ書き込むため、
+# source に取り込んでおかないと apply のたびに削除される（ドリフト防止）。
+[theme]
+name = "catppuccin"
+auto_switch = false
+
+# 通知設定。
+# バックグラウンド workspace のエージェントが状態変化した際に、
+# OS の通知サービス（macOS 通知センター）へポップアップし、ビープ音を鳴らす。
+# herdr は初回起動時に通知設定を home 側 config へ書き込むことがあるため、
+# theme と同様 source に明示して drift を防ぐ。
+[ui.toast]
+# 配信先: off=無効 / herdr=アプリ内トースト / terminal=外側端末経由 / system=OS 通知サービス
+delivery = "system"
+
+# ビープ音（herdr 同梱のデフォルト通知音）を再生する。
+# サウンドはバックグラウンド workspace のエージェント状態変化時のみ鳴る
+# （アクティブタブの通知は herdr が自動抑制する）。
+# enabled=true は herdr default だが、意図を source に明示して残す。
+[ui.sound]
+enabled = true
