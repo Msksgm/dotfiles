@@ -1,0 +1,39 @@
+# tmux (dot_tmux.conf) のキーバインドに合わせた herdr 設定。
+# herdr は tmux 風の prefix を持つエージェントマルチプレクサ。
+# 対応: pane→pane / tmux window→herdr tab / tmux session→herdr workspace。
+# `herdr config check` で検証可能。`herdr --default-config` で全項目とデフォルト値を確認できる。
+
+[keys]
+# prefix — tmux: set -g prefix C-j
+prefix = "ctrl+j"
+
+# ペイン移動（vim キー） — tmux: bind h/j/k/l select-pane（herdr default と一致）
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+# 分割 — tmux: bind | split-window -h / bind - split-window -v
+split_vertical = "prefix+|"
+split_horizontal = "prefix+minus"
+
+# タブ移動 = tmux のウィンドウ切替 C-h/C-l
+previous_tab = "prefix+ctrl+h"
+next_tab = "prefix+ctrl+l"
+
+# デタッチ — tmux: prefix d（herdr default は prefix+q。prefix+d は空きで close_workspace=shift+d と非衝突）
+detach = "prefix+d"
+
+# workspace を git リポジトリ名にリネーム — tmux: bind R（下記スクリプト）。
+# tmux のリネームは R だが herdr では prefix+r=resize_mode / prefix+shift+r=reload_config が占有するため、
+# 空きキー prefix+Space に割当。resize_mode・reload_config は herdr default を温存する。
+[[keys.command]]
+key = "prefix+space"
+type = "shell"
+command = "$HOME/.config/herdr/rename-workspace.sh"
+description = "rename workspace to git repo name"
+
+# 以下は tmux と 1:1 対応できないため herdr default のまま:
+#   - リサイズ: tmux は H/J/K/L のワンショット、herdr は resize_mode(prefix+r)。
+#   - レイアウト循環: tmux prefix+Space(next-layout) は herdr に該当機能なし（分割タイリングのみ）。
+#   - copy mode: herdr 0.7.5 では [keys] の再マップ対象外（コピーモード内の vi 風 v/y は既定で tmux 同様）。
