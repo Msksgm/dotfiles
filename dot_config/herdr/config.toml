@@ -30,6 +30,11 @@ workspace_picker = "prefix+w"
 navigate_workspace_up = "k"
 navigate_workspace_down = "j"
 
+# workspace 作成 — tmux: bind c new-window（herdr では prefix+c = new_tab が対応）。
+# workspace は tmux の session に相当するため、new_tab の大文字版として prefix+shift+c を割当。
+# herdr default は prefix+shift+n だが、c 系に寄せた方が new_tab との対応が直感的。
+new_workspace = "prefix+shift+c"
+
 # agent 移動 — herdr の agents は独立タブでなくサイドバーの agent パネル。
 # workspace のような navigate mode（j/k 連打）は agent には存在しない
 # （navigate mode の方向キーは workspace 選択と pane フォーカスのみ）。
