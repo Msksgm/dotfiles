@@ -27,6 +27,7 @@ presets:
       - "$HOME/Library/Caches/claude-cli-nodejs"
       # uv 実行時のキャッシュへの書き込み権限
       - "$HOME/.cache"
+      - "$HOME/workspace/github.com/Msksgm/obsidian-vault"
     allow-keychain: true
     allow-git: true
 

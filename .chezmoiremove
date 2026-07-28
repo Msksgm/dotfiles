@@ -1,0 +1,11 @@
+# chezmoi は source から消えた entry を home から自動削除しないため、廃止した
+# 自作 skill の source コピーをここで明示的に取り除く。これが無いと
+# ~/.agents/skills-local/<name>/ が残り、run_onchange_after_install-local-skills.sh
+# の $SRC 走査で毎回 store に再インストールされてしまう。
+#
+# パスは target 基準（dot_ プレフィックス無し）。.chezmoiignore と同じ規約。
+# store 本体 (~/.agents/skills/**) は .chezmoiignore 済みで chezmoi の操作対象外なので、
+# そちらの削除はインストーラの REMOVED_SKILLS が担当する。
+#
+# 全マシンが apply 済みになったらエントリは削除してよい。
+.agents/skills-local/plan-to-html

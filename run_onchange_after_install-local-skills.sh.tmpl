@@ -14,7 +14,7 @@
 # touches the entries listed in the lock file and performs no prune of other
 # directories.
 #
-# local-skill hash: {{ include "dot_agents/skills-local/plan-to-html/SKILL.md" | sha256sum }} {{ include "dot_agents/skills-local/plan-to-html/template.html" | sha256sum }}
+# local-skill hash: {{ include "dot_agents/skills-local/review-io-impact/SKILL.md" | sha256sum }}
 set -e
 
 SRC="$HOME/.agents/skills-local"
@@ -23,6 +23,20 @@ DEST="$HOME/.agents/skills"
 [ -d "$SRC" ] || exit 0
 
 mkdir -p "$DEST"
+
+# source から削除した自作 skill。このスクリプトは $SRC を走査してコピーするだけで
+# prune しないため、既存マシンの store に残った実体をここで明示的に取り除く。
+# 全マシンが apply 済みになったら該当エントリは削除してよい。
+# 注意: GitHub lock チャネルの skill 名は書かないこと（そちらの実体を消してしまう）。
+REMOVED_SKILLS=(
+  plan-to-html # 20260727: /crit で代替できるため廃止
+)
+
+for name in "${REMOVED_SKILLS[@]}"; do
+  [ -d "$DEST/$name" ] || continue
+  echo "local-skills: removing $name"
+  rm -rf "${DEST:?}/$name"
+done
 
 for skill_dir in "$SRC"/*/; do
   [ -d "$skill_dir" ] || continue

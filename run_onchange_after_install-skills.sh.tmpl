@@ -20,6 +20,9 @@ if ! command -v npx >/dev/null 2>&1; then
   exit 0
 fi
 
+# Ensure the canonical store exists so the ~/.claude/skills symlink is not dangling.
+mkdir -p "$HOME/.agents/skills"
+
 LOCK="$HOME/.agents/.skill-lock.json"
 [ -f "$LOCK" ] || exit 0
 
