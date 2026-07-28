@@ -10,9 +10,10 @@ go = "1.26.3"
 # aqua レジストリ未登録のツールは github backend
 "github:sunakan/op-vault" = "0.4.0" # op-vault
 "github:tomasz-tomczyk/crit" = "0.18.1" # crit
-{{- if hasKey . "private_tool_repo" }}
-"github:{{ .private_tool_repo }}" = "0.21.0" # private CLI tool (github backend; GITHUB_TOKEN via op-vault)
-{{- end }}
+# NOTE: private repo のツールはここに書かないこと。ここの tool は mise.lock に載り、
+# その mise.lock は public repo で追跡している（repo 名だけでなくアセット URL も漏れる）。
+# private tool は dot_config/mise/private_config.local.toml.tmpl に隔離すること。
+# conf.d/*.toml は lockfile が親の mise.lock に合流するため代替にならない。
 # CLI ツールは aqua 管理
 "aqua:cli/cli" = "2.95.0"              # gh
 "aqua:tkuchiki/alp" = "1.0.21"         # alp

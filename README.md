@@ -18,7 +18,9 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_ideavimrc` | `~/.ideavimrc` |
 | `dot_config/nvim/` | `~/.config/nvim/` |
 | `dot_config/karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json` |
-| `dot_config/mise/config.toml.tmpl` | `~/.config/mise/config.toml`（言語ランタイム + aqua バックエンドの主要 CLI ツール群。aqua 未登録のツールは github バックエンド、private tool はさらに op-vault トークンで導入） |
+| `dot_config/mise/config.toml.tmpl` | `~/.config/mise/config.toml`（言語ランタイム + aqua バックエンドの主要 CLI ツール群。aqua 未登録のツールは github バックエンド。**private tool はここに書かない** — lockfile `mise.lock` を追跡しているため、下記 `config.local.toml` に隔離する） |
+| `dot_config/mise/private_config.local.toml.tmpl` | `~/.config/mise/config.local.toml`（private tool 専用の machine-local config。mode 0600。`private_tool_repo` を設定したマシンでのみ展開され、lockfile は `mise.local.lock` に分離されて追跡されない） |
+| `dot_config/mise/private_mise.lock` | `~/.config/mise/mise.lock`（mise の lockfile。全ツールの version / URL / checksum を 7 プラットフォーム分固定して再現性を担保する。mode 0600。**生成物なので手で編集せず** `mise lock -g` → `cp` で同期する。手順は下記 "mise lockfile の更新" 参照） |
 | `dot_config/helm/repositories.yaml` | `~/.config/helm/repositories.yaml` |
 | `dot_config/cage/presets.yml` | `~/.config/cage/presets.yml` |
 | `dot_config/herdr/config.toml` | `~/.config/herdr/config.toml`（キーバインドを `dot_tmux.conf` に合わせた herdr 設定。prefix=`C-j`、分割 `\|`/`-`、ペイン移動 h/j/k/l、タブ移動 `C-h`/`C-l`、デタッチ `prefix+d`、workspace 作成 `prefix+Shift+C`、workspace リネーム `prefix+Space`） |
@@ -51,6 +53,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `~/.config/github-copilot/` | GitHub Copilot 認証トークン |
 | `~/.config/configstore/` | 各種ツールの認証情報 |
 | `~/.config/nvim/lazyvim.json` | LazyVim が自動更新する既読状態ファイル |
+| `~/.config/mise/mise.local.lock` | `config.local.toml`（private tool）の lockfile。private repo 名とリリースアセット URL を含むため public repo に置けない。`mise lock -g` を実行すると（`mise.lock` と一緒に）各マシンで自動生成される |
 | `~/.agents/skills/` | skills CLI が GitHub から取得する store。lock から再生成可能 (`run_onchange_after_install-skills.sh`) |
 | `~/.claude.json` | Claude Code OAuth/セッション情報 (253 KB、自動 backup あり) |
 | `~/.claude/sessions/` | アクティブセッション (mode 700、トークン含む) |
@@ -73,14 +76,15 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 |---|---|---|---|
 | `.github_username` | 手動 | `dot_gitconfig.tmpl` | `[data] github_username` → git の `user.name` (GitHub アカウント名) |
 | `.github_email` | 手動 | `dot_gitconfig.tmpl` | `[data] github_email` → git の `user.email` (GitHub に紐づく email) |
-| `.private_tool_repo` | 手動 (任意) | `dot_config/mise/config.toml.tmpl` | private GitHub repo のツールの `owner/repo`。github バックエンドの tool spec に使用。設定時のみ導入 (hasKey ゲート) |
+| `.private_tool_repo` | 手動 (任意) | `dot_config/mise/private_config.local.toml.tmpl` | private GitHub repo のツールの `owner/repo`。github バックエンドの tool spec に使用。設定時のみ導入 (hasKey ゲート) |
+| `.private_tool_version` | 手動 (任意) | `dot_config/mise/private_config.local.toml.tmpl` / `run_onchange_after_install-mise-tools.sh.tmpl` | private tool の tool spec のバージョン。repo 名と同様に public repo へ残さないため注入する。バージョンを上げるときはこの値を書き換えて `chezmoi apply` するだけでよい (dotfiles のコミット不要) |
 | `.op_account` | 手動 (任意) | `run_onchange_after_install-mise-tools.sh.tmpl` | op-vault の `OP_ACCOUNT` (1Password アカウント識別子) |
 | `.private_tool_token_ref` | 手動 (任意) | `run_onchange_after_install-mise-tools.sh.tmpl` | private repo を読める GitHub PAT の `op://<Vault>/<Item>/<field>` 参照 |
 | `install_orbstack` | 手動 (任意) | `Brewfile.tmpl` | 設定したマシンでのみ `cask "orbstack"` を install (`hasKey` ゲート) |
 | `install_docker_desktop` | 手動 (任意) | `Brewfile.tmpl` | 設定したマシンでのみ `cask "docker-desktop"` を install (`hasKey` ゲート) |
 | `.chezmoi.homeDir` | 自動 | `dot_gitconfig.tmpl` | ホームディレクトリのパス (`excludesfile` に使用) |
 | `.chezmoi.sourceDir` | 自動 | `run_onchange_install-packages.sh.tmpl` | source ディレクトリのパス (`Brewfile.tmpl` の場所に使用) |
-| `include "..."` | 自動 (関数) | `run_onchange_install-packages.sh.tmpl` / `run_onchange_after_install-skills.sh.tmpl` / `run_onchange_after_install-local-skills.sh.tmpl` / `run_onchange_after_install-mise-tools.sh.tmpl` | source 相対のファイル内容を埋め込む。`sha256sum` と組み合わせ Brewfile.tmpl / skill-lock / 自作 skill / mise config の変更検知に使用 |
+| `include "..."` | 自動 (関数) | `run_onchange_install-packages.sh.tmpl` / `run_onchange_after_install-skills.sh.tmpl` / `run_onchange_after_install-local-skills.sh.tmpl` / `run_onchange_after_install-mise-tools.sh.tmpl` | source 相対のファイル内容を埋め込む。`sha256sum` と組み合わせ Brewfile.tmpl / skill-lock / 自作 skill / mise config (`config.toml.tmpl`・`private_config.local.toml.tmpl`・`private_mise.lock`) の変更検知に使用 |
 
 新たにテンプレートを追加する場合、ファイル名に `.tmpl` を付ければ上記の変数を参照できる。手動変数を増やしたときは**この表と step 4 を更新**すること。
 
@@ -104,9 +108,10 @@ sourceDir = "~/workspace/github.com/Msksgm/dotfiles"
 [data]
   github_username = "Msksgm"               # → ~/.gitconfig の user.name
   github_email    = "you@example.com"      # → ~/.gitconfig の user.email
-  # 以下3変数は private GitHub repo のツールを mise で入れるマシンでだけ設定（任意）。
-  # 詳細は下記 "Private tool" 参照。3つはセットで必要。
+  # 以下4変数は private GitHub repo のツールを mise で入れるマシンでだけ設定（任意）。
+  # 詳細は下記 "Private tool" 参照。4つはセットで必要。
   private_tool_repo       = "<owner>/<repo>"
+  private_tool_version    = "<version>"    # 例: "1.2.3"
   op_account              = "<1Password アカウント識別子>"
   private_tool_token_ref  = "op://<Vault>/<Item>/<field>"
   # container runtime cask はマシンごとに入れ分ける（任意・どちらか一方 or 両方）。
@@ -118,14 +123,22 @@ EOF
 # 5. Apply dotfiles
 #    run_onchange_install-packages.sh runs `brew bundle` automatically,
 #    so Brewfile packages (powerlevel10k 等) もここでインストールされる
+#    mise.lock も chezmoi 管理下なので、mise のツールは全マシンで同一 version/checksum で入る
 chezmoi apply
 ```
 
 ## Private tool（任意）
 
-private GitHub repo のリリースを mise の **github バックエンド**で導入する仕組み。`mise install` が private repo を認証するために `GITHUB_TOKEN` が要るので、`run_onchange_after_install-mise-tools.sh` が **1Password から op-vault 経由でトークンを取得**して `mise install` の直前に export する。public repo にシークレット・内部参照（対象 repo 名も含む）を残さないため、op アカウント・シークレット参照・repo 名はすべて chezmoi の `[data]` (上記 step 4) から注入する。
+private GitHub repo のリリースを mise の **github バックエンド**で導入する仕組み。`mise install` が private repo を認証するために `GITHUB_TOKEN` が要るので、`run_onchange_after_install-mise-tools.sh` が **1Password から op-vault 経由でトークンを取得**して `mise install` の直前に export する。public repo にシークレット・内部参照（対象 repo 名・バージョンも含む）を残さないため、op アカウント・シークレット参照・repo 名・バージョンはすべて chezmoi の `[data]` (上記 step 4) から注入する。
 
-**opt-in**: `private_tool_repo` を設定したマシンでだけ有効（`hasKey` ゲート）。未設定のマシンでは mise config に行が出ず・トークン処理も走らないため、`chezmoi apply` は通常どおり成功する。
+**opt-in**: `private_tool_repo` を設定したマシンでだけ有効（`hasKey` ゲート）。未設定のマシンでは `config.local.toml` 自体が展開されず (`.chezmoiignore` で制御)・トークン処理も走らないため、`chezmoi apply` は通常どおり成功する。`private_tool_repo` を設定していて `private_tool_version` を設定し忘れた場合は、chezmoi がキー未定義エラーで apply を止める（設定漏れに気付けるようにあえて fail-fast にしている）。
+
+**なぜ `config.toml` と別ファイルなのか**: mise の lockfile は「宣言した config ファイル名の `.toml` → `.lock`」で決まり、`~/.config/mise/config.toml` の lock は `~/.config/mise/mise.lock`。この `mise.lock` は再現性のため dotfiles で追跡している (`dot_config/mise/private_mise.lock`) ので、private tool をここに書くと **repo 名とリリースアセット URL が public repo に載ってしまう**。そのため private tool は `~/.config/mise/config.local.toml` に隔離し、lock を `mise.local.lock`（追跡対象外）へ分離している。
+
+- `conf.d/*.toml` は lockfile が親ディレクトリの `mise.lock` に**合流する**ため隔離手段にならない。
+- `MISE_ENV` 方式は全プロジェクトディレクトリに波及するうえ、chezmoi のスクリプトは非対話 bash で走り `.zshenv` を読まないため apply 時にツールが入らない。
+
+**バージョン更新**: `~/.config/chezmoi/chezmoi.toml` の `private_tool_version` を書き換えて `chezmoi apply` するだけ。dotfiles 側のコミットは不要（スクリプトのバージョン hash 行が変わるので `mise install` も再実行される）。`mise.local.lock` の更新もあわせて行うなら `mise lock -g`（追跡対象外なのでコミットは不要）。
 
 導入するマシンで一度だけ用意しておくもの:
 
@@ -134,6 +147,40 @@ private GitHub repo のリリースを mise の **github バックエンド**で
 3. `private_tool_repo` / `op_account` / `private_tool_token_ref` を `~/.config/chezmoi/chezmoi.toml` の `[data]` に設定する（3つセット）。
 
 > トークンを解決できない (1Password ロック・変数未設定等) 場合、スクリプトは **中断**する (silent skip しない)。導入対象マシンで一時的に他ツールだけ入れたいときは 1Password を解錠してから再 apply すること。
+
+## mise lockfile の更新
+
+`~/.config/mise/mise.lock`（全ツールの version / URL / checksum を 7 プラットフォーム分固定した lockfile）は `dot_config/mise/private_mise.lock` として追跡している。**生成物なので手で編集せず**、ツールを追加・バージョン変更したら次の手順で source へ同期してコミットする（`dot_agents/dot_skill-lock.json` と同じ「実体を `cp` で追跡」パターン）。
+
+```sh
+# 1. dot_config/mise/config.toml.tmpl の [tools] を編集したあと
+chezmoi apply -v    # run_onchange が mise install を実行する
+
+# 2. 全プラットフォーム分の URL/checksum を再解決する
+#    ※ mise install だけでは「現在の platform 分しか lock されず、削除済みツールも残る」
+#    ※ GITHUB_TOKEN は必須。未認証だと 60 req/h で即座にレート制限に当たり、
+#      403 で取りこぼした platform エントリが歯抜けのまま lock に書かれる
+export GITHUB_TOKEN="$(gh auth token)"
+mise lock -g
+
+#    取りこぼしが無いか確認する（7 未満は上流が全 platform を配布していない場合もある）
+awk '/^\[\[tools\./{n++; c[n]=0} /^\[tools\..*platforms\./{c[n]++} \
+  END{f=0; for(i=1;i<=n;i++) if(c[i]>=7) f++; print f" / "n" tools with 7 platforms"}' ~/.config/mise/mise.lock
+
+# 3. private な参照が混ざっていないか確認（owner が全部 public であること）
+grep -o 'github\.com/[^/]*/[^/"]*' ~/.config/mise/mise.lock | sort -u
+
+# 4. source へ同期 → diff が空になることを確認 → コミット
+cp ~/.config/mise/mise.lock "$(chezmoi source-path)/dot_config/mise/private_mise.lock"
+chezmoi diff
+```
+
+> `uv` / `android-sdk` の `"latest"` は lockfile があると固定される（自動更新されなくなる）。上げたいときは `mise lock -g --bump`（config は書き換えない）を挟んでから手順 4 へ。
+
+**`mise lock` の注意点:**
+
+- **既に lockfile にある platform しか更新しない。** 新しく platform を増やすには `-p` で明示する必要がある（`mise lock -g -p linux-arm64,linux-arm64-musl,linux-x64,linux-x64-musl,macos-arm64,macos-x64,windows-x64`）。上流が配布していない platform は書かれず、以後その集合が「既存」になるので数は自然に落ち着く。7 未満のツールがあっても異常ではない（例: `github:sunakan/op-vault` は darwin_arm64 のみ配布なので 1）。
+- GitHub の build attestation を公開しているツール（uv / gh / jq / yq / pinact / ghtkn / op-vault 等）は、provenance 記録のため **lock のたびにアーティファクト実体をダウンロードする**（キャッシュされない）。実行が遅いのはこれが理由で、異常ではない。
 
 ## chezmoi cheatsheet
 

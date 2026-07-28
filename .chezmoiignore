@@ -8,3 +8,7 @@ _archive/**
 .agents/skills/**
 .claude/plugins/known_marketplaces.json
 .claude/plugins/installed_plugins.json
+{{ if not (hasKey . "private_tool_repo") -}}
+.config/mise/config.local.toml
+{{ end -}}
+.config/mise/mise.local.lock

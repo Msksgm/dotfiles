@@ -1,0 +1,18 @@
+# private GitHub repo のツール専用の global config（machine-local）。
+#
+# config.toml と別ファイルにすることで lockfile が mise.local.lock に分かれ、
+# public repo で追跡する mise.lock に private repo 名 / リリースアセット URL が載らない。
+# mise の lockfile 名は「宣言した config ファイル名の .toml → .lock」で決まるため、
+# conf.d/*.toml は親の mise.lock に合流してしまい隔離手段にならない。
+#
+# global config の解決順: conf.d/*.toml → config.toml → config.<env>.toml → config.local.toml
+#
+# 展開されるのは chezmoi.toml に private_tool_repo を設定したマシンのみ（.chezmoiignore で制御）。
+# repo 名・バージョンとも chezmoi の [data] から注入し、public repo には残さない。
+# インストールに必要な GITHUB_TOKEN は run_onchange_after_install-mise-tools.sh が
+# op-vault 経由で解決する。
+{{- if hasKey . "private_tool_repo" }}
+
+[tools]
+"github:{{ .private_tool_repo }}" = "{{ .private_tool_version }}" # private CLI tool (github backend; GITHUB_TOKEN via op-vault)
+{{- end }}

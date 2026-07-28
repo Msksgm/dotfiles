@@ -1,18 +1,38 @@
 #!/bin/bash
-# Install / update mise-managed tools from ~/.config/mise/config.toml.
-# Re-runs on `chezmoi apply` whenever config.toml changes (the hash below
-# changes with it, so chezmoi detects a new script — same trick as the Brewfile).
+# Install / update mise-managed tools from the global mise configs.
+# Re-runs on `chezmoi apply` whenever config.toml / config.local.toml / mise.lock、
+# または chezmoi.toml 側の private tool のバージョンが変わったとき（下のハッシュが
+# 変わり chezmoi が新しいスクリプトとして検知する — Brewfile と同じ仕組み）。
 #
 # `after_` guarantees this runs after run_onchange_install-packages.sh.tmpl,
 # so Homebrew has already installed the mise binary itself.
 #
 # private な CLI tool は mise の github バックエンドで入れるため GITHUB_TOKEN が要る。
 # apply 時に 1Password から op-vault 経由でトークンを解決し `mise install` の直前に
-# export する。op アカウント / シークレット参照 / 対象 repo は chezmoi の [data] から
-# 注入するので、public repo にシークレットや内部参照を残さない。private_tool_repo を
-# 設定したマシンでだけ有効（hasKey ゲート）。
+# export する。op アカウント / シークレット参照 / 対象 repo / バージョンは chezmoi の
+# [data] から注入するので、public repo にシークレットや内部参照を残さない。
+# private_tool_repo を設定したマシンでだけ有効（hasKey ゲート）。
+#
+# private tool は ~/.config/mise/config.local.toml（dot_config/mise/private_config.local.toml.tmpl）
+# 側で宣言している。config.toml と分けることで lockfile が mise.local.lock に分離され、
+# dotfiles で追跡する mise.lock に private repo 名 / アセット URL が載らない。
+#
+# ~/.config/mise/mise.lock も chezmoi 管理下（dot_config/mise/private_mise.lock）。
+# `after_` なのでこのスクリプトが走る時点で config.toml / config.local.toml / mise.lock は
+# 適用済みで、`mise install` は lock の URL/checksum を使って再現性のある導入をする。
+# - `--locked` は付けない: private tool は mise.local.lock を持たないため失敗する。
+# - `mise lock -g` もここでは実行しない: apply のたびに lock を書き換えて drift を作るため。
+#   lock の更新は人間の明示操作（README "mise lockfile の更新" 参照）。
+#
+# version hash は `include`（raw テンプレートを読む）では検知できない chezmoi.toml 側の
+# バージョン変更を拾うためのもの。値そのものは埋めず sha256 だけを置く。
 #
 # config hash: {{ include "dot_config/mise/config.toml.tmpl" | sha256sum }}
+# private config hash: {{ include "dot_config/mise/private_config.local.toml.tmpl" | sha256sum }}
+{{ if hasKey . "private_tool_repo" -}}
+# private tool version hash: {{ .private_tool_version | sha256sum }}
+{{ end -}}
+# lockfile hash: {{ include "dot_config/mise/private_mise.lock" | sha256sum }}
 set -e
 
 # Make brew (and the brew-installed mise) available in this non-interactive shell.
@@ -35,6 +55,7 @@ fi
 export GITHUB_TOKEN
 
 {{ end -}}
-# Installs everything declared in the global config (~/.config/mise/config.toml),
-# which chezmoi has already applied. Pinned versions make this reproducible.
+# Installs everything declared in the global configs (~/.config/mise/config.toml and,
+# on machines that have it, ~/.config/mise/config.local.toml), which chezmoi has already
+# applied. Pinned versions + the tracked mise.lock make this reproducible.
 mise install
