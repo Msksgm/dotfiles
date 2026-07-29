@@ -175,7 +175,9 @@ cp ~/.config/mise/mise.lock "$(chezmoi source-path)/dot_config/mise/private_mise
 chezmoi diff
 ```
 
-> `uv` / `android-sdk` の `"latest"` は lockfile があると固定される（自動更新されなくなる）。上げたいときは `mise lock -g --bump`（config は書き換えない）を挟んでから手順 4 へ。
+> `uv` の `"latest"` は lockfile があると固定される（自動更新されなくなる）。上げたいときは `mise lock -g --bump`（config は書き換えない）を挟んでから手順 4 へ。
+>
+> `"latest"` は lockfile 追跡下では自動更新の利点が消える一方、resolve が意図しない古いバージョンを掴むと `mise install` が失敗し続ける（`android-sdk` が `1.0` に固定されて壊れた実例あり）。新規ツールは原則 `"latest"` を使わず明示ピンにすること。
 
 **`mise lock` の注意点:**
 

@@ -5,7 +5,10 @@ python = "3.13.6"
 terraform = "1.14.1"
 uv = "latest"
 java = "21.0.2"
-android-sdk = "latest"
+# NOTE: android-sdk は "latest" にしないこと。lockfile 追跡下では結局固定されるうえ、
+# resolve が最古の 1.0（2020 年の cmdline-tools）を掴んで `mise install` が毎回失敗した。
+# 他ツールと同じく明示ピンに統一する。上げるときは `mise ls-remote android-sdk` で確認する。
+android-sdk = "22.0"
 go = "1.26.3"
 # aqua レジストリ未登録のツールは github backend
 "github:sunakan/op-vault" = "0.4.0" # op-vault
