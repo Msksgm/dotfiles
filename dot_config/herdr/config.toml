@@ -1,3 +1,10 @@
+# 初回起動時の通知セットアップ案内を抑止する。
+# herdr はこのキーが無い場合も案内を表示し、選択後に home 側 config の先頭へ
+# `onboarding = false` を書き込むため、source に持たないと apply で消えて案内が
+# 再表示され、書き戻されて diff が復活し続ける（theme / ui.toast と同じドリフト）。
+# 案内が聞くのは通知設定だが、それは下の [ui.toast] / [ui.sound] で既に宣言済み。
+onboarding = false
+
 # tmux (dot_tmux.conf) のキーバインドに合わせた herdr 設定。
 # herdr は tmux 風の prefix を持つエージェントマルチプレクサ。
 # 対応: pane→pane / tmux window→herdr tab / tmux session→herdr workspace。
