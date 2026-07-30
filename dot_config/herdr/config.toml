@@ -66,6 +66,25 @@ type = "shell"
 command = "$HOME/.config/herdr/rename-workspace.sh"
 description = "rename workspace to git repo name"
 
+# pane を新しい tab に切り出す — tmux: prefix+! (break-pane。dot_tmux.conf に記述は無いが
+# tmux 標準バインドで、unbind-key -a していないため有効)。
+# herdr には break-pane 相当の組み込みアクションが無いため CLI を shell command で呼ぶ。
+# 冒頭の対応表どおり tmux window = herdr tab なので --new-tab が対応する。
+# --focus は tmux の break-pane が新 window へ移動する挙動に合わせるため明示する。
+#
+# キー: shift 付き記号は端末依存だが、上の split_vertical = "prefix+|" (shift+\) が
+# 同じカテゴリで実機動作しているため prefix+! (shift+1) を採用した。
+# switch_tab = "prefix+1..9" (herdr default) とは修飾子が異なるため衝突しない。
+#
+# PATH: herdr を detached で起動すると mise shim が PATH に無いことがあるため
+# (rename-workspace.sh と同じ理由)、herdr を呼ぶ前に shim を通す。
+# TOML はシングルクォート (literal string) で $ のエスケープを避ける。
+[[keys.command]]
+key = "prefix+!"
+type = "shell"
+command = 'export PATH="$HOME/.local/share/mise/shims:$PATH"; herdr pane move "$HERDR_ACTIVE_PANE_ID" --new-tab --focus'
+description = "break pane into a new tab"
+
 # 以下は tmux と 1:1 対応できないため herdr default のまま:
 #   - リサイズ: tmux は H/J/K/L のワンショット、herdr は resize_mode(prefix+r)。
 #   - レイアウト循環: tmux prefix+Space(next-layout) は herdr に該当機能なし（分割タイリングのみ）。
