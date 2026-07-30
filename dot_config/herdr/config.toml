@@ -92,3 +92,17 @@ delivery = "system"
 # enabled=true は herdr default だが、意図を source に明示して残す。
 [ui.sound]
 enabled = true
+
+# サイドバー（agent パネル）の行構成。
+# herdr default は [["state_icon", "workspace", "tab"], ["agent"]]。
+# 1 行目の末尾に pane ID を足して、サイドバーの表示と `herdr agent list` /
+# `herdr pane ...` のターゲット指定を目視で突き合わせられるようにする。
+# 組み込みトークンは workspace/tab の「ラベル」しか描画できず pane ID を出せないため、
+# $pane_id はカスタムトークン。~/.zsh/herdr.zsh が
+# `herdr pane report-metadata --token pane_id=...` で報告した値を描画する。
+#
+# 色: トークン既定のままだと dim なグレーで workspace 名と区別しづらいので、
+# catppuccin の peach を明示し dim を外す。端末（iTerm）側の設定には依存しない。
+# 色を変えたいときは fg を差し替える: blue #89b4fa / mauve #cba6f7 / teal #94e2d5。
+[ui.sidebar.agents]
+rows = [["state_icon", "workspace", "tab", { token = "$pane_id", fg = "#fab387", dim = false }], ["agent"]]

@@ -183,6 +183,11 @@ eval "$(mise activate zsh)"
 
 # direnv (mise activate の後に置くことで shims が PATH に入った状態で実行できる)
 eval "$(direnv hook zsh)"
+
+# herdr サイドバーへ pane ID を報告する（定義は ~/.zsh/herdr.zsh）。
+# direnv と同じ理由でこの位置: mise activate 済みで herdr が PATH にいる必要がある。
+# ~/.zsh/*.zsh の source は mise activate より前なので、定義元では呼べない。
+_herdr_report_pane_id
 show_virtual_env() {
   if [ -n "$VIRTUAL_ENV" ]; then
     echo "($(basename $VIRTUAL_ENV))"
