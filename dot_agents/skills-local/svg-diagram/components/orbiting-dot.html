@@ -1,0 +1,66 @@
+<!--
+  部品テンプレート: 円周を周回する点
+  ------------------------------------------------
+  用途:
+    - 円 + その円周上を周回し続ける点。ローディング表現やモーションの
+      最も基本的な例として使う。
+  貼り付け方:
+    - <g class="wsdb-orbit"> ... </g> をそのままコピーする。
+    - 円の半径・周回速度は circle の r / animateMotion の dur を変更する。
+  依存 defs:
+    - なし
+  ダークテーマ:
+    - .wsdb-orbit クラスへスコープした CSS 変数を
+      @media (prefers-color-scheme: dark) で再定義して追従させる
+  複数貼り付け時の注意:
+    - id を持たないため、同一ページに複数貼っても衝突しない
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>部品: 円周を周回する点</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef1f6;
+    font-family: -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #0b0f16; }
+  }
+</style>
+</head>
+<body>
+
+<svg viewBox="0 0 400 400" width="320" height="320" role="img" aria-label="円周を周回する点のアニメーション">
+  <style>
+    .wsdb-orbit {
+      --ring: #161c28;
+      --dot: #2f5fd6;
+    }
+    @media (prefers-color-scheme: dark) {
+      .wsdb-orbit {
+        --ring: #7c8898;
+        --dot: #4da3ff;
+      }
+    }
+  </style>
+
+  <g class="wsdb-orbit">
+    <circle cx="200" cy="200" r="150" fill="none" stroke="var(--ring)" stroke-width="2" />
+    <circle r="10" fill="var(--dot)">
+      <animateMotion
+        dur="4s"
+        repeatCount="indefinite"
+        path="M 350,200 A 150,150 0 1,1 49.99999999999999,200 A 150,150 0 1,1 350,200" />
+    </circle>
+  </g>
+</svg>
+
+</body>
+</html>

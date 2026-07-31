@@ -1,0 +1,191 @@
+<!--
+  完成イメージ: 動的パケットフロー図
+  ------------------------------------------------
+  内容:
+    - クライアント／Webサーバー／データベースを、常時流れ続ける光る粒子（パケット）で
+      つないだ動的な通信フロー図。components/client-node.html, webserver-node.html,
+      database-node.html, packet.html を組み合わせたもの。
+  貼り付け方:
+    - <figure class="wsdb-flow"> ... </figure> 全体をブログ記事へそのまま貼り付け可能。
+  ダークテーマ:
+    - .wsdb-flow クラスへスコープした CSS 変数を
+      @media (prefers-color-scheme: dark) で再定義して追従させる
+  複数貼り付け時の注意:
+    - id は "wsdb-flow-" プレフィックスでスコープ済み。同じ図を2つ以上
+      貼る場合は id の重複がないか確認すること
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>完成イメージ: パケットフロー図</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef1f6;
+    padding: 40px 20px;
+    box-sizing: border-box;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #0b0f16; }
+  }
+</style>
+</head>
+<body>
+
+<figure class="wsdb-flow" style="margin:0;max-width:960px;width:100%;">
+  <style>
+    .wsdb-flow {
+      --surface: #f7f9fc;
+      --border: #d7dde6;
+      --ink: #161c28;
+      --muted: #5c6b7d;
+      --request: #2f5fd6;
+      --response: #c9781f;
+      --path-idle: rgba(22, 28, 40, 0.12);
+      --grid-dot: rgba(20, 28, 40, 0.07);
+      --hub-glow: rgba(47, 95, 214, 0.18);
+    }
+    @media (prefers-color-scheme: dark) {
+      .wsdb-flow {
+        --surface: #131a24;
+        --border: #2a3341;
+        --ink: #e9eef6;
+        --muted: #7c8898;
+        --request: #4da3ff;
+        --response: #ffb454;
+        --path-idle: rgba(233, 238, 246, 0.14);
+        --grid-dot: rgba(233, 238, 246, 0.06);
+        --hub-glow: rgba(77, 163, 255, 0.3);
+      }
+    }
+    .wsdb-flow { font-family: -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; color: var(--ink); }
+    .wsdb-flow .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .wsdb-flow .scroll { overflow-x: auto; }
+    .wsdb-flow svg { display: block; width: 100%; min-width: 720px; height: auto; }
+    .wsdb-flow .legend {
+      display: flex; gap: 22px; padding: 13px 22px; border-top: 1px solid var(--border);
+      font-size: 12.5px; color: var(--muted); flex-wrap: wrap;
+    }
+    .wsdb-flow .legend-item { display: flex; align-items: center; gap: 8px; }
+    .wsdb-flow .swatch { width: 22px; height: 2px; background: var(--request); border-radius: 2px; }
+    .wsdb-flow .swatch.response { background: var(--response); }
+  </style>
+
+  <div class="card">
+    <div class="scroll">
+      <svg viewBox="0 0 960 460" role="img" aria-label="クライアント、Webサーバー、データベース間をパケットが往復し続けるアニメーション図">
+        <defs>
+          <pattern id="wsdb-flow-dotgrid" width="26" height="26" patternUnits="userSpaceOnUse">
+            <circle cx="1.5" cy="1.5" r="1.5" fill="var(--grid-dot)" />
+          </pattern>
+          <radialGradient id="wsdb-flow-hubGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="var(--request)" stop-opacity="0.22" />
+            <stop offset="100%" stop-color="var(--request)" stop-opacity="0" />
+          </radialGradient>
+          <filter id="wsdb-flow-blurGlow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="3.2" />
+          </filter>
+
+          <path id="wsdb-flow-pathReqCS" d="M 176,205 C 270,150 330,150 402,198" fill="none" />
+          <path id="wsdb-flow-pathResSC" d="M 402,232 C 330,285 270,285 176,235" fill="none" />
+          <path id="wsdb-flow-pathReqSD" d="M 558,198 C 640,150 700,150 776,205" fill="none" />
+          <path id="wsdb-flow-pathResDS" d="M 776,235 C 700,285 640,285 558,232" fill="none" />
+        </defs>
+
+        <rect x="0" y="0" width="960" height="460" fill="url(#wsdb-flow-dotgrid)" />
+        <ellipse cx="480" cy="215" rx="260" ry="150" fill="url(#wsdb-flow-hubGlow)" />
+
+        <use href="#wsdb-flow-pathReqCS" stroke="var(--path-idle)" stroke-width="1.5" />
+        <use href="#wsdb-flow-pathResSC" stroke="var(--path-idle)" stroke-width="1.5" />
+        <use href="#wsdb-flow-pathReqSD" stroke="var(--path-idle)" stroke-width="1.5" />
+        <use href="#wsdb-flow-pathResDS" stroke="var(--path-idle)" stroke-width="1.5" />
+
+        <text x="200" y="168" font-size="11" font-weight="600" font-family="ui-monospace,monospace" fill="var(--request)">HTTPリクエスト</text>
+        <text x="200" y="308" font-size="11" font-weight="600" font-family="ui-monospace,monospace" fill="var(--response)">HTTPレスポンス</text>
+        <text x="592" y="168" font-size="11" font-weight="600" font-family="ui-monospace,monospace" fill="var(--request)">SQLクエリ</text>
+        <text x="592" y="308" font-size="11" font-weight="600" font-family="ui-monospace,monospace" fill="var(--response)">結果セット</text>
+
+        <!-- クライアント（components/client-node.html 準拠） -->
+        <g transform="translate(90,170)">
+          <rect x="0" y="0" width="86" height="60" rx="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6" />
+          <rect x="8" y="8" width="70" height="38" rx="3" fill="none" stroke="var(--muted)" stroke-width="1.3" />
+          <rect x="30" y="60" width="26" height="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6" />
+          <line x1="24" y1="68" x2="62" y2="68" stroke="var(--ink)" stroke-width="1.6" />
+          <text x="43" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">クライアント</text>
+          <text x="43" y="108" text-anchor="middle" font-size="10.5" font-family="ui-monospace,monospace" fill="var(--muted)">browser</text>
+        </g>
+
+        <!-- Webサーバー（components/webserver-node.html 準拠） -->
+        <g transform="translate(400,170)">
+          <rect x="0" y="0" width="160" height="90" rx="10" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6" />
+          <line x1="14" y1="22" x2="146" y2="22" stroke="var(--muted)" stroke-width="1.2" />
+          <line x1="14" y1="45" x2="146" y2="45" stroke="var(--muted)" stroke-width="1.2" />
+          <line x1="14" y1="68" x2="146" y2="68" stroke="var(--muted)" stroke-width="1.2" />
+          <circle cx="134" cy="22" r="3" fill="var(--request)">
+            <animate attributeName="opacity" values="1;0.25;1" dur="1.8s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="134" cy="45" r="3" fill="var(--request)">
+            <animate attributeName="opacity" values="0.25;1;0.25" dur="1.8s" begin="0.3s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="134" cy="68" r="3" fill="var(--request)">
+            <animate attributeName="opacity" values="1;0.25;1" dur="1.8s" begin="0.6s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="80" cy="45" r="46" fill="none" stroke="var(--request)" stroke-width="1.5" opacity="0">
+            <animate attributeName="r" values="30;62" dur="1.9s" begin="1.1s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.5;0" dur="1.9s" begin="1.1s" repeatCount="indefinite" />
+          </circle>
+          <text x="80" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Webサーバー</text>
+          <text x="80" y="126" text-anchor="middle" font-size="10.5" font-family="ui-monospace,monospace" fill="var(--muted)">app server</text>
+        </g>
+
+        <!-- データベース（components/database-node.html 準拠） -->
+        <g transform="translate(742,168)">
+          <path d="M 0,12 A 34,12 0 1 1 68,12 A 34,12 0 1 1 0,12 Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6" />
+          <path d="M 0,12 L 0,72 A 34,12 0 0 0 68,72 L 68,12" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6" />
+          <path d="M 0,32 A 34,12 0 0 0 68,32" fill="none" stroke="var(--muted)" stroke-width="1.1" />
+          <path d="M 0,52 A 34,12 0 0 0 68,52" fill="none" stroke="var(--muted)" stroke-width="1.1" />
+          <circle cx="34" cy="42" r="50" fill="none" stroke="var(--response)" stroke-width="1.5" opacity="0">
+            <animate attributeName="r" values="32;66" dur="1.9s" begin="1.5s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.5;0" dur="1.9s" begin="1.5s" repeatCount="indefinite" />
+          </circle>
+          <text x="34" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">データベース</text>
+          <text x="34" y="110" text-anchor="middle" font-size="10.5" font-family="ui-monospace,monospace" fill="var(--muted)">DB</text>
+        </g>
+
+        <!-- パケット（components/packet.html 準拠、往復4経路に配置） -->
+        <circle r="7" fill="var(--request)" filter="url(#wsdb-flow-blurGlow)" opacity="0.55"><animateMotion dur="1.8s" begin="0s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathReqCS" /></animateMotion></circle>
+        <circle r="3.2" fill="var(--request)"><animateMotion dur="1.8s" begin="0s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathReqCS" /></animateMotion></circle>
+        <circle r="7" fill="var(--request)" filter="url(#wsdb-flow-blurGlow)" opacity="0.55"><animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathReqCS" /></animateMotion></circle>
+        <circle r="3.2" fill="var(--request)"><animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathReqCS" /></animateMotion></circle>
+
+        <circle r="7" fill="var(--request)" filter="url(#wsdb-flow-blurGlow)" opacity="0.55"><animateMotion dur="1.5s" begin="1.1s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathReqSD" /></animateMotion></circle>
+        <circle r="3.2" fill="var(--request)"><animateMotion dur="1.5s" begin="1.1s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathReqSD" /></animateMotion></circle>
+        <circle r="7" fill="var(--request)" filter="url(#wsdb-flow-blurGlow)" opacity="0.55"><animateMotion dur="1.5s" begin="2.0s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathReqSD" /></animateMotion></circle>
+        <circle r="3.2" fill="var(--request)"><animateMotion dur="1.5s" begin="2.0s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathReqSD" /></animateMotion></circle>
+
+        <circle r="7" fill="var(--response)" filter="url(#wsdb-flow-blurGlow)" opacity="0.55"><animateMotion dur="1.5s" begin="1.5s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathResDS" /></animateMotion></circle>
+        <circle r="3.2" fill="var(--response)"><animateMotion dur="1.5s" begin="1.5s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathResDS" /></animateMotion></circle>
+        <circle r="7" fill="var(--response)" filter="url(#wsdb-flow-blurGlow)" opacity="0.55"><animateMotion dur="1.5s" begin="2.4s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathResDS" /></animateMotion></circle>
+        <circle r="3.2" fill="var(--response)"><animateMotion dur="1.5s" begin="2.4s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathResDS" /></animateMotion></circle>
+
+        <circle r="7" fill="var(--response)" filter="url(#wsdb-flow-blurGlow)" opacity="0.55"><animateMotion dur="1.8s" begin="2.9s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathResSC" /></animateMotion></circle>
+        <circle r="3.2" fill="var(--response)"><animateMotion dur="1.8s" begin="2.9s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathResSC" /></animateMotion></circle>
+        <circle r="7" fill="var(--response)" filter="url(#wsdb-flow-blurGlow)" opacity="0.55"><animateMotion dur="1.8s" begin="3.8s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathResSC" /></animateMotion></circle>
+        <circle r="3.2" fill="var(--response)"><animateMotion dur="1.8s" begin="3.8s" repeatCount="indefinite"><mpath href="#wsdb-flow-pathResSC" /></animateMotion></circle>
+      </svg>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="swatch"></span>リクエスト / クエリ（往路）</div>
+      <div class="legend-item"><span class="swatch response"></span>レスポンス / 結果（復路）</div>
+    </div>
+  </div>
+</figure>
+
+</body>
+</html>

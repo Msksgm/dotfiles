@@ -1,0 +1,84 @@
+<!--
+  部品テンプレート: データベースノード
+  ------------------------------------------------
+  用途:
+    - 通信フロー図の「データベース」を表すアイコン。円柱（シリンダー）+
+      パルスリング（結果返却時のような明滅）を内包する自己完結の <g>。
+  貼り付け方:
+    - <g class="wsdb-db"> ... </g> をコピーし、外側に
+      <g transform="translate(X,Y)"> ... </g> を被せて配置する。
+    - パルスリングの色（既定は response 色のオレンジ）は用途に応じて変更してよい。
+  依存 defs:
+    - なし（単体で完結。アニメーションは <animate> のみで id 参照なし）
+  ダークテーマ:
+    - .wsdb-db クラスへスコープした CSS 変数を
+      @media (prefers-color-scheme: dark) で再定義して追従させる
+  複数貼り付け時の注意:
+    - id を持たないため、同一ページに複数貼っても衝突しない
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>部品: データベースノード</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef1f6;
+    font-family: -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #0b0f16; }
+  }
+</style>
+</head>
+<body>
+
+<svg viewBox="0 0 160 200" width="240" height="300" role="img" aria-label="データベースノード">
+  <style>
+    .wsdb-db {
+      --ink: #161c28;
+      --muted: #5c6b7d;
+      --surface: #ffffff;
+      --accent: #c9781f;
+    }
+    @media (prefers-color-scheme: dark) {
+      .wsdb-db {
+        --ink: #e9eef6;
+        --muted: #7c8898;
+        --surface: #131a24;
+        --accent: #ffb454;
+      }
+    }
+    .wsdb-db .shell { fill: var(--surface); stroke: var(--ink); stroke-width: 1.6; }
+    .wsdb-db .band { fill: none; stroke: var(--muted); stroke-width: 1.1; }
+    .wsdb-db .pulse { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+    .wsdb-db .label { font-size: 13px; font-weight: 700; fill: var(--ink); text-anchor: middle; }
+    .wsdb-db .sublabel {
+      font-size: 10.5px; fill: var(--muted); text-anchor: middle;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+  </style>
+
+  <g class="wsdb-db" transform="translate(46,40)">
+    <path class="shell" d="M 0,12 A 34,12 0 1 1 68,12 A 34,12 0 1 1 0,12 Z" />
+    <path class="shell" d="M 0,12 L 0,72 A 34,12 0 0 0 68,72 L 68,12" />
+    <path class="band" d="M 0,32 A 34,12 0 0 0 68,32" />
+    <path class="band" d="M 0,52 A 34,12 0 0 0 68,52" />
+
+    <circle class="pulse" cx="34" cy="42" r="50" opacity="0">
+      <animate attributeName="r" values="32;66" dur="1.9s" begin="1.5s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.5;0" dur="1.9s" begin="1.5s" repeatCount="indefinite" />
+    </circle>
+
+    <text class="label" x="34" y="96">データベース</text>
+    <text class="sublabel" x="34" y="110">DB</text>
+  </g>
+</svg>
+
+</body>
+</html>

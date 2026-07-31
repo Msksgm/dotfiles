@@ -1,0 +1,148 @@
+<!--
+  完成イメージ: レーン式シーケンス図（静的）
+  ------------------------------------------------
+  内容:
+    - クライアント／Webサーバー／データベースの3レーンと、
+      ①〜④の番号付きステップ矢印による静的な通信シーケンス図。
+    - components/client-node.html, webserver-node.html, database-node.html の
+      アイコンをこの図のレイアウトに合わせて配置したもの。
+  貼り付け方:
+    - <figure class="wsdb-seq"> ... </figure> 全体をブログ記事へそのまま貼り付け可能。
+  ダークテーマ:
+    - .wsdb-seq クラスへスコープした CSS 変数を
+      @media (prefers-color-scheme: dark) で再定義して追従させる
+  複数貼り付け時の注意:
+    - id は "wsdb-seq-" プレフィックスでスコープ済み。他テンプレートと同時に
+      貼る場合、同じ図を2つ以上貼るときは id の重複がないか確認すること
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>完成イメージ: シーケンス図</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef1f6;
+    padding: 40px 20px;
+    box-sizing: border-box;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #0b0f16; }
+  }
+</style>
+</head>
+<body>
+
+<figure class="wsdb-seq" style="margin:0;max-width:860px;width:100%;">
+  <style>
+    .wsdb-seq {
+      --paper: #f4f6f9;
+      --surface: #ffffff;
+      --border: #d7dce4;
+      --ink: #1b2230;
+      --muted: #5c6b7d;
+      --request: #3552c9;
+      --response: #c9822f;
+    }
+    @media (prefers-color-scheme: dark) {
+      .wsdb-seq {
+        --paper: #12151b;
+        --surface: #1a1f28;
+        --border: #2b323d;
+        --ink: #e7eaf0;
+        --muted: #8891a0;
+        --request: #6f8dff;
+        --response: #e0a94f;
+      }
+    }
+    .wsdb-seq { font-family: -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; color: var(--ink); }
+    .wsdb-seq .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .wsdb-seq .scroll { overflow-x: auto; }
+    .wsdb-seq svg { display: block; width: 100%; min-width: 640px; height: auto; }
+    .wsdb-seq .legend {
+      display: flex; gap: 24px; padding: 14px 20px; border-top: 1px solid var(--border);
+      font-size: 12.5px; color: var(--muted); flex-wrap: wrap;
+    }
+    .wsdb-seq .legend-item { display: flex; align-items: center; gap: 8px; }
+    .wsdb-seq .legend-line { width: 28px; height: 0; border-top: 2px solid var(--request); }
+    .wsdb-seq .legend-line.response { border-top: 2px dashed var(--response); }
+    .wsdb-seq ol.steps {
+      margin: 0; padding: 20px 20px 20px 40px; display: flex; flex-direction: column; gap: 10px; font-size: 0.92rem;
+    }
+    .wsdb-seq ol.steps li::marker { color: var(--muted); font-weight: 600; }
+    .wsdb-seq code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: color-mix(in srgb, var(--ink) 8%, transparent);
+      padding: 0.1em 0.4em; border-radius: 4px; font-size: 0.85em;
+    }
+  </style>
+
+  <div class="card">
+    <div class="scroll">
+      <svg viewBox="0 0 760 360" role="img" aria-label="クライアント、Webサーバー、データベース間の通信シーケンス図">
+        <text x="124" y="30" font-size="14" font-weight="700" fill="var(--ink)">クライアント</text>
+        <text x="124" y="46" font-size="11" fill="var(--muted)" font-family="ui-monospace,monospace">ブラウザ</text>
+        <circle cx="110" cy="34" r="5" fill="var(--request)" />
+
+        <text x="394" y="30" font-size="14" font-weight="700" fill="var(--ink)">Webサーバー</text>
+        <text x="394" y="46" font-size="11" fill="var(--muted)" font-family="ui-monospace,monospace">アプリケーション</text>
+        <circle cx="380" cy="34" r="5" fill="var(--ink)" />
+
+        <text x="664" y="30" font-size="14" font-weight="700" fill="var(--ink)">データベース</text>
+        <text x="664" y="46" font-size="11" fill="var(--muted)" font-family="ui-monospace,monospace">DB</text>
+        <circle cx="650" cy="34" r="5" fill="var(--response)" />
+
+        <line x1="110" y1="58" x2="110" y2="330" stroke="var(--border)" stroke-width="2" stroke-dasharray="3 5" />
+        <line x1="380" y1="58" x2="380" y2="330" stroke="var(--border)" stroke-width="2" stroke-dasharray="3 5" />
+        <line x1="650" y1="58" x2="650" y2="330" stroke="var(--border)" stroke-width="2" stroke-dasharray="3 5" />
+
+        <line x1="110" y1="100" x2="374" y2="100" stroke="var(--request)" stroke-width="2" marker-end="url(#wsdb-seq-arrowReq)" />
+        <text x="118" y="90" font-size="12.5" font-weight="600" fill="var(--request)">① HTTPリクエスト</text>
+        <text x="118" y="112" font-size="11" fill="var(--muted)" font-family="ui-monospace,monospace">GET /users</text>
+
+        <line x1="380" y1="160" x2="644" y2="160" stroke="var(--request)" stroke-width="2" marker-end="url(#wsdb-seq-arrowReq)" />
+        <text x="388" y="150" font-size="12.5" font-weight="600" fill="var(--request)">② SQLクエリ発行</text>
+        <text x="388" y="172" font-size="11" fill="var(--muted)" font-family="ui-monospace,monospace">SELECT * FROM users</text>
+
+        <line x1="650" y1="240" x2="386" y2="240" stroke="var(--response)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#wsdb-seq-arrowRes)" />
+        <text x="388" y="230" font-size="12.5" font-weight="600" fill="var(--response)">③ クエリ結果を返却</text>
+        <text x="388" y="252" font-size="11" fill="var(--muted)" font-family="ui-monospace,monospace">行データ（result rows）</text>
+
+        <line x1="380" y1="300" x2="116" y2="300" stroke="var(--response)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#wsdb-seq-arrowRes)" />
+        <text x="118" y="290" font-size="12.5" font-weight="600" fill="var(--response)">④ HTTPレスポンス</text>
+        <text x="118" y="312" font-size="11" fill="var(--muted)" font-family="ui-monospace,monospace">200 OK（JSON）</text>
+
+        <defs>
+          <marker id="wsdb-seq-arrowReq" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+            <path d="M0,0 L8,3.5 L0,7 Z" fill="var(--request)" />
+          </marker>
+          <marker id="wsdb-seq-arrowRes" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+            <path d="M0,0 L8,3.5 L0,7 Z" fill="var(--response)" />
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-line"></span>リクエスト／クエリ（往路）</div>
+      <div class="legend-item"><span class="legend-line response"></span>レスポンス／結果（復路）</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <ol class="steps">
+      <li><b>クライアント → Webサーバー</b>：ブラウザが <code>GET /users</code> のようなHTTPリクエストを送信する。</li>
+      <li><b>Webサーバー → DB</b>：受け取ったリクエストを解釈し、必要なデータを取得するためのSQLクエリ（例：<code>SELECT * FROM users</code>）を発行する。</li>
+      <li><b>DB → Webサーバー</b>：DBがクエリを実行し、該当する行データをWebサーバーに返却する。</li>
+      <li><b>Webサーバー → クライアント</b>：受け取ったデータをHTML/JSONなどの形式に整形し、HTTPレスポンスとしてクライアントに返す。</li>
+    </ol>
+  </div>
+</figure>
+
+</body>
+</html>

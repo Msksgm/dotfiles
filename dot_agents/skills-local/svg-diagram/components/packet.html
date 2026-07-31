@@ -1,0 +1,90 @@
+<!--
+  部品テンプレート: 流れるパケット（粒子）
+  ------------------------------------------------
+  用途:
+    - ノード間を流れ続けるデータ／リクエストを表す、光る粒子のアニメーション。
+      SMIL の animateMotion + mpath で任意の <path> に沿って周回させる。
+  貼り付け方:
+    1. 経路となる <path id="任意のid"> を defs 等に用意する（fill="none"）
+    2. 下記の「パケット1個分」のブロック（ぼかし円 + 実体円のペア）をコピーし、
+       <mpath href="#経路のid"> をその経路 id に書き換える
+    3. 連続して流れているように見せるには、同じ経路に対してこのペアを
+       begin をずらして複数（例: 0s / 0.9s / 1.8s）並べる
+  依存 defs:
+    - <filter id="...-blurGlow"> によるグロー効果（このファイルでは wsdb-blurGlow）
+    - 経路用の <path id="...">（このファイルでは wsdb-demoPath）
+  ダークテーマ:
+    - 粒子の色は var(--request) / var(--response) を参照し、
+      .wsdb-packet クラスへスコープした CSS 変数を @media (prefers-color-scheme: dark) で再定義する
+  複数貼り付け時の注意:
+    - <path id> と <filter id> は同一ページ内で重複しないよう、
+      ノード名などを含めたユニークな id にリネームすること（例: wsdb-pathReqCS）
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>部品: 流れるパケット</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef1f6;
+    font-family: -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #0b0f16; }
+  }
+</style>
+</head>
+<body>
+
+<svg viewBox="0 0 400 160" width="500" height="200" role="img" aria-label="流れるパケットのアニメーション例">
+  <style>
+    .wsdb-packet {
+      --request: #2f5fd6;
+      --response: #c9781f;
+      --path-idle: rgba(22, 28, 40, 0.15);
+    }
+    @media (prefers-color-scheme: dark) {
+      .wsdb-packet {
+        --request: #4da3ff;
+        --response: #ffb454;
+        --path-idle: rgba(233, 238, 246, 0.16);
+      }
+    }
+  </style>
+
+  <defs>
+    <filter id="wsdb-blurGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="3.2" />
+    </filter>
+    <path id="wsdb-demoPath" d="M 40,120 C 140,20 260,20 360,120" fill="none" />
+  </defs>
+
+  <g class="wsdb-packet">
+    <!-- 経路のガイド線（任意。無くてもよい） -->
+    <use href="#wsdb-demoPath" stroke="var(--path-idle)" stroke-width="1.5" />
+
+    <!-- パケット1個分: ぼかし円 + 実体円 のペア。begin をずらして複数並べると連続した流れに見える -->
+    <circle r="7" fill="var(--request)" filter="url(#wsdb-blurGlow)" opacity="0.55">
+      <animateMotion dur="1.8s" begin="0s" repeatCount="indefinite"><mpath href="#wsdb-demoPath" /></animateMotion>
+    </circle>
+    <circle r="3.2" fill="var(--request)">
+      <animateMotion dur="1.8s" begin="0s" repeatCount="indefinite"><mpath href="#wsdb-demoPath" /></animateMotion>
+    </circle>
+
+    <circle r="7" fill="var(--request)" filter="url(#wsdb-blurGlow)" opacity="0.55">
+      <animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#wsdb-demoPath" /></animateMotion>
+    </circle>
+    <circle r="3.2" fill="var(--request)">
+      <animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#wsdb-demoPath" /></animateMotion>
+    </circle>
+  </g>
+</svg>
+
+</body>
+</html>

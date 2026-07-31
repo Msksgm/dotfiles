@@ -14,7 +14,19 @@
 # touches the entries listed in the lock file and performs no prune of other
 # directories.
 #
+# ハッシュは skill・ファイル単位で明示列挙する（glob 展開はできない）。サポート
+# ファイルを追加したら、その1ファイルにつき1行ここに追記すること。追記を忘れると
+# スクリプト内容が変わらず、既存マシンでコピーが再実行されない。
+#
 # local-skill hash: {{ include "dot_agents/skills-local/review-io-impact/SKILL.md" | sha256sum }}
+# local-skill hash: {{ include "dot_agents/skills-local/svg-diagram/SKILL.md" | sha256sum }}
+# local-skill hash: {{ include "dot_agents/skills-local/svg-diagram/components/client-node.html" | sha256sum }}
+# local-skill hash: {{ include "dot_agents/skills-local/svg-diagram/components/webserver-node.html" | sha256sum }}
+# local-skill hash: {{ include "dot_agents/skills-local/svg-diagram/components/database-node.html" | sha256sum }}
+# local-skill hash: {{ include "dot_agents/skills-local/svg-diagram/components/packet.html" | sha256sum }}
+# local-skill hash: {{ include "dot_agents/skills-local/svg-diagram/components/orbiting-dot.html" | sha256sum }}
+# local-skill hash: {{ include "dot_agents/skills-local/svg-diagram/examples/sequence-diagram.html" | sha256sum }}
+# local-skill hash: {{ include "dot_agents/skills-local/svg-diagram/examples/packet-flow.html" | sha256sum }}
 set -e
 
 SRC="$HOME/.agents/skills-local"
