@@ -51,6 +51,23 @@ agent skill を追加/削除したら、`~/.agents/.skill-lock.json` を `dot_ag
 
 mise のツールを追加・バージョン変更したら、同じ要領で **`mise lock -g` を実行してから `cp ~/.config/mise/mise.lock dot_config/mise/private_mise.lock`** で lockfile を source へ同期してコミットすること（手順は README の "mise lockfile の更新"）。`mise install` だけでは現在の platform 分しか lock されず、削除済みツールのエントリも残るため `mise lock -g` を挟むのが必須。**private repo のツールは `dot_config/mise/config.toml.tmpl` に書かないこと** — lockfile `mise.lock` に repo 名とリリースアセット URL が載り、public repo に出せなくなる。private tool は `dot_config/mise/private_config.local.toml.tmpl`（→ `~/.config/mise/config.local.toml`、lock は追跡しない `mise.local.lock` に分離される）に書く。`conf.d/*.toml` は lockfile が `mise.lock` に合流するので隔離手段にならない。`mise.lock` は生成物なので手で編集せず `mise lock -g` で再生成し、コミット前に `grep -o 'github\.com/[^/]*/[^/"]*' ~/.config/mise/mise.lock | sort -u` で owner がすべて public か確認すること。
 
+## 二重チャネル管理ツール（CLI + Claude 連携）
+
+同じツールを CLI（mise）と Claude 連携（plugin / skill / hook）の**複数チャネルで管理**しているものがある。片方だけ更新すると挙動がズレる（例: CLI に入った新機能が plugin 側の古い hook から呼ばれず効かない）。
+
+| ツール | CLI チャネル | Claude 連携チャネル |
+|---|---|---|
+| crit | mise `github:tomasz-tomczyk/crit`（`dot_config/mise/config.toml.tmpl`） | plugin `crit@crit`（`run_onchange_after_install-claude-plugins.sh.tmpl` の manifest） |
+| herdr | mise `aqua:ogulcancelik/herdr`（同上） | agent skill（`dot_agents/dot_skill-lock.json`）+ hook（`dot_claude/modify_settings.json.tmpl` / `dot_claude/hooks/executable_herdr-agent-state.sh`） |
+| hunk | mise `aqua:modem-dev/hunk`（同上） | なし（CLI のみ） |
+
+**ルール: 二重チャネルのツールの CLI バージョンを更新するときは、Claude 連携チャネル側の更新も必要かユーザーに確認を促すこと。** 逆方向（plugin/skill だけ更新して CLI が古い）も同様。連携側の更新手順:
+
+- **crit（plugin）**: `claude plugin marketplace update crit` → `claude plugin update crit@crit`。manifest を変更しない限り run_onchange は再走しないため、バージョン追従は手動
+- **herdr（skill + hook）**: `skills update herdr`（または再 add）→ `cp ~/.agents/.skill-lock.json dot_agents/dot_skill-lock.json` で lock を source へ同期。hook スクリプトが更新された場合は `dot_claude/hooks/executable_herdr-agent-state.sh` へも再 `cp`（source はスナップショット）
+
+新しくツールを CLI と Claude 連携の両チャネルで導入したら、この表に追記すること。
+
 ## よく使うコマンド
 
 ```sh

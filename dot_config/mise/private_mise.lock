@@ -977,33 +977,33 @@ backend = "aqua:ogulcancelik/herdr"
 
 [tools."aqua:ogulcancelik/herdr"."platforms.linux-arm64"]
 checksum = "sha256:32e763a1499a6b694b1d708e4f062b743be1da9f34fcfa4d212d6db6fe09a8b9"
-url = "https://github.com/ogulcancelik/herdr/releases/download/v0.7.5/herdr-linux-aarch64"
-url_api = "https://api.github.com/repos/ogulcancelik/herdr/releases/assets/484992543"
+url = "https://github.com/herdrdev/herdr/releases/download/v0.7.5/herdr-linux-aarch64"
+url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/484992543"
 
 [tools."aqua:ogulcancelik/herdr"."platforms.linux-arm64-musl"]
 checksum = "sha256:32e763a1499a6b694b1d708e4f062b743be1da9f34fcfa4d212d6db6fe09a8b9"
-url = "https://github.com/ogulcancelik/herdr/releases/download/v0.7.5/herdr-linux-aarch64"
-url_api = "https://api.github.com/repos/ogulcancelik/herdr/releases/assets/484992543"
+url = "https://github.com/herdrdev/herdr/releases/download/v0.7.5/herdr-linux-aarch64"
+url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/484992543"
 
 [tools."aqua:ogulcancelik/herdr"."platforms.linux-x64"]
 checksum = "sha256:3dc83288073e4c2d3c679a30e7be97bcca9141c6fd17dbbb9219142e95c59253"
-url = "https://github.com/ogulcancelik/herdr/releases/download/v0.7.5/herdr-linux-x86_64"
-url_api = "https://api.github.com/repos/ogulcancelik/herdr/releases/assets/484992544"
+url = "https://github.com/herdrdev/herdr/releases/download/v0.7.5/herdr-linux-x86_64"
+url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/484992544"
 
 [tools."aqua:ogulcancelik/herdr"."platforms.linux-x64-musl"]
 checksum = "sha256:3dc83288073e4c2d3c679a30e7be97bcca9141c6fd17dbbb9219142e95c59253"
-url = "https://github.com/ogulcancelik/herdr/releases/download/v0.7.5/herdr-linux-x86_64"
-url_api = "https://api.github.com/repos/ogulcancelik/herdr/releases/assets/484992544"
+url = "https://github.com/herdrdev/herdr/releases/download/v0.7.5/herdr-linux-x86_64"
+url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/484992544"
 
 [tools."aqua:ogulcancelik/herdr"."platforms.macos-arm64"]
 checksum = "sha256:37350546b0012555943b92eaf962665de4e264395baeb44227b8015e8ff5b0d6"
-url = "https://github.com/ogulcancelik/herdr/releases/download/v0.7.5/herdr-macos-aarch64"
-url_api = "https://api.github.com/repos/ogulcancelik/herdr/releases/assets/484992542"
+url = "https://github.com/herdrdev/herdr/releases/download/v0.7.5/herdr-macos-aarch64"
+url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/484992542"
 
 [tools."aqua:ogulcancelik/herdr"."platforms.macos-x64"]
 checksum = "sha256:3fe50c4a63dc8102306b1322178628ddb3655cd3ae56d784f094153408d69e62"
-url = "https://github.com/ogulcancelik/herdr/releases/download/v0.7.5/herdr-macos-x86_64"
-url_api = "https://api.github.com/repos/ogulcancelik/herdr/releases/assets/484992541"
+url = "https://github.com/herdrdev/herdr/releases/download/v0.7.5/herdr-macos-x86_64"
+url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/484992541"
 
 [[tools."aqua:openai/codex"]]
 version = "0.142.4"
@@ -1548,43 +1548,43 @@ url_api = "https://api.github.com/repos/sunakan/op-vault/releases/assets/4871859
 provenance = "github-attestations"
 
 [[tools."github:tomasz-tomczyk/crit"]]
-version = "0.18.1"
+version = "0.18.2"
 backend = "github:tomasz-tomczyk/crit"
 
 [tools."github:tomasz-tomczyk/crit"."platforms.linux-arm64"]
-checksum = "sha256:f95f18342c7e52100bf568ad159d646ccbda5ff114670637f148a4467c0e784d"
-url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.1/crit-linux-arm64"
-url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/480435209"
+checksum = "sha256:2d84b30af3961fe67cfd017235ce79404ef6ffda37928e02d651ea38bff15aad"
+url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.2/crit-linux-arm64"
+url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/494559496"
 
 [tools."github:tomasz-tomczyk/crit"."platforms.linux-arm64-musl"]
-checksum = "sha256:f95f18342c7e52100bf568ad159d646ccbda5ff114670637f148a4467c0e784d"
-url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.1/crit-linux-arm64"
-url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/480435209"
+checksum = "sha256:2d84b30af3961fe67cfd017235ce79404ef6ffda37928e02d651ea38bff15aad"
+url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.2/crit-linux-arm64"
+url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/494559496"
 
 [tools."github:tomasz-tomczyk/crit"."platforms.linux-x64"]
-checksum = "sha256:f977bdc16527bd8619e6f7d18b72cd9865513581eb005d5ace9f287156efc225"
-url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.1/crit-linux-amd64"
-url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/480435206"
+checksum = "sha256:897b6e8802f9dfcf09f855b409604a1b68e5e26061934591b0565c2099cf1022"
+url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.2/crit-linux-amd64"
+url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/494559500"
 
 [tools."github:tomasz-tomczyk/crit"."platforms.linux-x64-musl"]
-checksum = "sha256:f977bdc16527bd8619e6f7d18b72cd9865513581eb005d5ace9f287156efc225"
-url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.1/crit-linux-amd64"
-url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/480435206"
+checksum = "sha256:897b6e8802f9dfcf09f855b409604a1b68e5e26061934591b0565c2099cf1022"
+url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.2/crit-linux-amd64"
+url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/494559500"
 
 [tools."github:tomasz-tomczyk/crit"."platforms.macos-arm64"]
-checksum = "sha256:9fe1e341108a50e7f8210f833565468b2c733477a4e3e302a91bc5803a51bbda"
-url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.1/crit-darwin-arm64"
-url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/480435210"
+checksum = "sha256:9fc43beb1f323998b39b7ee6f76623ee46a7ca07859183aefb4deecbc09b264d"
+url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.2/crit-darwin-arm64"
+url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/494559498"
 
 [tools."github:tomasz-tomczyk/crit"."platforms.macos-x64"]
-checksum = "sha256:9e757c07a7116b5c24644ec8aa6d3f1478b040491d2b0d6201ee0e306e4095bc"
-url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.1/crit-darwin-amd64"
-url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/480435211"
+checksum = "sha256:b34f39beeb97743239cbc3a0ae077cda078c7191879aee3b3bbfe5d355233c2c"
+url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.2/crit-darwin-amd64"
+url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/494559499"
 
 [tools."github:tomasz-tomczyk/crit"."platforms.windows-x64"]
-checksum = "sha256:71fc1bcf9c46ca90a9211099fd1d3a600ba002f95ee9b5935d32daf78a347a7e"
-url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.1/crit-windows-amd64.exe"
-url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/480435208"
+checksum = "sha256:09d497b13927fb8420808dd63db9b659843c40881108cb196ac12a58ed651dfa"
+url = "https://github.com/tomasz-tomczyk/crit/releases/download/v0.18.2/crit-windows-amd64.exe"
+url_api = "https://api.github.com/repos/tomasz-tomczyk/crit/releases/assets/494559497"
 
 [[tools.go]]
 version = "1.26.3"
