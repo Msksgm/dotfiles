@@ -22,7 +22,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_config/karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json` |
 | `dot_config/mise/config.toml.tmpl` | `~/.config/mise/config.toml`（言語ランタイム + aqua バックエンドの主要 CLI ツール群。aqua 未登録のツールは github バックエンド。**private tool はここに書かない** — lockfile `mise.lock` を追跡しているため、下記 `config.local.toml` に隔離する） |
 | `dot_config/mise/private_config.local.toml.tmpl` | `~/.config/mise/config.local.toml`（private tool 専用の machine-local config。mode 0600。`private_tool_repo` を設定したマシンでのみ展開され、lockfile は `mise.local.lock` に分離されて追跡されない） |
-| `dot_config/mise/private_mise.lock` | `~/.config/mise/mise.lock`（mise の lockfile。全ツールの version / URL / checksum を 7 プラットフォーム分固定して再現性を担保する。mode 0600。**生成物なので手で編集せず** `mise lock -g` → `cp` で同期する。手順は下記 "mise lockfile の更新" 参照） |
+| `dot_config/mise/private_mise.lock` | `~/.config/mise/mise.lock`（mise の lockfile。全ツールの version / URL / checksum を複数プラットフォーム分固定して再現性を担保する。mode 0600。**生成物なので手で編集せず** `mise lock -g` → `cp` で同期する。手順は下記 "mise lockfile の更新" 参照） |
 | `dot_config/helm/repositories.yaml` | `~/.config/helm/repositories.yaml` |
 | `dot_config/cage/presets.yml` | `~/.config/cage/presets.yml` |
 | `dot_config/herdr/config.toml` | `~/.config/herdr/config.toml`（キーバインドを `dot_tmux.conf` に合わせた herdr 設定。prefix=`C-j`、分割 `\|`/`-`、ペイン移動 h/j/k/l、タブ移動 `C-h`/`C-l`、デタッチ `prefix+d`、workspace 作成 `prefix+Shift+C`、workspace リネーム `prefix+Space`、pane を新 tab に切り出し `prefix+!`（tmux の break-pane 相当。組み込みアクションが無いため `herdr pane move --new-tab` を shell command で呼ぶ）。加えて `[ui.sidebar.agents]` で左サイドバーの agent 行に pane ID (`wG:pB`) を表示する。この `$pane_id` はカスタムトークンで、**値の供給は `dot_zsh/herdr.zsh` に依存する** — 片方だけ消すと ID が空欄になる） |
@@ -155,39 +155,11 @@ private GitHub repo のリリースを mise の **github バックエンド**で
 
 ## mise lockfile の更新
 
-`~/.config/mise/mise.lock`（全ツールの version / URL / checksum を 7 プラットフォーム分固定した lockfile）は `dot_config/mise/private_mise.lock` として追跡している。**生成物なので手で編集せず**、ツールを追加・バージョン変更したら次の手順で source へ同期してコミットする（`dot_agents/dot_skill-lock.json` と同じ「実体を `cp` で追跡」パターン）。
+`~/.config/mise/mise.lock`（全ツールの version / URL / checksum を複数プラットフォーム分固定した lockfile）は `dot_config/mise/private_mise.lock` として追跡している。**生成物なので手で編集せず**、ツールを追加・バージョン変更したら `mise lock -g` → `cp` で source へ同期してコミットする（`dot_agents/dot_skill-lock.json` と同じ「実体を `cp` で追跡」パターン）。`mise install` だけでは現在の platform 分しか lock されず、削除済みツールのエントリも残るため `mise lock -g` を挟むのが必須。
 
-```sh
-# 1. dot_config/mise/config.toml.tmpl の [tools] を編集したあと
-chezmoi apply -v    # run_onchange が mise install を実行する
+**手順・検証コマンド・注意点は [`.claude/skills/mise-lock-update/SKILL.md`](.claude/skills/mise-lock-update/SKILL.md) に集約している**（Claude Code では `/mise-lock-update` で起動できる）。
 
-# 2. 全プラットフォーム分の URL/checksum を再解決する
-#    ※ mise install だけでは「現在の platform 分しか lock されず、削除済みツールも残る」
-#    ※ GITHUB_TOKEN は必須。未認証だと 60 req/h で即座にレート制限に当たり、
-#      403 で取りこぼした platform エントリが歯抜けのまま lock に書かれる
-export GITHUB_TOKEN="$(gh auth token)"
-mise lock -g
-
-#    取りこぼしが無いか確認する（7 未満は上流が全 platform を配布していない場合もある）
-awk '/^\[\[tools\./{n++; c[n]=0} /^\[tools\..*platforms\./{c[n]++} \
-  END{f=0; for(i=1;i<=n;i++) if(c[i]>=7) f++; print f" / "n" tools with 7 platforms"}' ~/.config/mise/mise.lock
-
-# 3. private な参照が混ざっていないか確認（owner が全部 public であること）
-grep -o 'github\.com/[^/]*/[^/"]*' ~/.config/mise/mise.lock | sort -u
-
-# 4. source へ同期 → diff が空になることを確認 → コミット
-cp ~/.config/mise/mise.lock "$(chezmoi source-path)/dot_config/mise/private_mise.lock"
-chezmoi diff
-```
-
-> `uv` の `"latest"` は lockfile があると固定される（自動更新されなくなる）。上げたいときは `mise lock -g --bump`（config は書き換えない）を挟んでから手順 4 へ。
->
-> `"latest"` は lockfile 追跡下では自動更新の利点が消える一方、resolve が意図しない古いバージョンを掴むと `mise install` が失敗し続ける（`android-sdk` が `1.0` に固定されて壊れた実例あり）。新規ツールは原則 `"latest"` を使わず明示ピンにすること。
-
-**`mise lock` の注意点:**
-
-- **既に lockfile にある platform しか更新しない。** 新しく platform を増やすには `-p` で明示する必要がある（`mise lock -g -p linux-arm64,linux-arm64-musl,linux-x64,linux-x64-musl,macos-arm64,macos-x64,windows-x64`）。上流が配布していない platform は書かれず、以後その集合が「既存」になるので数は自然に落ち着く。7 未満のツールがあっても異常ではない（例: `github:sunakan/op-vault` は darwin_arm64 のみ配布なので 1）。
-- GitHub の build attestation を公開しているツール（uv / gh / jq / yq / pinact / ghtkn / op-vault 等）は、provenance 記録のため **lock のたびにアーティファクト実体をダウンロードする**（キャッシュされない）。実行が遅いのはこれが理由で、異常ではない。
+> **`cp` した直後の `chezmoi diff` は空にならない。** `install-mise-tools.sh` が `new file mode 100755` として全文表示される。これはファイル差分ではなく「apply したらこのスクリプトが走る」という予告で、lockfile の中身が変わるとスクリプトに埋め込まれた `# lockfile hash:` 行が変わり run_onchange の再実行対象になるため。**もう一度 `chezmoi apply` すれば `mise install` が冪等に走って diff が収束する。** 見るべきは「diff が空か」ではなく「`.config/mise/mise.lock` のファイル差分が出ていないか」。
 
 ## chezmoi cheatsheet
 
