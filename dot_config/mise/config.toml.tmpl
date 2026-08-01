@@ -58,6 +58,14 @@ go = "1.26.3"
 "aqua:ogulcancelik/herdr" = "0.7.5"    # herdr
 "aqua:suzuki-shunsuke/ghalint" = "1.5.6" # ghalint (GitHub Actions の workflow/action linter)
 "aqua:ClementTsang/bottom" = "0.14.7"   # bottom (binary: btm — top/htop 系のシステムモニタ)
+# NOTE: gcloud の version source は非公式ミラー (twistedpair/google-cloud-sdk) の GitHub tag で、
+# バイナリ自体は Google 公式 dl.google.com から落ちる。ミラーのタグ更新が止まると上げられない
+# （2026-08 時点の上限が 562.0.0。brew cask 側は 577.0.0 まで出ている）。上げるときは
+# `mise ls-remote aqua:twistedpair/google-cloud-sdk` で実在を確認すること。
+# NOTE: `gcloud components install/update` は mise の install dir に書き込むためバージョン変更で
+# 消える。かつ components update は pin と競合する。追加コンポーネントが要るときは components
+# ではなく mise 側の tool として入れられないか先に検討すること。
+"aqua:twistedpair/google-cloud-sdk" = "562.0.0" # gcloud (gsutil/bq/docker-credential-gcloud 同梱, brew cask から移行)
 
 [settings]
 idiomatic_version_file_enable_tools = []

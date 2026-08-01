@@ -1471,6 +1471,29 @@ checksum = "sha256:4e191bf1050f4bc6264217f0959efc8de1a661d80ba59194712c47c603a43
 url = "https://github.com/tkuchiki/alp/releases/download/v1.0.21/alp_windows_amd64.tar.gz"
 url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/128704693"
 
+[[tools."aqua:twistedpair/google-cloud-sdk"]]
+version = "562.0.0"
+backend = "aqua:twistedpair/google-cloud-sdk"
+
+[tools."aqua:twistedpair/google-cloud-sdk"."platforms.linux-arm64"]
+url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-linux-arm.tar.gz"
+
+[tools."aqua:twistedpair/google-cloud-sdk"."platforms.linux-arm64-musl"]
+url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-linux-arm.tar.gz"
+
+[tools."aqua:twistedpair/google-cloud-sdk"."platforms.linux-x64"]
+url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-linux-x86_64.tar.gz"
+
+[tools."aqua:twistedpair/google-cloud-sdk"."platforms.linux-x64-musl"]
+url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-linux-x86_64.tar.gz"
+
+[tools."aqua:twistedpair/google-cloud-sdk"."platforms.macos-arm64"]
+checksum = "blake3:eb44524f9569a8e1d5a55e56b825d3591de4211fd947561d6b948ae76ec521e7"
+url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-darwin-arm.tar.gz"
+
+[tools."aqua:twistedpair/google-cloud-sdk"."platforms.macos-x64"]
+url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-darwin-x86_64.tar.gz"
+
 [[tools."aqua:typst/typst"]]
 version = "0.15.0"
 backend = "aqua:typst/typst"
