@@ -437,6 +437,38 @@ checksum = "sha256:d2537dfd991787c1e458965c4f49098c5a72f943bfc9d975c573a9c245f7b
 url = "https://github.com/golang-migrate/migrate/releases/download/v4.19.1/migrate.windows-amd64.zip"
 url_api = "https://api.github.com/repos/golang-migrate/migrate/releases/assets/322306462"
 
+[[tools."aqua:hashicorp/terraform"]]
+version = "1.15.8"
+backend = "aqua:hashicorp/terraform"
+
+[tools."aqua:hashicorp/terraform"."platforms.linux-arm64"]
+checksum = "sha256:8891e9dcedc9e3b8950bc6af9d4d8af1f4cfade3062f53b9dc403a89f6ce8c9c"
+url = "https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux_arm64.zip"
+
+[tools."aqua:hashicorp/terraform"."platforms.linux-arm64-musl"]
+checksum = "sha256:8891e9dcedc9e3b8950bc6af9d4d8af1f4cfade3062f53b9dc403a89f6ce8c9c"
+url = "https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux_arm64.zip"
+
+[tools."aqua:hashicorp/terraform"."platforms.linux-x64"]
+checksum = "sha256:d25ce7b6902013ad905db3d2eab0be4cd905887fe88b81a6171b8d5503c31f3d"
+url = "https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux_amd64.zip"
+
+[tools."aqua:hashicorp/terraform"."platforms.linux-x64-musl"]
+checksum = "sha256:d25ce7b6902013ad905db3d2eab0be4cd905887fe88b81a6171b8d5503c31f3d"
+url = "https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux_amd64.zip"
+
+[tools."aqua:hashicorp/terraform"."platforms.macos-arm64"]
+checksum = "sha256:f210110c5698b94d803a7a63cdb0251b5455c150841478808e2bbb343f95ed68"
+url = "https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_darwin_arm64.zip"
+
+[tools."aqua:hashicorp/terraform"."platforms.macos-x64"]
+checksum = "sha256:e2e812e783771159bf758fd4e55d6dc9bb08f63e2af2c63d212721807a02c5dc"
+url = "https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_darwin_amd64.zip"
+
+[tools."aqua:hashicorp/terraform"."platforms.windows-x64"]
+checksum = "sha256:2ff41d2129afb1982733c132c61a8d6ef038f879f3aeede7fc28b8b8b24acf02"
+url = "https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_windows_amd64.zip"
+
 [[tools."aqua:helm/helm"]]
 version = "4.2.2"
 backend = "aqua:helm/helm"
@@ -1615,6 +1647,7 @@ checksum = "sha256:d53a4c006de8576909d4516cd8ea2d68366b789ed3eb460e2815ad387a5be
 url = "https://github.com/sunakan/op-vault/releases/download/v0.4.0/op-vault_darwin_arm64.tar.gz"
 url_api = "https://api.github.com/repos/sunakan/op-vault/releases/assets/487185930"
 provenance = "github-attestations"
+provenance_verified = true
 
 [[tools."github:tomasz-tomczyk/crit"]]
 version = "0.18.2"
@@ -1833,38 +1866,6 @@ provenance = "github-attestations"
 checksum = "sha256:09e489d2e7123cbd8111293e91af08efd203c9229c9e761ba3995bb263a6fa92"
 url = "https://github.com/astral-sh/python-build-standalone/releases/download/20250814/cpython-3.13.6+20250814-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"
 provenance = "github-attestations"
-
-[[tools.terraform]]
-version = "1.14.1"
-backend = "aqua:hashicorp/terraform"
-
-[tools.terraform."platforms.linux-arm64"]
-checksum = "sha256:b2bb6aada17e2954d6b6a6f1e615884cacfd94b3879d8b4644f80b1c5020ac75"
-url = "https://releases.hashicorp.com/terraform/1.14.1/terraform_1.14.1_linux_arm64.zip"
-
-[tools.terraform."platforms.linux-arm64-musl"]
-checksum = "sha256:b2bb6aada17e2954d6b6a6f1e615884cacfd94b3879d8b4644f80b1c5020ac75"
-url = "https://releases.hashicorp.com/terraform/1.14.1/terraform_1.14.1_linux_arm64.zip"
-
-[tools.terraform."platforms.linux-x64"]
-checksum = "sha256:9f53070ee626df9e157887c1d3f9af3d8107a1b654371cd99040629eed698b27"
-url = "https://releases.hashicorp.com/terraform/1.14.1/terraform_1.14.1_linux_amd64.zip"
-
-[tools.terraform."platforms.linux-x64-musl"]
-checksum = "sha256:9f53070ee626df9e157887c1d3f9af3d8107a1b654371cd99040629eed698b27"
-url = "https://releases.hashicorp.com/terraform/1.14.1/terraform_1.14.1_linux_amd64.zip"
-
-[tools.terraform."platforms.macos-arm64"]
-checksum = "sha256:4e98074e6b8a4b4f692780101d82cd9974c521e4cd6def4ab6299594619cda53"
-url = "https://releases.hashicorp.com/terraform/1.14.1/terraform_1.14.1_darwin_arm64.zip"
-
-[tools.terraform."platforms.macos-x64"]
-checksum = "sha256:7760332d860343f83d68ee96ec99edffc6a2e95281041afffc851ced5df0f6f3"
-url = "https://releases.hashicorp.com/terraform/1.14.1/terraform_1.14.1_darwin_amd64.zip"
-
-[tools.terraform."platforms.windows-x64"]
-checksum = "sha256:d18488068d57115fd44a675f7d58db8688c0e1bdc38affb0591c67ec6472e8a8"
-url = "https://releases.hashicorp.com/terraform/1.14.1/terraform_1.14.1_windows_amd64.zip"
 
 [[tools.uv]]
 version = "0.11.16"
