@@ -204,7 +204,11 @@ export PATH=$(echo $PATH | sed "s|Applications/IntelliJ IDEA.app/Contents/MacOS'
 # enable comment on command line mode
 setopt interactivecomments
 
-export PATH=$HOME/go/bin:$HOME/.local/share/mise/installs/node/22.16.0/bin:$HOME/.local/share/mise/installs/npm/11.4.1/bin:$HOME/.local/share/mise/installs/python/3.13.6/bin:$HOME/.local/share/mise/installs/uv/0.8.8/uv-x86_64-apple-darwin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/X11/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/Applications/TeXLive/Library/texlive/2016/bin/x86_64-darwin:/Applications/TeXLive/Library/mactexaddons/bin:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Postgres.app/Contents/Versions/latest/bin:$HOME/.zinit/polaris/bin:/Applications/iTerm.app/Contents/Resources/utilities
+# mise activate / brew shellenv が積んだ PATH を壊さないよう、必ず末尾に :$PATH を付けて追記する。
+# 上書きにすると、プロンプトを出さないログインシェル（IntelliJ 等 GUI アプリの env 取り込み）で
+# mise 管理コマンド (gcloud 等) が PATH から消え、precmd フックが走る対話ターミナルでだけ動く状態になる。
+# 素の macOS PATH (/usr/bin 等) は /etc/paths(.d) が path_helper 経由で供給するのでここには書かない。
+export PATH=$HOME/go/bin:$HOME/.zinit/polaris/bin:/Applications/iTerm.app/Contents/Resources/utilities:$PATH
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
