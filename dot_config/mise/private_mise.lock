@@ -149,23 +149,38 @@ version = "2.1.220"
 backend = "aqua:anthropics/claude-code"
 
 [tools."aqua:anthropics/claude-code"."platforms.linux-arm64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.220/linux-arm64/claude"
+checksum = "sha256:a4f2e93621b1521731d1f132c83f8266384403ab29e14986d67e3b4a805bf454"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.220/claude-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/488921613"
 
 [tools."aqua:anthropics/claude-code"."platforms.linux-arm64-musl"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.220/linux-arm64-musl/claude"
+checksum = "sha256:25aa9d57b68b7ea150ecce4a8ecbc2d55f292453f2ae99591cadff42f8181293"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.220/claude-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/488921612"
 
 [tools."aqua:anthropics/claude-code"."platforms.linux-x64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.220/linux-x64/claude"
+checksum = "sha256:e69e7f72d784c243bcc377a578ad9ff8e65ae14da672fbbf9f2ba7bf47eca7ec"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.220/claude-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/488921660"
 
 [tools."aqua:anthropics/claude-code"."platforms.linux-x64-musl"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.220/linux-x64-musl/claude"
+checksum = "sha256:ee96cfeee9662c184d4238cf71e4834d33a1e806620360cb84333d6b09cd2c01"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.220/claude-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/488921611"
 
 [tools."aqua:anthropics/claude-code"."platforms.macos-arm64"]
 checksum = "blake3:a52f4d67321c55ba134584a2766889b62218d796495dc20e7aad978cf04035f0"
 url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.220/darwin-arm64/claude"
 
 [tools."aqua:anthropics/claude-code"."platforms.macos-x64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.220/darwin-x64/claude"
+checksum = "sha256:3c9072239f05fdd4ca6a02a58d892f2ccf0460ff7e5c94a9c88d65eb3383da16"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.220/claude-darwin-x64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/488921609"
+
+[tools."aqua:anthropics/claude-code"."platforms.windows-x64"]
+checksum = "sha256:505d25ca77482511cce29f3daa72d99311f8264fb49d5a134caff291c835990d"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.220/claude-win32-x64.zip"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/488921663"
 
 [[tools."aqua:azu/dockerfile-pin"]]
 version = "1.3.0"
@@ -1010,6 +1025,11 @@ checksum = "sha256:ecf4db36357cb31e08aaad15a8d07531507d78717cff01df87b301e3c2f07
 url = "https://github.com/modem-dev/hunk/releases/download/v0.17.3/hunkdiff-darwin-x64.tar.gz"
 url_api = "https://api.github.com/repos/modem-dev/hunk/releases/assets/482681574"
 
+[tools."aqua:modem-dev/hunk"."platforms.windows-x64"]
+checksum = "sha256:57f6765d9edc7eec6e14f53e63e2b5e396365944db0786bef7f41cdb392a70d0"
+url = "https://github.com/modem-dev/hunk/releases/download/v0.17.3/hunkdiff-windows-x64.tar.gz"
+url_api = "https://api.github.com/repos/modem-dev/hunk/releases/assets/482681567"
+
 [[tools."aqua:neovim/neovim"]]
 version = "0.12.3"
 backend = "aqua:neovim/neovim"
@@ -1084,43 +1104,43 @@ url = "https://github.com/herdrdev/herdr/releases/download/v0.7.5/herdr-macos-x8
 url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/484992541"
 
 [[tools."aqua:openai/codex"]]
-version = "0.142.4"
+version = "0.148.0"
 backend = "aqua:openai/codex"
 
 [tools."aqua:openai/codex"."platforms.linux-arm64"]
-checksum = "sha256:0fa47c499e310dd0f1b3cefa9e6f7a5e8e98c4ed0285d7b13484a200236d4652"
-url = "https://github.com/openai/codex/releases/download/rust-v0.142.4/codex-package-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/460785586"
+checksum = "sha256:580db3c7411f5852b550876f185c30b61b674e01b948fd5030f2cd7a30db110a"
+url = "https://github.com/openai/codex/releases/download/rust-v0.148.0/codex-package-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/520046710"
 
 [tools."aqua:openai/codex"."platforms.linux-arm64-musl"]
-checksum = "sha256:0fa47c499e310dd0f1b3cefa9e6f7a5e8e98c4ed0285d7b13484a200236d4652"
-url = "https://github.com/openai/codex/releases/download/rust-v0.142.4/codex-package-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/460785586"
+checksum = "sha256:580db3c7411f5852b550876f185c30b61b674e01b948fd5030f2cd7a30db110a"
+url = "https://github.com/openai/codex/releases/download/rust-v0.148.0/codex-package-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/520046710"
 
 [tools."aqua:openai/codex"."platforms.linux-x64"]
-checksum = "sha256:79d049427514a9298e77be92ad9bbb74a346b50fa659851f807da7363da11cbd"
-url = "https://github.com/openai/codex/releases/download/rust-v0.142.4/codex-package-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/460785535"
+checksum = "sha256:8c790500af2ba6e74ce4948fe26c651ac1f77f6dbb005b47c8d26ff711146262"
+url = "https://github.com/openai/codex/releases/download/rust-v0.148.0/codex-package-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/520046609"
 
 [tools."aqua:openai/codex"."platforms.linux-x64-musl"]
-checksum = "sha256:79d049427514a9298e77be92ad9bbb74a346b50fa659851f807da7363da11cbd"
-url = "https://github.com/openai/codex/releases/download/rust-v0.142.4/codex-package-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/460785535"
+checksum = "sha256:8c790500af2ba6e74ce4948fe26c651ac1f77f6dbb005b47c8d26ff711146262"
+url = "https://github.com/openai/codex/releases/download/rust-v0.148.0/codex-package-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/520046609"
 
 [tools."aqua:openai/codex"."platforms.macos-arm64"]
-checksum = "sha256:8f81cd9d0ec108b1220055038ee02e14b9bbc4651a503675312d453e7227d826"
-url = "https://github.com/openai/codex/releases/download/rust-v0.142.4/codex-package-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/460785634"
+checksum = "sha256:bfae69c7bb7a3fbe68161f2ca9328839c7e6eea053a8871186eb6edbb1346870"
+url = "https://github.com/openai/codex/releases/download/rust-v0.148.0/codex-package-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/520046734"
 
 [tools."aqua:openai/codex"."platforms.macos-x64"]
-checksum = "sha256:7a76c3be2ed5139c099dbcabd3316623c12f5f28a8fb200b466dfb994a1bdd3e"
-url = "https://github.com/openai/codex/releases/download/rust-v0.142.4/codex-package-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/460785561"
+checksum = "sha256:9ac9245ea244629a9ba4db3315f0cdaebb05182b790ee34271a5060875d836e1"
+url = "https://github.com/openai/codex/releases/download/rust-v0.148.0/codex-package-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/520046640"
 
 [tools."aqua:openai/codex"."platforms.windows-x64"]
-checksum = "sha256:6ca847d0f3356fbd26ffc0b9a543d146b1f025c0f16d7b8f3d937d9bd1f3db44"
-url = "https://github.com/openai/codex/releases/download/rust-v0.142.4/codex-package-x86_64-pc-windows-msvc.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/460785519"
+checksum = "sha256:cc09f725b8ed133b76a2882fda750b3f1672b10701e8172c9680b5ab79b861ff"
+url = "https://github.com/openai/codex/releases/download/rust-v0.148.0/codex-package-x86_64-pc-windows-msvc.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/520046611"
 
 [[tools."aqua:reviewdog/reviewdog"]]
 version = "0.21.0"
