@@ -374,6 +374,40 @@ checksum = "sha256:d96fc8b7cf020c2d4c1dbbc2ccec5fd1cab05b51c491f02c8527a7fa6c50a
 url = "https://github.com/direnv/direnv/releases/download/v2.37.1/direnv.windows-amd64"
 url_api = "https://api.github.com/repos/direnv/direnv/releases/assets/274610569"
 
+[[tools."aqua:fujiwara/lambroll"]]
+version = "1.5.2"
+backend = "aqua:fujiwara/lambroll"
+
+[tools."aqua:fujiwara/lambroll"."platforms.linux-arm64"]
+checksum = "sha256:6b3d427d2db2cac09ca900f456f57bc367ca889f0d6b26c281a70d7086426181"
+url = "https://github.com/fujiwara/lambroll/releases/download/v1.5.2/lambroll_v1.5.2_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/fujiwara/lambroll/releases/assets/511568382"
+
+[tools."aqua:fujiwara/lambroll"."platforms.linux-arm64-musl"]
+checksum = "sha256:6b3d427d2db2cac09ca900f456f57bc367ca889f0d6b26c281a70d7086426181"
+url = "https://github.com/fujiwara/lambroll/releases/download/v1.5.2/lambroll_v1.5.2_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/fujiwara/lambroll/releases/assets/511568382"
+
+[tools."aqua:fujiwara/lambroll"."platforms.linux-x64"]
+checksum = "sha256:2dc50fec5b37b999d4b58fe14d847e5047610c3656c4f4b0d216b1e6ef150a0c"
+url = "https://github.com/fujiwara/lambroll/releases/download/v1.5.2/lambroll_v1.5.2_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/fujiwara/lambroll/releases/assets/511568383"
+
+[tools."aqua:fujiwara/lambroll"."platforms.linux-x64-musl"]
+checksum = "sha256:2dc50fec5b37b999d4b58fe14d847e5047610c3656c4f4b0d216b1e6ef150a0c"
+url = "https://github.com/fujiwara/lambroll/releases/download/v1.5.2/lambroll_v1.5.2_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/fujiwara/lambroll/releases/assets/511568383"
+
+[tools."aqua:fujiwara/lambroll"."platforms.macos-arm64"]
+checksum = "sha256:bfc40638577fe839f7f04fc69bd443ef5c6ddbd6d9240d1e77fed0ae6e70225d"
+url = "https://github.com/fujiwara/lambroll/releases/download/v1.5.2/lambroll_v1.5.2_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/fujiwara/lambroll/releases/assets/511568381"
+
+[tools."aqua:fujiwara/lambroll"."platforms.macos-x64"]
+checksum = "sha256:f74ed0cb0ff47070fa428c5af76b27ac7ace1844a225e359f6a3221f868c0019"
+url = "https://github.com/fujiwara/lambroll/releases/download/v1.5.2/lambroll_v1.5.2_darwin_amd64.tar.gz"
+url_api = "https://api.github.com/repos/fujiwara/lambroll/releases/assets/511568384"
+
 [[tools."aqua:fullstorydev/grpcurl"]]
 version = "1.9.3"
 backend = "aqua:fullstorydev/grpcurl"
