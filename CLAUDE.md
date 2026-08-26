@@ -49,7 +49,7 @@ chezmoi による macOS dotfiles リポジトリ。source dir は `~/workspace/g
 
 agent skill を追加/削除したら、`~/.agents/.skill-lock.json` を `dot_agents/dot_skill-lock.json` へ同期 (`cp`) してコミットすること。lock が source 側に反映されないと、新規マシンで skill が復元されない。
 
-mise のツールを追加・バージョン変更したら、lockfile (`dot_config/mise/private_mise.lock`) を source へ同期してコミットすること。**手順・検証コマンド・落とし穴は `/mise-lock-update` skill (`.claude/skills/mise-lock-update/SKILL.md`) が正本**なので、作業時はそれを参照する。ここに残す不変ルールは1点: **private repo のツールは `dot_config/mise/config.toml.tmpl` に書かないこと** — lockfile `mise.lock` に repo 名とリリースアセット URL が載り、public repo に出せなくなる。private tool は `dot_config/mise/private_config.local.toml.tmpl`（→ `~/.config/mise/config.local.toml`、lock は追跡しない `mise.local.lock` に分離される）に書く。`conf.d/*.toml` は lockfile が `mise.lock` に合流するので隔離手段にならない。
+mise のツールを追加・バージョン変更したら、lockfile (`dot_config/mise/private_mise.lock`) を source へ同期してコミットすること。**手順・検証コマンド・落とし穴は `mise-lock-update` skill (`.agents/skills/mise-lock-update/SKILL.md`) が正本**なので、作業時はそれを参照する（Codex は `$mise-lock-update`、Claude Code は `/mise-lock-update`）。ここに残す不変ルールは1点: **private repo のツールは `dot_config/mise/config.toml.tmpl` に書かないこと** — lockfile `mise.lock` に repo 名とリリースアセット URL が載り、public repo に出せなくなる。private tool は `dot_config/mise/private_config.local.toml.tmpl`（→ `~/.config/mise/config.local.toml`、lock は追跡しない `mise.local.lock` に分離される）に書く。`conf.d/*.toml` は lockfile が `mise.lock` に合流するので隔離手段にならない。
 
 ## 二重チャネル管理ツール（CLI + Claude 連携）
 
@@ -114,9 +114,9 @@ source 側にファイルが残っていると死蔵されるので、`.chezmoii
 - `dot_claude/agents/*.md` (→ `~/.claude/agents/*.md`) — user-level subagent (architect / code-reviewer / pm-reviewer / qa-reviewer)。frontmatter に `name` / `description` / `tools` / `model` を持つ通常の Markdown。skills のような symlink/lock 機構の対象外で、ファイルを置くだけで反映される。
 - `dot_claude/rules/*.md` (→ `~/.claude/rules/*.md`) — コーディング規約 docs。`dot_claude/CLAUDE.md` から参照される。
 
-## このリポジトリ固有の skill (`.claude/skills/`)
+## このリポジトリ固有の skill (`.agents/skills/`)
 
-本リポジトリ専用の skill は source root の `.claude/skills/<name>/SKILL.md` に置く（現在: `mise-lock-update`）。chezmoi は `.` 始まりの source エントリを無視するので **chezmoi 管理外・git 追跡のみ**で、置くだけで有効。user-level の 2 チャネルとは別物で、**ハッシュ行・`REMOVED_SKILLS`・`.chezmoiremove`・`cp` 同期はいずれも不要**。全プロジェクトで使うなら `dot_agents/skills-local/` 側へ。
+本リポジトリ専用の skill は source root の `.agents/skills/<name>/SKILL.md` に置く（現在: `mise-lock-update`）。`.claude/skills` は `../.agents/skills` への相対 symlink とし、Codex と Claude Code が同じ正本を読む。chezmoi は `.` 始まりの source エントリを無視するので **chezmoi 管理外・git 追跡のみ**で、置くだけで有効。user-level の 2 チャネルとは別物で、**ハッシュ行・`REMOVED_SKILLS`・`.chezmoiremove`・`cp` 同期はいずれも不要**。全プロジェクトで使うなら `dot_agents/skills-local/` 側へ。
 
 ## 注意事項
 

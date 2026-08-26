@@ -157,7 +157,7 @@ private GitHub repo のリリースを mise の **github バックエンド**で
 
 `~/.config/mise/mise.lock`（全ツールの version / URL / checksum を複数プラットフォーム分固定した lockfile）は `dot_config/mise/private_mise.lock` として追跡している。**生成物なので手で編集せず**、ツールを追加・バージョン変更したら `mise lock -g` → `cp` で source へ同期してコミットする（`dot_agents/dot_skill-lock.json` と同じ「実体を `cp` で追跡」パターン）。`mise install` だけでは現在の platform 分しか lock されず、削除済みツールのエントリも残るため `mise lock -g` を挟むのが必須。
 
-**手順・検証コマンド・注意点は [`.claude/skills/mise-lock-update/SKILL.md`](.claude/skills/mise-lock-update/SKILL.md) に集約している**（Claude Code では `/mise-lock-update` で起動できる）。
+**手順・検証コマンド・注意点は [`.agents/skills/mise-lock-update/SKILL.md`](.agents/skills/mise-lock-update/SKILL.md) に集約している**（Codex では `$mise-lock-update`、Claude Code では `/mise-lock-update` で起動できる。`.claude/skills` は `.agents/skills` への symlink）。
 
 > **`cp` した直後の `chezmoi diff` は空にならない。** `install-mise-tools.sh` が `new file mode 100755` として全文表示される。これはファイル差分ではなく「apply したらこのスクリプトが走る」という予告で、lockfile の中身が変わるとスクリプトに埋め込まれた `# lockfile hash:` 行が変わり run_onchange の再実行対象になるため。**もう一度 `chezmoi apply` すれば `mise install` が冪等に走って diff が収束する。** 見るべきは「diff が空か」ではなく「`.config/mise/mise.lock` のファイル差分が出ていないか」。
 

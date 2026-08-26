@@ -1,22 +1,18 @@
 ---
 name: mise-lock-update
 description: |
-  この dotfiles リポジトリで mise のツールを追加・削除・バージョン変更・リネームしたあと、`~/.config/mise/mise.lock` を `dot_config/mise/private_mise.lock` へ同期してコミットするまでの手順。`mise lock -g` を挟む理由、`mise lock` がエントリを削除しないため削除・リネーム時は残骸ブロックを手で消す必要があること、private 参照の混入チェック、そして同期後の `chezmoi diff` が空にならず run_onchange スクリプトのハッシュ差分として現れる挙動を扱う。
-when_to_use: |
-  triggered by "mise lock", "mise.lock", "lockfile 更新", "lockfile を同期", "private_mise.lock", "mise にツールを追加", "mise のツールを更新", "mise のバージョンを上げた", "mise のツールを削除", "mise のツールをリネーム", "バックエンドを変えた", "aqua でツールを入れた", "lockfile に古いエントリが残る", "mise lock で消えない", "chezmoi diff が空にならない", "install-mise-tools.sh が diff に出る", "差分が無いのに apply 対象", "/mise-lock-update"
+  この dotfiles リポジトリで mise のツールを追加・削除・更新・リネームしたあと、`mise lock -g` による全 platform の lock 生成、`dot_config/mise/private_mise.lock` への同期、古いエントリや private 参照の検査、run_onchange による `chezmoi diff` の解釈を行う。mise/aqua ツールの変更、mise.lock の更新・同期・残骸調査を依頼されたときに使う。他のリポジトリや mise と無関係なパッケージ管理には使わない。
 allowed-tools:
   - Read
   - Bash
   - Edit
-argument-hint: "[追加/変更したツール名]（省略時は現在の差分から判断）"
-user-invocable: true
 ---
 
 # mise-lock-update
 
 `dot_config/mise/config.toml.tmpl` の `[tools]` を触ったあと、lockfile を source へ同期してコミットするまでの手順。
 
-**入力情報**: $ARGUMENTS
+対象ツール名や変更内容が指定されていればそれを使い、省略されていれば現在の差分から判断する。
 
 ## なぜ `mise lock -g` が要るのか
 
@@ -64,20 +60,20 @@ yq -p toml -o json '.tools | keys' dot_config/mise/private_mise.lock | grep -i '
 
 ## 実行分担
 
-このリポジトリの方針（CLAUDE.md）により、home への適用操作はユーザーが実行する。
+このリポジトリの方針により、home への適用と、そこで生成した lockfile の source へのコピーはユーザーが実行する。
 
 | 操作 | 実行者 |
 |---|---|
-| `dot_config/mise/config.toml.tmpl` の編集 | Claude |
+| `dot_config/mise/config.toml.tmpl` の編集 | agent |
 | `chezmoi apply` | **ユーザー** |
 | `mise uninstall`（ツール削除・リネーム時のみ） | **ユーザー** |
 | `mise lock -g`（`~/.config/mise/mise.lock` を書き換える） | **ユーザー** |
-| `cp` で source へ同期（source ファイルの更新） | Claude |
-| source lock からの残骸ブロック手削除（ツール削除・リネーム時のみ） | Claude |
-| 検証コマンド（read-only） | Claude |
+| `cp` で source へ同期（source ファイルの更新） | **ユーザー** |
+| source lock からの残骸ブロック手削除（ツール削除・リネーム時のみ） | agent |
+| 検証コマンド（read-only） | agent |
 | コミット | **ユーザー** |
 
-ユーザーに実行を依頼するときは `! <command>` をプロンプトに打てばこのセッションに出力が返ることを案内する。
+ユーザー操作が完了するまでは、生成前の lockfile を source へコピーしたり、同期済みとして後続検証へ進んだりしない。
 
 ## 手順
 
