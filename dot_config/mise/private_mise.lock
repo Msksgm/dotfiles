@@ -375,6 +375,35 @@ checksum = "sha256:d96fc8b7cf020c2d4c1dbbc2ccec5fd1cab05b51c491f02c8527a7fa6c50a
 url = "https://github.com/direnv/direnv/releases/download/v2.37.1/direnv.windows-amd64"
 url_api = "https://api.github.com/repos/direnv/direnv/releases/assets/274610569"
 
+[[tools."aqua:firebase/firebase-tools"]]
+version = "15.28.1"
+backend = "aqua:firebase/firebase-tools"
+
+[tools."aqua:firebase/firebase-tools"."platforms.linux-x64"]
+checksum = "sha256:78e5d2b0fa3d2a84cc015b710fb9c9078315a6ba923289f0759dd5e2b901fa32"
+url = "https://github.com/firebase/firebase-tools/releases/download/v15.28.1/firebase-tools-linux"
+url_api = "https://api.github.com/repos/firebase/firebase-tools/releases/assets/521494950"
+
+[tools."aqua:firebase/firebase-tools"."platforms.linux-x64-musl"]
+checksum = "sha256:78e5d2b0fa3d2a84cc015b710fb9c9078315a6ba923289f0759dd5e2b901fa32"
+url = "https://github.com/firebase/firebase-tools/releases/download/v15.28.1/firebase-tools-linux"
+url_api = "https://api.github.com/repos/firebase/firebase-tools/releases/assets/521494950"
+
+[tools."aqua:firebase/firebase-tools"."platforms.macos-arm64"]
+checksum = "sha256:aacec55ab57ff0470e0fe41fc7fc96ddd9d2100e28082f3f935e747d1eb9e491"
+url = "https://github.com/firebase/firebase-tools/releases/download/v15.28.1/firebase-tools-macos"
+url_api = "https://api.github.com/repos/firebase/firebase-tools/releases/assets/521495100"
+
+[tools."aqua:firebase/firebase-tools"."platforms.macos-x64"]
+checksum = "sha256:aacec55ab57ff0470e0fe41fc7fc96ddd9d2100e28082f3f935e747d1eb9e491"
+url = "https://github.com/firebase/firebase-tools/releases/download/v15.28.1/firebase-tools-macos"
+url_api = "https://api.github.com/repos/firebase/firebase-tools/releases/assets/521495100"
+
+[tools."aqua:firebase/firebase-tools"."platforms.windows-x64"]
+checksum = "sha256:863865b5cfdf7f1e63c8bf0e436f1baf08002a4a9dc80066a2207c60072a7054"
+url = "https://github.com/firebase/firebase-tools/releases/download/v15.28.1/firebase-tools-win.exe"
+url_api = "https://api.github.com/repos/firebase/firebase-tools/releases/assets/521495257"
+
 [[tools."aqua:fujiwara/lambroll"]]
 version = "1.5.2"
 backend = "aqua:fujiwara/lambroll"
