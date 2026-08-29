@@ -165,7 +165,7 @@ cat "$root_managed_file"
 cat <<'EOF'
 
 [permissions.workspace-agents-write]
-description = "Workspace access with .agents writable."
+description = "Workspace access with agent configuration and Git metadata writable."
 extends = ":workspace"
 
 [permissions.workspace-agents-write.filesystem]
@@ -173,6 +173,7 @@ extends = ":workspace"
 
 [permissions.workspace-agents-write.filesystem.":workspace_roots"]
 ".agents" = "write"
+".codex" = "write"
 ".git" = "write"
 
 [permissions.workspace-agents-write.network]
