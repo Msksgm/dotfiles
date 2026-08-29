@@ -1,0 +1,182 @@
+#!/bin/sh
+# chezmoi modify_ script for ~/.codex/config.toml.
+#
+# config.toml is a hybrid file: the defaults below are hand-curated, while
+# Codex also persists machine-local state such as trusted projects, desktop
+# preferences, plugins, MCP configuration, and hook hashes. Keep that state
+# byte-for-byte where possible and replace only the settings owned here.
+set -eu
+
+if ! work_dir=$(mktemp -d "${TMPDIR:-/tmp}/codex-config.XXXXXX"); then
+  # A modify_ script's stdout becomes the target. Preserve stdin if temporary
+  # storage is unavailable rather than risking an empty config.
+  cat
+  exit 0
+fi
+
+current_file="$work_dir/current.toml"
+root_file="$work_dir/root.toml"
+tables_file="$work_dir/tables.toml"
+root_trimmed_file="$work_dir/root-trimmed.toml"
+root_managed_file="$work_dir/root-managed.toml"
+tables_trimmed_file="$work_dir/tables-trimmed.toml"
+
+cleanup() {
+  rm -f \
+    "$current_file" \
+    "$root_file" \
+    "$tables_file" \
+    "$root_trimmed_file" \
+    "$root_managed_file" \
+    "$tables_trimmed_file"
+  rmdir "$work_dir" 2>/dev/null || true
+}
+trap cleanup EXIT
+
+cat > "$current_file"
+: > "$root_file"
+: > "$tables_file"
+
+# TOML root keys must appear before the first table. Split the current config
+# at that boundary, remove the permission tables managed below, and preserve
+# everything else in its original order and spelling.
+if ! awk -v root_file="$root_file" -v tables_file="$tables_file" '
+  function is_table_header(line) {
+    return line ~ /^[[:space:]]*\[/
+  }
+
+  function is_managed_permission_header(line) {
+    return line ~ /^[[:space:]]*\[permissions\.workspace-agents-write(\]|\.)/
+  }
+
+  BEGIN {
+    in_tables = 0
+    skip_table = 0
+  }
+
+  {
+    if (!in_tables && is_table_header($0)) {
+      in_tables = 1
+    }
+
+    if (!in_tables) {
+      print $0 >> root_file
+      next
+    }
+
+    if (is_table_header($0)) {
+      skip_table = is_managed_permission_header($0)
+    }
+
+    if (!skip_table) {
+      print $0 >> tables_file
+    }
+  }
+' "$current_file"; then
+  cat "$current_file"
+  exit 0
+fi
+
+# Normalize only the blank lines at generated-block boundaries. Interior
+# whitespace, comments, and all unmanaged values remain untouched.
+trim_blank_edges() {
+  awk '
+    /^[[:space:]]*$/ {
+      if (started) {
+        pending = pending $0 ORS
+      }
+      next
+    }
+
+    {
+      if (started) {
+        printf "%s", pending
+      }
+      pending = ""
+      print
+      started = 1
+    }
+  ' "$1"
+}
+
+if ! trim_blank_edges "$root_file" > "$root_trimmed_file"; then
+  cat "$current_file"
+  exit 0
+fi
+
+# Replace managed root keys in place so Codex-owned root keys such as notify
+# keep their relative position. Append any missing managed keys in canonical
+# order; subsequent runs then remain byte-identical.
+if ! awk '
+  BEGIN {
+    order[1] = "default_permissions"
+    order[2] = "approval_policy"
+    order[3] = "personality"
+    order[4] = "model"
+    order[5] = "model_reasoning_effort"
+    order[6] = "service_tier"
+    order[7] = "plan_mode_reasoning_effort"
+
+    managed["default_permissions"] = "default_permissions = \"workspace-agents-write\""
+    managed["approval_policy"] = "approval_policy = \"never\""
+    managed["personality"] = "personality = \"pragmatic\""
+    managed["model"] = "model = \"gpt-5.6-sol\""
+    managed["model_reasoning_effort"] = "model_reasoning_effort = \"xhigh\""
+    managed["service_tier"] = "service_tier = \"priority\""
+    managed["plan_mode_reasoning_effort"] = "plan_mode_reasoning_effort = \"xhigh\""
+  }
+
+  {
+    key = $0
+    sub(/^[[:space:]]*/, "", key)
+    sub(/[[:space:]]*=.*/, "", key)
+
+    if (key in managed) {
+      if (!seen[key]) {
+        print managed[key]
+        seen[key] = 1
+      }
+      next
+    }
+
+    print
+  }
+
+  END {
+    for (i = 1; i <= 7; i++) {
+      key = order[i]
+      if (!seen[key]) {
+        print managed[key]
+      }
+    }
+  }
+' "$root_trimmed_file" > "$root_managed_file"; then
+  cat "$current_file"
+  exit 0
+fi
+
+if ! trim_blank_edges "$tables_file" > "$tables_trimmed_file"; then
+  cat "$current_file"
+  exit 0
+fi
+
+cat "$root_managed_file"
+
+cat <<'EOF'
+
+[permissions.workspace-agents-write]
+description = "Workspace access with .agents writable."
+extends = ":workspace"
+
+[permissions.workspace-agents-write.filesystem.":workspace_roots"]
+".agents" = "write"
+".git" = "write"
+
+[permissions.workspace-agents-write.network]
+enabled = true
+EOF
+
+if [ -s "$tables_trimmed_file" ]; then
+  printf '\n'
+  cat "$tables_trimmed_file"
+fi

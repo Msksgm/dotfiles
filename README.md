@@ -27,6 +27,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_config/cage/presets.yml` | `~/.config/cage/presets.yml` |
 | `dot_config/herdr/config.toml` | `~/.config/herdr/config.toml`（キーバインドを `dot_tmux.conf` に合わせた herdr 設定。prefix=`C-j`、分割 `\|`/`-`、ペイン移動 h/j/k/l、タブ移動 `C-h`/`C-l`、デタッチ `prefix+d`、workspace 作成 `prefix+Shift+C`、workspace リネーム `prefix+Space`、pane を新 tab に切り出し `prefix+!`（tmux の break-pane 相当。組み込みアクションが無いため `herdr pane move --new-tab` を shell command で呼ぶ）。加えて `[ui.sidebar.agents]` で左サイドバーの agent 行に pane ID (`wG:pB`) を表示する。この `$pane_id` はカスタムトークンで、**値の供給は `dot_zsh/herdr.zsh` に依存する** — 片方だけ消すと ID が空欄になる） |
 | `dot_config/herdr/executable_rename-workspace.sh` | `~/.config/herdr/rename-workspace.sh`（実行ビット付き。focused workspace を git リポジトリ名にリネームする。tmux の `~/.tmux-rename-session` の herdr 版で、config.toml の `[[keys.command]]` から `prefix+Space` で呼ぶ） |
+| `dot_codex/modify_private_config.toml` | `~/.codex/config.toml`（mode 0600 の chezmoi `modify_` スクリプト。model / reasoning effort / personality / approval / service tier / `.agents`・`.git` 書き込みを含む `workspace-agents-write` permission profile だけを強制し、Codex が書き換える project trust / notify / Desktop / plugin / MCP / hook 等は実ファイルから保持する） |
 | `dot_claude/modify_settings.json.tmpl` | `~/.claude/settings.json`（chezmoi `modify_` スクリプト。自分が管理するキー（env/permissions/model/hooks/deny 等）だけ強制し、Claude Code が実行時に書き換えるキー（`enabledPlugins`/`extraKnownMarketplaces`/`feedbackSurveyState`）は実ファイルから保持してドリフトを防ぐ。herdr フックパスは `{{ .chezmoi.homeDir }}` で展開） |
 | `dot_claude/hooks/executable_herdr-agent-state.sh` | `~/.claude/hooks/herdr-agent-state.sh`（実行ビット付き。settings.json の SessionStart フックが呼ぶ herdr の Claude 連携スクリプト。**herdr が自動管理し integration 更新時に上書きするため source はスナップショット**。更新時は再 `cp` で同期する） |
 | `dot_claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
@@ -41,6 +42,8 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_agents/skills-local/review-io-impact/SKILL.md` | `~/.agents/skills-local/review-io-impact/SKILL.md`（インストーラ経由で `~/.agents/skills/review-io-impact/SKILL.md` にも展開） |
 | `dot_agents/skills-local/svg-diagram/**` | `~/.agents/skills-local/svg-diagram/`（SKILL.md + `components/` `examples/` の HTML テンプレート。インストーラ経由で `~/.agents/skills/svg-diagram/` にも展開） |
 
+> **Note (Codex config):** `~/.codex/config.toml` は手動設定と Codex 所有の実行時状態が混在するため、ファイル全体をスナップショットせず `modify_private_config.toml` で管理対象キーだけを置換する。未管理の root key と table はそのまま保持されるので、Codex が project trust・通知先・Desktop 設定・plugin/MCP/hook 状態を更新しても `chezmoi diff` の対象にならない。`~/.codex` には認証情報・会話履歴・shell snapshot もあるため、**ディレクトリ全体を `chezmoi add ~/.codex` しない**。
+
 > **Note (agent skills):** skill の導入チャネルは2種類ある。① **GitHub lock チャネル**: [`skills`](https://github.com/vercel-labs/skills) CLI で導入する skill の正本は `~/.agents/skills/` (store)。`~/.claude/skills` はそこへの symlink で、Claude Code から同じ skill を共有する。`~/.agents/.skill-lock.json` (どの GitHub ソースから入れたかの記録) を管理対象にしており、これが変わると `run_onchange_after_install-skills.sh` が `chezmoi apply` 時に各 skill を `skills add` で再取得する (Brewfile と同じ仕組み)。skill を追加/削除したら `cp ~/.agents/.skill-lock.json dot_agents/dot_skill-lock.json` で lock を source へ同期してコミットする。② **自作 skill チャネル**: `dot_agents/skills-local/<name>/` に `SKILL.md`（とサポートファイル）を置き、`run_onchange_after_install-local-skills.sh` が `chezmoi apply` 時に `~/.agents/skills/<name>/` へコピーする。GitHub チャネルは lock 外のフォルダを削除しないため両チャネルは共存できる。store 本体 (`~/.agents/skills/**`) は再生成可能なので `.chezmoiignore` で除外（自作スキルの source は `dot_agents/skills-local/` に残る）。自作 skill を**削除**するときは source から消すだけでは足りず、`run_onchange_after_install-local-skills.sh.tmpl` の `REMOVED_SKILLS` 配列（store 側の実体を除去）と `.chezmoiremove`（`~/.agents/skills-local/` 側の残骸を除去。残すと毎回再インストールされる）の2箇所に追記する。
 
 > **Note (Claude Code plugins):** プラグインの導入は `run_onchange_after_install-claude-plugins.sh.tmpl` の **inline manifest**（`MARKETPLACES` / `PLUGINS` 配列）が唯一の source of truth。`chezmoi apply` 時にこのスクリプトが `claude plugin marketplace add` + `claude plugin install` を冪等に流し、marketplace の clone と cache 本体を再生成する（skills store と同じ「ignore して run_onchange で再生成」方式）。Claude Code が実行時に所有する `known_marketplaces.json` / `installed_plugins.json` は `.chezmoiignore` 済みで**追跡しない**（タイムスタンプ等のドリフトが出ない）。有効化状態 `enabledPlugins` は `modify_settings.json.tmpl` が新規マシン用に seed し、以降は Claude Code の値を保持する。現在は公式 LSP (`gopls-lsp` / `rust-analyzer-lsp` @ `claude-plugins-official`) と [`ecc`](https://github.com/affaan-m/ECC) (`ecc@ecc`)、[`crit`](https://github.com/tomasz-tomczyk/crit) (`crit@crit`) を管理 (ecc は **Claude Code CLI ≥ v2.1.0** 必須)。プラグインを増減するときは manifest 配列を編集するだけ（JSON への手動反映や `chezmoi re-add` は不要）。
@@ -49,7 +52,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 
 ## Excluded from management
 
-以下は認証トークンや機密情報を含むため管理対象外。
+以下は認証トークン・機密情報を含むか、アプリが所有する実行時状態のため管理対象外。
 
 | パス | 理由 |
 |---|---|
@@ -60,6 +63,10 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `~/.config/nvim/lazyvim.json` | LazyVim が自動更新する既読状態ファイル |
 | `~/.config/mise/mise.local.lock` | `config.local.toml`（private tool）の lockfile。private repo 名とリリースアセット URL を含むため public repo に置けない。`mise lock -g` を実行すると（`mise.lock` と一緒に）各マシンで自動生成される |
 | `~/.agents/skills/` | skills CLI が GitHub から取得する store。lock から再生成可能 (`run_onchange_after_install-skills.sh`) |
+| `~/.codex/auth.json`, `.codex-global-state.json*`, `installation_id` | Codex の認証・インストール・アプリ状態。機密またはマシン固有 |
+| `~/.codex/history.jsonl`, `session_index.jsonl`, `sessions/`, `archived_sessions/`, `attachments/`, `shell_snapshots/` | 会話・添付・実行環境の履歴。機密情報を含む可能性が高い |
+| `~/.codex/*.sqlite*`, `cache/`, `log/`, `tmp/`, `.tmp/`, `plugins/cache/`, `skills/.system/` | Codex とpluginが生成するDB・cache・log・組み込みskill。再生成可能 |
+| `~/.codex/AGENTS.md`, `rules/`, `automations/` | 現在の `AGENTS.md` は空、rules は一時的なコマンド許可、automations はmachine-localな定義・memoryのため今回は追跡しない |
 | `~/.claude.json` | Claude Code OAuth/セッション情報 (253 KB、自動 backup あり) |
 | `~/.claude/sessions/` | アクティブセッション (mode 700、トークン含む) |
 | `~/.claude/projects/` | プロジェクト別トランスクリプト (79 MB、機密含む) |
