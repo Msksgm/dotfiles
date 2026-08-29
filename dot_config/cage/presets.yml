@@ -4,6 +4,7 @@ presets:
       - "."
       - path: "/tmp"
         eval-symlinks: true
+      - "$HOME/.local"
       - "$HOME/.npm"
       - "$HOME/.npm-global"
       - "$HOME/.gradle"
