@@ -168,6 +168,9 @@ cat <<'EOF'
 description = "Workspace access with .agents writable."
 extends = ":workspace"
 
+[permissions.workspace-agents-write.filesystem]
+"~/.local" = "write"
+
 [permissions.workspace-agents-write.filesystem.":workspace_roots"]
 ".agents" = "write"
 ".git" = "write"
