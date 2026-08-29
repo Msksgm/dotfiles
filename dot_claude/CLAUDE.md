@@ -2,6 +2,7 @@
 
 全プロジェクト共通のコーディング規約と Claude Code 運用ルール。`@`-import で `~/.claude/rules/` 配下を読み込む。
 
+@rules/tool-management.md
 @rules/coding-general.md
 @rules/coding-ddd.md
 @rules/coding-style.md
