@@ -171,6 +171,8 @@ extends = ":workspace"
 [permissions.workspace-agents-write.filesystem]
 "~/.local" = "write"
 "~/.m2" = "write"
+"~/.gradle" = "write"
+"~/.konan" = "write"
 
 [permissions.workspace-agents-write.filesystem.":workspace_roots"]
 ".agents" = "write"
