@@ -25,6 +25,13 @@ brew "tree"
 brew "watch"
 brew "wget"
 brew "percona-toolkit"
+# NOTE: op (1Password CLI) は「single-binary CLI は原則 aqua」方針の例外。aqua registry の
+# 1password/cli は type: http（配布元が GitHub release ではなく cache.agilebits.com）で
+# repo_owner/repo_name を持たず、mise ではバージョン一覧が引けない（ls-remote / latest /
+# "latest" 指定が不可 → 更新検知が効かず手動追従になる）。上流が digest を公開していないため
+# lockfile にも checksum が載らない。aqua を選ぶ利点が両方とも成立しない一方、資格情報ツールは
+# 追従が遅れるほうが痛いので brew に置く。cask は zsh 補完 (op completion) も入れてくれる。
+cask "1password-cli"
 cask "warashi/tap/cage"
 # docker_desktop と orbstack は商用の規約があるため、フラグでインストールを制御する
 {{ if hasKey . "install_docker_desktop" -}}

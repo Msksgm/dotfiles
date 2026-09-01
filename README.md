@@ -52,6 +52,8 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 
 > **Note (Claude Code plugins):** プラグインの導入は `run_onchange_after_install-claude-plugins.sh.tmpl` の **inline manifest**（`MARKETPLACES` / `PLUGINS` 配列）が唯一の source of truth。`chezmoi apply` 時にこのスクリプトが `claude plugin marketplace add` + `claude plugin install` を冪等に流し、marketplace の clone と cache 本体を再生成する（skills store と同じ「ignore して run_onchange で再生成」方式）。Claude Code が実行時に所有する `known_marketplaces.json` / `installed_plugins.json` は `.chezmoiignore` 済みで**追跡しない**（タイムスタンプ等のドリフトが出ない）。有効化状態 `enabledPlugins` は `modify_settings.json.tmpl` が新規マシン用に seed し、以降は Claude Code の値を保持する。現在は公式 LSP (`gopls-lsp` / `rust-analyzer-lsp` @ `claude-plugins-official`) と [`ecc`](https://github.com/affaan-m/ECC) (`ecc@ecc`)、[`crit`](https://github.com/tomasz-tomczyk/crit) (`crit@crit`) を管理 (ecc は **Claude Code CLI ≥ v2.1.0** 必須)。プラグインを増減するときは manifest 配列を編集するだけ（JSON への手動反映や `chezmoi re-add` は不要）。
 
+> **Note (op / 1Password CLI):** `op` は「single-binary CLI は原則 aqua (mise)」方針の**例外**で、`Brewfile.tmpl` の `cask "1password-cli"` で管理する。aqua registry の `1password/cli` は配布元が GitHub release ではなく `cache.agilebits.com` のため `type: http` 扱いで `repo_owner`/`repo_name` を持たず、mise ではバージョン一覧を引けない (`ls-remote` / `latest` / `"latest"` 指定が不可 → 更新検知が効かず手動追従になる)。上流が digest を公開していないので lockfile にも checksum が載らない。aqua を選ぶ利点が両方とも成立しない一方、資格情報ツールは追従が遅れるほうが痛いため brew に置いている (cask は `op` の zsh 補完も同梱する)。バージョン追従は `brew upgrade` に任せる。
+
 > **Note (二重チャネル管理ツール):** crit / herdr は CLI（mise）と Claude 連携（plugin / skill / hook）の**複数チャネルで同じツールを管理**している。CLI のバージョンだけ上げると連携側が古いままズレるため、更新時は両方を揃えること。対応表と更新手順は `CLAUDE.md` の「二重チャネル管理ツール（CLI + Claude 連携）」を参照。
 
 ## Excluded from management
@@ -158,7 +160,7 @@ private GitHub repo のリリースを mise の **github バックエンド**で
 
 導入するマシンで一度だけ用意しておくもの:
 
-1. 1Password デスクトップアプリの **CLI 連携を有効化**し、`op-vault init` を実行する ([op-vault](https://github.com/sunakan/op-vault) は 1Password SDK 利用のため `op` CLI は不要)。
+1. 1Password デスクトップアプリの **CLI 連携を有効化**し、`op-vault init` を実行する ([op-vault](https://github.com/sunakan/op-vault) は 1Password SDK 利用のため `op` CLI に依存しない。`op` 自体は Brewfile で別途入るが、この仕組みの前提ではない)。
 2. private repo を読める **GitHub PAT を 1Password に保存**し、その `op://<Vault>/<Item>/<field>` 参照を `private_tool_token_ref` に設定する。
 3. `private_tool_repo` / `op_account` / `private_tool_token_ref` を `~/.config/chezmoi/chezmoi.toml` の `[data]` に設定する（3つセット）。
 
