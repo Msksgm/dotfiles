@@ -41,6 +41,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_claude/plugins/private_blocklist.json` | `~/.claude/plugins/blocklist.json` |
 | `dot_claude/symlink_skills` | `~/.claude/skills` → `~/.agents/skills` (symlink) |
 | `dot_agents/dot_skill-lock.json` | `~/.agents/.skill-lock.json` |
+| `dot_agents/skills-local/pr-critical-review/**` | `~/.agents/skills-local/pr-critical-review/`（根拠付きの PR トリアージを行う Markdown 専用 skill。未採用の図解仕様は `references/` に保管し、インストーラ経由で `~/.agents/skills/pr-critical-review/` にも展開） |
 | `dot_agents/skills-local/review-io-impact/SKILL.md` | `~/.agents/skills-local/review-io-impact/SKILL.md`（インストーラ経由で `~/.agents/skills/review-io-impact/SKILL.md` にも展開） |
 | `dot_agents/skills-local/svg-diagram/**` | `~/.agents/skills-local/svg-diagram/`（SKILL.md + `components/` `examples/` の HTML テンプレート。インストーラ経由で `~/.agents/skills/svg-diagram/` にも展開） |
 
