@@ -173,6 +173,9 @@ extends = ":workspace"
 "~/.m2" = "write"
 "~/.gradle" = "write"
 "~/.konan" = "write"
+"~/.android" = "write"
+"~/Library/Application Support/kotlin/daemon" = "write"
+"~/Library/Logs/CoreSimulator" = "write"
 
 [permissions.workspace-agents-write.filesystem.":workspace_roots"]
 ".agents" = "write"
