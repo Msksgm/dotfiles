@@ -123,7 +123,7 @@ if ! awk '
     managed["model"] = "model = \"gpt-6-astra\""
     managed["model_reasoning_effort"] = "model_reasoning_effort = \"low\""
     managed["service_tier"] = "service_tier = \"default\""
-    managed["plan_mode_reasoning_effort"] = "plan_mode_reasoning_effort = \"xhigh\""
+    managed["plan_mode_reasoning_effort"] = "plan_mode_reasoning_effort = \"high\""
   }
 
   {
