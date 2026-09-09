@@ -10,7 +10,7 @@ description: >-
 
 ## 管理元と境界
 
-1. 最初に `chezmoi source-path ~/.config/mise/config.toml` を実行し、この dotfiles リポジトリの `dot_config/mise/config.toml.tmpl` が source であることを確認する。リポジトリの instruction file も読む。
+1. 最初に `chezmoi source-path ~/.config/mise/config.toml` を実行し、この dotfiles リポジトリの `dot_config/mise/config.toml.tmpl` が source であることを確認する。`chezmoi source-path` で取得した source root の `AGENTS.md` を読み、適用の共通ルールに従う。インストール先や作業ディレクトリからの相対パスで参照先を推測しない。
 2. Codex CLI は `[tools]` の `"aqua:openai/codex"` で管理する。npm、Homebrew、個別 installer、`mise use -g` で別経路を作らない。
 3. 未コミットの変更を確認して保持する。バージョン更新だけの依頼では `dot_codex/modify_private_config.toml` などの実行時設定を変更しない。
 4. lockfile は生成物である。通常のバージョン更新では `dot_config/mise/private_mise.lock` の version、URL、checksum を手で書き換えない。
@@ -36,12 +36,7 @@ description: >-
 
 ## Lock を更新する
 
-config の編集後は必ず `mise-lock-update` スキルを読み、その実行分担と手順に従う。このリポジトリでは以下をユーザーが実行するため、完了前に必要なコマンドを提示して待つ。
-
-1. `chezmoi apply -v`
-2. GitHub 認証済みの状態で `mise lock -g`
-3. home の `~/.config/mise/mise.lock` を source の `dot_config/mise/private_mise.lock` へコピー
-4. 再度 `chezmoi apply -v` して `chezmoi diff` を収束させる
+config の編集後は、上で特定した source root の `.agents/skills/mise-lock-update/SKILL.md` を必ず読む。適用の共通ルールは同じ source root の `AGENTS.md`、lock 更新固有の実行分担・手順・再適用のタイミングは `mise-lock-update` に従う。ユーザーに引き渡す操作はその手順から提示する。
 
 ユーザーが同期を完了したら、agent が source を読み取り専用で検証する。
 
@@ -62,4 +57,4 @@ config の編集後は必ず `mise-lock-update` スキルを読み、その実�
 - apply 後の `codex --version` が対象版である。
 - `chezmoi diff` が `mise-lock-update` の基準で収束している。
 
-完了報告には旧版→新版、changelog の重要点、変更ファイル、検証結果を含める。commit はユーザーが行う。
+完了報告には旧版→新版、changelog の重要点、変更ファイル、検証結果を含める。適用前の報告とコミットの分担は source root の `AGENTS.md` に従う。

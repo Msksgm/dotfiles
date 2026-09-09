@@ -20,7 +20,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_crit.config.json` | `~/.crit.config.json`（crit のグローバル設定。`plan_approve_mode` で plan 承認後の Claude Code permission mode を指定する。プロジェクト側 `.crit.config.json` からは上書き不可） |
 | `dot_config/nvim/` | `~/.config/nvim/` |
 | `dot_config/karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json` |
-| `dot_config/mise/config.toml.tmpl` | `~/.config/mise/config.toml`（言語ランタイム + aqua バックエンドの主要 CLI ツール群。aqua 未登録のツールは github バックエンド。**private tool はここに書かない** — lockfile `mise.lock` を追跡しているため、下記 `config.local.toml` に隔離する） |
+| `dot_config/mise/config.toml.tmpl` | `~/.config/mise/config.toml`（言語ランタイム + aqua バックエンドの主要 CLI ツール群。aqua 未登録のツールは github バックエンド等を使い、npm 配布の WXT は npm バックエンドで管理する。**private tool はここに書かない** — lockfile `mise.lock` を追跡しているため、下記 `config.local.toml` に隔離する） |
 | `dot_config/mise/private_config.local.toml.tmpl` | `~/.config/mise/config.local.toml`（private tool 専用の machine-local config。mode 0600。`private_tool_repo` を設定したマシンでのみ展開され、lockfile は `mise.local.lock` に分離されて追跡されない） |
 | `dot_config/mise/private_mise.lock` | `~/.config/mise/mise.lock`（mise の lockfile。全ツールの version / URL / checksum を複数プラットフォーム分固定して再現性を担保する。mode 0600。**生成物なので手で編集せず** `mise lock -g` → `cp` で同期する。手順は下記 "mise lockfile の更新" 参照） |
 | `dot_config/helm/repositories.yaml` | `~/.config/helm/repositories.yaml` |
@@ -61,10 +61,11 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 
 ## Excluded from management
 
-以下は認証トークン・機密情報を含むか、アプリが所有する実行時状態のため管理対象外。
+以下はリポジトリ専用のメタファイル、認証トークン・機密情報、アプリが所有する実行時状態のため管理対象外。
 
 | パス | 理由 |
 |---|---|
+| `AGENTS.md`（リポジトリ直下） | この dotfiles の chezmoi 適用ルールの正本。Git で管理し、home には展開しない |
 | `~/.config/chezmoi/` | chezmoi 設定ファイル (`sourceDir` / `[data]` の手動変数を含む) |
 | `~/.config/gh/` | GitHub CLI 認証トークン |
 | `~/.config/github-copilot/` | GitHub Copilot 認証トークン |

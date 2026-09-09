@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+@AGENTS.md
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview
@@ -77,7 +79,7 @@ chezmoi managed       # 管理対象ファイル一覧
 chezmoi update        # remote pull + apply
 ```
 
-> **`chezmoi diff` / `apply` / `update` などの home への適用操作はユーザーが実行する。** Claude は `dot_*` 等の source ファイルの編集までを担当し、apply の実行やコミット可否の判断はユーザーに委ねること。
+実行分担と適用前後の報告は [AGENTS.md](AGENTS.md#chezmoi-の適用) に従う。
 
 ## ファイルを新たに管理対象に追加する手順
 

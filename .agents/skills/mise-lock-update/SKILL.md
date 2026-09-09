@@ -60,22 +60,23 @@ yq -p toml -o json '.tools | keys' dot_config/mise/private_mise.lock | grep -i '
 
 ## 実行分担
 
-このリポジトリの方針により、home への適用と、そこで生成した lockfile の source へのコピーはユーザーが実行する。
+適用・読み取り専用の検証・コミットの分担は [AGENTS.md](../../../AGENTS.md#chezmoi-の適用) に従う。以下はこのスキル固有の分担。home のツール実体と生成 lockfile を扱い、生成前の lock を同期しないよう、生成・コピーをユーザーの一連の操作とする。
 
 | 操作 | 実行者 |
 |---|---|
 | `dot_config/mise/config.toml.tmpl` の編集 | agent |
-| `chezmoi apply` | **ユーザー** |
 | `mise uninstall`（ツール削除・リネーム時のみ） | **ユーザー** |
 | `mise lock -g`（`~/.config/mise/mise.lock` を書き換える） | **ユーザー** |
 | `cp` で source へ同期（source ファイルの更新） | **ユーザー** |
 | source lock からの残骸ブロック手削除（ツール削除・リネーム時のみ） | agent |
-| 検証コマンド（read-only） | agent |
-| コミット | **ユーザー** |
 
 ユーザー操作が完了するまでは、生成前の lockfile を source へコピーしたり、同期済みとして後続検証へ進んだりしない。
 
 ## 手順
+
+### 1–2. ユーザー操作: 適用と lock 生成
+
+source の編集・検証後、共通ルールに従って以下をユーザーへ提示する。
 
 ```sh
 # 1. dot_config/mise/config.toml.tmpl の [tools] を編集したあと
@@ -86,27 +87,51 @@ chezmoi apply -v    # run_onchange が mise install を実行する
 #      403 で取りこぼした platform エントリが歯抜けのまま lock に書かれる
 export GITHUB_TOKEN="$(gh auth token)"
 mise lock -g
+```
 
+### 3. エージェントの検証: platform と private 参照
+
+ユーザーの生成完了後に実行する。問題があれば解消してから手順 4 を提示する。
+
+```sh
 #    取りこぼしが無いか確認する（7 未満は上流が全 platform を配布していない場合もある）
 awk '/^\[\[tools\./{n++; c[n]=0} /^\[tools\..*platforms\./{c[n]++} \
   END{f=0; for(i=1;i<=n;i++) if(c[i]>=7) f++; print f" / "n" tools with 7 platforms"}' ~/.config/mise/mise.lock
 
 # 3. private な参照が混ざっていないか確認（owner が全部 public であること）
 grep -o 'github\.com/[^/]*/[^/"]*' ~/.config/mise/mise.lock | sort -u
+```
 
+### 4. ユーザー操作: source へ同期
+
+```sh
 # 4. source へ同期する
 cp ~/.config/mise/mise.lock "$(chezmoi source-path)/dot_config/mise/private_mise.lock"
+```
 
+### 5. エージェントの編集・検証: 残骸の除去と差分確認
+
+ユーザーの同期完了後に実行する。
+
+```sh
 # 5. ツールを削除・リネームした場合のみ: 残骸ブロックを source から手で消す
 #    mise lock はエントリを削除しないので、これをやらないと旧エントリが public repo に残る
 grep -n '^\[\[tools\.' dot_config/mise/private_mise.lock   # config に無い名前が出たら残骸
 #    → 「`mise lock` はエントリを削除しない」章の手順で削除する
 
 chezmoi diff        # ← 空にはならない。次章を読むこと
+```
 
+### 6. 再適用の引き渡しと適用後の検証
+
+差分確認後、共通ルールに従って以下をユーザーへ提示する。
+
+```sh
 # 6. もう一度 apply して収束させる → コミット
 chezmoi apply -v    # mise install が冪等に再実行され、diff が静かになる
 ```
+
+ユーザーの再適用完了後、エージェントが `chezmoi diff` を確認する。コミットの分担は共通ルールに従う。
 
 ## 同期後の `chezmoi diff` は「空」にならない
 
