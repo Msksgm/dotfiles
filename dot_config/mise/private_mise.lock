@@ -1961,6 +1961,10 @@ url = "https://registry.npmjs.org/npm/-/npm-11.4.1.tgz"
 [tools.npm."platforms.macos-x64"]
 url = "https://registry.npmjs.org/npm/-/npm-11.4.1.tgz"
 
+[[tools."npm:wxt"]]
+version = "0.21.4"
+backend = "npm:wxt"
+
 [[tools.python]]
 version = "3.13.6"
 backend = "core:python"
