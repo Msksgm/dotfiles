@@ -1,38 +1,41 @@
+# Tap
 tap "warashi/tap"
-brew "ansible"
-brew "aws-vault"
-brew "chezmoi"
-brew "colordiff"
-brew "coreutils"
-brew "curl"
-brew "ffmpeg"
-brew "gemini-cli"
-brew "git"
-brew "git-filter-repo"
-brew "gawk"
-brew "gnu-sed"
-brew "grep"
-brew "mise"
-brew "nkf"
-brew "plantuml"
-brew "poppler"
-brew "powerlevel10k"
-brew "rustup"
-brew "sleepwatcher"
-brew "tig"
-brew "tmux"
-brew "tree"
-brew "watch"
-brew "wget"
-brew "percona-toolkit"
-# NOTE: op (1Password CLI) は「single-binary CLI は原則 aqua」方針の例外。aqua registry の
-# 1password/cli は type: http（配布元が GitHub release ではなく cache.agilebits.com）で
-# repo_owner/repo_name を持たず、mise ではバージョン一覧が引けない（ls-remote / latest /
-# "latest" 指定が不可 → 更新検知が効かず手動追従になる）。上流が digest を公開していないため
-# lockfile にも checksum が載らない。aqua を選ぶ利点が両方とも成立しない一方、資格情報ツールは
-# 追従が遅れるほうが痛いので brew に置く。cask は zsh 補完 (op completion) も入れてくれる。
-cask "1password-cli"
-cask "warashi/tap/cage"
+
+# CLI・シェル環境（Homebrew 管理）
+# Formula
+brew "ansible" # Python・libssh 等の実行依存を formula とまとめて管理
+brew "aws-vault" # 配布物の等価性が未確認のツールを Homebrew に残す既存方針に従う
+brew "chezmoi" # dotfiles 適用に必要な bootstrap ツールとして管理
+brew "colordiff" # 既存の Homebrew 運用を維持（個別の管理理由は未確認）
+brew "coreutils" # GNU コマンド群の配布・配置を Homebrew に任せる既存方針に従う
+brew "curl" # system 系を Homebrew に残す既存方針に従い、TLS 等の依存もまとめて管理
+brew "diff-pdf" # aqua 未登録・公式 macOS バイナリなしのため、描画ライブラリとともに管理
+brew "ffmpeg" # コーデック等のネイティブ依存を formula とまとめて管理
+brew "gawk" # GNU 系を Homebrew に残す既存方針に従い、awk の gawk エイリアスを維持
+brew "gemini-cli" # 既存の Homebrew 運用を維持（個別の管理理由は未確認）
+brew "git" # system 系ツールを Homebrew に残す既存方針に従う
+brew "git-filter-repo" # 既存の Homebrew 運用を維持（個別の管理理由は未確認）
+brew "gnu-sed" # GNU 系ツールを Homebrew に残す既存方針に従う
+brew "grep" # GNU 系ツールを Homebrew に残す既存方針に従う
+brew "mise" # CLI・ランタイム管理の基盤を mise install の前に導入
+brew "nkf" # 既存の Homebrew 運用を維持（個別の管理理由は未確認）
+brew "percona-toolkit" # Perl の MySQL ドライバー依存とツール群をまとめて管理
+brew "plantuml" # Java ランタイム・Graphviz を formula とまとめて管理
+brew "poppler" # PDF 用 CLI 群と Cairo 等の描画ライブラリをまとめて管理
+brew "powerlevel10k" # dot_zshrc が Homebrew 配下のテーマファイルを直接参照
+brew "rustup" # run_once_setup.sh が使用する rustup-init を事前に導入
+brew "sleepwatcher" # macOS 用ビルドと brew services 用の定義を formula で管理
+brew "tig" # ncurses・readline 等のネイティブ依存を formula とまとめて管理
+brew "tmux" # 配布物の等価性が未確認のツールを Homebrew に残す既存方針に従う
+brew "tree" # system 系ツールを Homebrew に残す既存方針に従う
+brew "watch" # system 系を Homebrew に残す既存方針に従い、ncurses 依存もまとめて管理
+brew "wget" # GNU 系を Homebrew に残す既存方針に従い、TLS 等の依存もまとめて管理
+
+# Cask（CLI）
+cask "1password-cli" # 資格情報 CLI の更新と同梱の zsh 補完を Homebrew で管理（例外の詳細は README.md）
+cask "warashi/tap/cage" # 上流の tap が提供する macOS 用バイナリを cask で管理
+
+# GUI アプリ
 # docker_desktop と orbstack は商用の規約があるため、フラグでインストールを制御する
 {{ if hasKey . "install_docker_desktop" -}}
 cask "docker-desktop"
@@ -43,6 +46,8 @@ cask "orbstack"
 cask "raycast"
 cask "visual-studio-code"
 cask "zed"
+
+# VS Code 拡張
 vscode "3w36zj6.textlint"
 vscode "amandeepmittal.pug"
 vscode "andrewrazumovsky.vscode-styled-jsx-languageserver"
