@@ -1773,6 +1773,40 @@ checksum = "sha256:a526da44d5f67250598fa95e5654815e9f672b2c05d1d98c28bce0e60d3cf
 url = "https://github.com/x-motemen/ghq/releases/download/v1.10.1/ghq_windows_amd64.zip"
 url_api = "https://api.github.com/repos/x-motemen/ghq/releases/assets/394135809"
 
+[[tools."github:openai/symphony"]]
+version = "0.0.3"
+backend = "github:openai/symphony"
+
+[tools."github:openai/symphony"."platforms.linux-arm64"]
+checksum = "sha256:bf204639b836d378f5d2ddb389f5d76602a62e9d1b115bdbefb07916848ae066"
+url = "https://github.com/openai/symphony/releases/download/v0.0.3/symphony-v0.0.3-linux_arm64"
+url_api = "https://api.github.com/repos/openai/symphony/releases/assets/566604830"
+
+[tools."github:openai/symphony"."platforms.linux-arm64-musl"]
+checksum = "sha256:bf204639b836d378f5d2ddb389f5d76602a62e9d1b115bdbefb07916848ae066"
+url = "https://github.com/openai/symphony/releases/download/v0.0.3/symphony-v0.0.3-linux_arm64"
+url_api = "https://api.github.com/repos/openai/symphony/releases/assets/566604830"
+
+[tools."github:openai/symphony"."platforms.linux-x64"]
+checksum = "sha256:ea35a04a54a6d37c0cafe3f195da871e47614a8c05765b90dbb4cac32e1435ee"
+url = "https://github.com/openai/symphony/releases/download/v0.0.3/symphony-v0.0.3-linux_x86_64"
+url_api = "https://api.github.com/repos/openai/symphony/releases/assets/566604829"
+
+[tools."github:openai/symphony"."platforms.linux-x64-musl"]
+checksum = "sha256:ea35a04a54a6d37c0cafe3f195da871e47614a8c05765b90dbb4cac32e1435ee"
+url = "https://github.com/openai/symphony/releases/download/v0.0.3/symphony-v0.0.3-linux_x86_64"
+url_api = "https://api.github.com/repos/openai/symphony/releases/assets/566604829"
+
+[tools."github:openai/symphony"."platforms.macos-arm64"]
+checksum = "sha256:b85d78b25cd5cacff92424416f6a3af7cafee5d675f56b5cd26d22d601c2026d"
+url = "https://github.com/openai/symphony/releases/download/v0.0.3/symphony-v0.0.3-macos_arm64"
+url_api = "https://api.github.com/repos/openai/symphony/releases/assets/566604832"
+
+[tools."github:openai/symphony"."platforms.macos-x64"]
+checksum = "sha256:e7db24d8b35d99a96b96db51e50c7974ab9a8ae06fd05abf6d03ead6bf183d90"
+url = "https://github.com/openai/symphony/releases/download/v0.0.3/symphony-v0.0.3-macos_x86_64"
+url_api = "https://api.github.com/repos/openai/symphony/releases/assets/566604845"
+
 [[tools."github:sunakan/op-vault"]]
 version = "1.0.0"
 backend = "github:sunakan/op-vault"
