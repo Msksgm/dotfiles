@@ -1,5 +1,11 @@
 # CLI ツール管理
 
-- ユーザーレベルの CLI ツールは、原則として chezmoi の dotfiles リポジトリを通じて mise で管理する。
-- グローバルな CLI ツールを追加・更新・削除する前に、`chezmoi source-path ~/.config/mise/config.toml` で source を特定し、そのリポジトリの指示を確認する。Homebrew や個別インストーラーは、リポジトリで定めた例外に限る。
-- プロジェクトローカルの依存関係には適用せず、各プロジェクトの manifest と instruction file に従う。
+この節は、エージェントがユーザー個人の環境で作業する際の指示であり、各プロジェクトの開発要件ではない。
+
+ユーザーレベルの CLI ツールは、原則として chezmoi の dotfiles リポジトリを通じて mise で管理する。プロジェクト作業中でも、ユーザーレベルの CLI ツールを変更する場合はこの指示に従う。
+
+グローバルな CLI ツールを追加・更新・削除する前に、`chezmoi source-path ~/.config/mise/config.toml` で source を特定し、その dotfiles リポジトリの指示を確認する。Homebrew や個別インストーラーは、同リポジトリで定めた例外に限る。
+
+プロジェクトローカルの依存関係には適用せず、各プロジェクトの manifest と instruction file に従う。
+
+この指示に従うことを理由に、個人環境の管理方針をプロジェクトの AGENTS.md・README・その他の文書や設定へ転載・追加しない。記載するのは、ユーザーが明示的に依頼した場合、または個人環境を管理する dotfiles リポジトリ自体の整備が作業対象である場合に限る。
