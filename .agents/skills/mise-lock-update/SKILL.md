@@ -78,6 +78,8 @@ yq -p toml -o json '.tools | keys' dot_config/mise/private_mise.lock | grep -i '
 
 source の編集・検証後、共通ルールに従って以下をユーザーへ提示する。
 
+`GITHUB_TOKEN` の取得には `ghtkn` を使う。`gh auth token` は案内せず、ユーザーに `ghtkn auth ga` で認証してもらってから `ghtkn get ga` の出力を環境変数へ設定する。
+
 ```sh
 # 1. dot_config/mise/config.toml.tmpl の [tools] を編集したあと
 chezmoi apply -v    # run_onchange が mise install を実行する
@@ -85,7 +87,8 @@ chezmoi apply -v    # run_onchange が mise install を実行する
 # 2. 全プラットフォーム分の URL/checksum を再解決する
 #    ※ GITHUB_TOKEN は必須。未認証だと 60 req/h で即座にレート制限に当たり、
 #      403 で取りこぼした platform エントリが歯抜けのまま lock に書かれる
-export GITHUB_TOKEN="$(gh auth token)"
+ghtkn auth ga
+export GITHUB_TOKEN="$(ghtkn get ga)"
 mise lock -g
 ```
 
@@ -199,7 +202,7 @@ private tool は `dot_config/mise/private_config.local.toml.tmpl`（→ `~/.conf
 ## 観点チェックリスト
 
 - [ ] `config.toml.tmpl` の編集後に `chezmoi apply` を済ませたか（手順 1）
-- [ ] `GITHUB_TOKEN` を export してから `mise lock -g` したか（手順 2）
+- [ ] `ghtkn auth ga` → `export GITHUB_TOKEN="$(ghtkn get ga)"` の順に実行してから `mise lock -g` したか（手順 2）
 - [ ] platform 数のカウントを確認したか。減っているツールがあれば上流の配布状況を確認したか
 - [ ] `grep` で owner がすべて public だったか（手順 3）
 - [ ] `cp` の方向は home → source か（逆にすると lock が巻き戻る）
