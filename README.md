@@ -12,6 +12,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_p10k.zsh` | `~/.p10k.zsh` |
 | `dot_zsh/alias.zsh` | `~/.zsh/alias.zsh` |
 | `dot_zsh/brew_drift_check.zsh` | `~/.zsh/brew_drift_check.zsh` |
+| `dot_zsh/github-auth.zsh` | `~/.zsh/github-auth.zsh`（org ごとの App 名を使い、`git()` / `gh()` で ghtkn の read / write 認証を選択する。既存の `~/.zsh/*.zsh` 読み込みで関数を定義する） |
 | `dot_zsh/herdr.zsh` | `~/.zsh/herdr.zsh`（herdr 用のシェル設定。自分の pane ID を herdr にカスタムトークンとして報告する `_herdr_report_pane_id` を定義する。`~/.zsh/*.zsh` の source は `mise activate` より前で herdr が PATH に無いため、**定義だけを置き呼び出しは `dot_zshrc` の mise activate 直後**に置いている） |
 | `dot_tmux.conf` | `~/.tmux.conf` |
 | `executable_dot_tmux-rename-session` | `~/.tmux-rename-session` |
@@ -150,6 +151,63 @@ EOF
 #    mise.lock も chezmoi 管理下なので、mise のツールは全マシンで同一 version/checksum で入る
 chezmoi apply
 ```
+
+## GitHub 認証（ghtkn）
+
+`~/.zsh/github-auth.zsh` の共通関数と `~/.gitconfig` の GitHub HTTPS 用 credential helper を使う。Git は `ghtkn git-credential`、gh は `ghtkn exec` で認証する。GitHub に限って既存 helper を空の設定でリセットし、`useHttpPath = true` でリポジトリの path を helper に渡す。[ghtkn 公式仕様](https://github.com/suzuki-shunsuke/ghtkn/blob/main/docs/git-credential-helper.md)
+
+org ごとの `mise.toml` はこの dotfiles の管理対象外。例えば、`~/workspace/github.com/example-org/mise.toml` に次を設定し、mise を有効化した Zsh で配下のリポジトリへ移動する。
+
+```toml
+[env]
+GHTKN_GIT_APP_READ = "example-org/read"
+GHTKN_GIT_APP_WRITE = "example-org/write"
+```
+
+値は ghtkn に登録した `apps[].name` と完全に一致させる。各 org の read / write App の登録・権限・インストールと `ghtkn auth` による認証は利用前に用意する。既存設定を使う場合も、App 名の不一致や read App の未登録を確認する。切替対象の owner を `git_owner` / `git_owners` に固定すると環境変数より優先されるため、固定割当は設定しない。[App の選択順](https://github.com/suzuki-shunsuke/ghtkn/blob/main/docs/git-credential-helper.md#switching-github-apps-to-access-fork-repositories)
+
+mise には独自変数の `GHTKN_GIT_APP_READ` / `GHTKN_GIT_APP_WRITE` を設定し、`GHTKN_GIT_APP` は設定しない。関数が選んだ App を実行時だけ `GHTKN_GIT_APP` に渡すため、shim による mise 環境の再適用と衝突しない。
+
+関数を呼ぶたびに **両方の環境変数**を確認し、どちらかが未設定・空なら、ローカル操作を含むすべての git / gh 呼び出しを終了コード 1 で止める。スクリプトの読み込み時には確認しない。
+
+| 操作 | App / 挙動 |
+|---|---|
+| `git push` | write（`git -C <repo> push` なども対象） |
+| その他の git 操作 | read |
+| `gh repo create` / `gh pr create` / `gh release create` / `gh release delete` | write。子 Git にも同じ App を渡す |
+| `gh auth login` / `gh auth token` | 拒否。認証には `ghtkn auth` を使い、トークンを表示しない |
+| その他の gh 操作 | read。追加の書き込み操作が必要なら関数の分岐を追加する |
+
+`gitw` / `ghw` と mise wrappers は定義しない。App は呼び出し元シェルの環境変数で選ぶので、`git -C` や `gh -R` で別 org を指定しても自動で切り替わらない。対象 org のディレクトリへ移動してから実行する。
+
+### SSH remote の個別変更
+
+`git()` はすべての登録 remote の fetch / push URL を検査する。未使用の remote や明示的な push URL も含め、`git@github.com:…` またはホストが `github.com` の `ssh://…` が残っていれば、ローカル操作も止めて HTTPS への変更コマンドを表示する。clone などで標準 GitHub SSH URL を直接渡した場合も拒否する。SSH の Host 別名や他サービスは対象外で、自動読み替えは行わない。
+
+remote を修正する際は、関数を迂回する `command git` を使う。
+
+```sh
+command git remote set-url origin https://github.com/example-org/example-repo.git
+# 明示的な push URL がある場合
+command git remote set-url --push origin https://github.com/example-org/example-repo.git
+```
+
+既存の URL 読み替え設定により保存 URL と実際の接続 URL が異なる場合は、表示された修正案内を使う。保存 URL の置換が必要な場合は `command git config --fixed-value --replace-all ...` を案内し、HTTPS が SSH に読み替えられている場合は `url.*.insteadOf` の修正を案内する。
+
+`gh pr create` も子 Git の push に備えて同じ remote 検査を行う。その他の gh 操作には SSH 検査を追加しない。これらの関数が効くのは読み込み済みの Zsh からの呼び出しだけで、IDE、ghq、`command git` などの直接呼び出しには適用されない。
+
+### 適用と読み取り確認
+
+source の変更を `chezmoi diff ~/.gitconfig ~/.zsh/github-auth.zsh` で確認し、ユーザーが次を実行して新しい Zsh を起動する。org の mise 設定、App 認証、HTTPS remote を準備してから、対象リポジトリ内で読み取りを確認する。
+
+```sh
+chezmoi apply ~/.gitconfig ~/.zsh/github-auth.zsh
+# 新しい Zsh で対象 org 配下のリポジトリへ移動してから実行
+git ls-remote origin HEAD
+gh repo view --json nameWithOwner
+```
+
+source 更新だけでは実環境には反映されない。エージェントは home への適用、App 認証、トークンの取得・表示、push / PR 作成、コミットを行わない。
 
 ## Private tool（任意）
 

@@ -8,6 +8,10 @@
 	ignorecase = false
 	autocrlf = input
 	pager = hunk pager
+[credential "https://github.com"]
+	helper =
+	helper = !ghtkn git-credential
+	useHttpPath = true
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
