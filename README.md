@@ -12,7 +12,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_p10k.zsh` | `~/.p10k.zsh` |
 | `dot_zsh/alias.zsh` | `~/.zsh/alias.zsh` |
 | `dot_zsh/brew_drift_check.zsh` | `~/.zsh/brew_drift_check.zsh` |
-| `dot_zsh/github-auth.zsh` | `~/.zsh/github-auth.zsh`（org ごとの App 名を使い、`git()` / `gh()` で ghtkn の read / write 認証を選択する。既存の `~/.zsh/*.zsh` 読み込みで関数を定義する） |
+| `dot_zsh/github-auth.zsh` | `~/.zsh/github-auth.zsh`（org ごとの App 名を使い、`git()` / `gh()` / `ghq()` で ghtkn の認証を選択する。既存の `~/.zsh/*.zsh` 読み込みで関数を定義する） |
 | `dot_zsh/herdr.zsh` | `~/.zsh/herdr.zsh`（herdr 用のシェル設定。自分の pane ID を herdr にカスタムトークンとして報告する `_herdr_report_pane_id` を定義する。`~/.zsh/*.zsh` の source は `mise activate` より前で herdr が PATH に無いため、**定義だけを置き呼び出しは `dot_zshrc` の mise activate 直後**に置いている） |
 | `dot_tmux.conf` | `~/.tmux.conf` |
 | `executable_dot_tmux-rename-session` | `~/.tmux-rename-session` |
@@ -168,7 +168,7 @@ GHTKN_GIT_APP_WRITE = "example-org/write"
 
 mise には独自変数の `GHTKN_GIT_APP_READ` / `GHTKN_GIT_APP_WRITE` を設定し、`GHTKN_GIT_APP` は設定しない。関数が選んだ App を実行時だけ `GHTKN_GIT_APP` に渡すため、shim による mise 環境の再適用と衝突しない。
 
-関数を呼ぶたびに **両方の環境変数**を確認し、どちらかが未設定・空なら、ローカル操作を含むすべての git / gh 呼び出しを終了コード 1 で止める。スクリプトの読み込み時には確認しない。
+`git()` / `gh()` を呼ぶたびに **両方の環境変数**を確認し、どちらかが未設定・空なら、ローカル操作を含むすべての git / gh 呼び出しを終了コード 1 で止める。`ghq()` は `get` / `clone` のときだけ同じ確認を行う。スクリプトの読み込み時には確認しない。
 
 | 操作 | App / 挙動 |
 |---|---|
@@ -177,8 +177,27 @@ mise には独自変数の `GHTKN_GIT_APP_READ` / `GHTKN_GIT_APP_WRITE` を設�
 | `gh repo create` / `gh pr create` / `gh release create` / `gh release delete` | write。子 Git にも同じ App を渡す |
 | `gh auth login` / `gh auth token` | 拒否。認証には `ghtkn auth` を使い、トークンを表示しない |
 | その他の gh 操作 | read。追加の書き込み操作が必要なら関数の分岐を追加する |
+| `ghq get` / `ghq clone`（`--update` を含む） | read。`GH_TOKEN` と、子 Git の credential helper 用 App を渡す |
+| その他の ghq 操作 | 環境変数の確認・App の選択をせず、そのまま実行 |
 
 `gitw` / `ghw` と mise wrappers は定義しない。App は呼び出し元シェルの環境変数で選ぶので、`git -C` や `gh -R` で別 org を指定しても自動で切り替わらない。対象 org のディレクトリへ移動してから実行する。
+
+### ghq の認証
+
+ghq には認証が関わる経路が二つある。`ghq get repo-name` のように owner を省略した場合、owner の補完で GitHub API に問い合わせる際に、依存ライブラリが `GH_TOKEN` / `GITHUB_TOKEN` を参照する。[補完処理](https://github.com/Songmu/gitconfig/blob/v0.2.2/special.go) Git リポジトリの取得・更新は Git 本体が行い、HTTPS 認証には credential helper を使う。[ghq の仕様](https://github.com/x-motemen/ghq/blob/v1.10.1/README.adoc)
+
+`ghq get` / `ghq clone` では `ghtkn exec` で read App のトークンを `GH_TOKEN` に渡す。同時に `GHTKN_GIT_APP_READ` を実行時の `GHTKN_GIT_APP` に渡し、子 Git の `ghtkn git-credential` にも同じ read App を選ばせる。トークンは子プロセスに渡し、親シェルには export しない。
+
+取得先 org の `mise.toml` が有効なディレクトリから、HTTPS URL または `owner/repo` を指定する。取得先のパスから App を自動選択する処理はない。
+
+```sh
+cd ~/workspace/github.com/example-org
+ghq get https://github.com/example-org/example-repo.git
+# 取得済みのリポジトリを更新する場合
+ghq get --update example-org/example-repo
+```
+
+`ghq get -p`、SSH URL、更新対象の SSH remote は SSH 認証になる。ghq が起動する Git はシェル関数 `git()` を通らないため、同関数の SSH 検査も働かない。ghtkn を使う取得・更新では HTTPS を指定し、既存 remote も HTTPS に変更する。`ghq list` / `ghq root` などは org の環境変数がなくても利用できる。
 
 ### SSH remote の個別変更
 
@@ -194,7 +213,7 @@ command git remote set-url --push origin https://github.com/example-org/example-
 
 既存の URL 読み替え設定により保存 URL と実際の接続 URL が異なる場合は、表示された修正案内を使う。保存 URL の置換が必要な場合は `command git config --fixed-value --replace-all ...` を案内し、HTTPS が SSH に読み替えられている場合は `url.*.insteadOf` の修正を案内する。
 
-`gh pr create` も子 Git の push に備えて同じ remote 検査を行う。その他の gh 操作には SSH 検査を追加しない。これらの関数が効くのは読み込み済みの Zsh からの呼び出しだけで、IDE、ghq、`command git` などの直接呼び出しには適用されない。
+`gh pr create` も子 Git の push に備えて同じ remote 検査を行う。その他の gh 操作には SSH 検査を追加しない。これらの関数が効くのは読み込み済みの Zsh からの呼び出しだけで、IDE や `command git` などの直接呼び出しには適用されない。`ghq()` が行うのは上記の App 選択であり、SSH 検査は行わない。
 
 ### 適用と読み取り確認
 

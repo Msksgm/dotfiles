@@ -230,3 +230,19 @@ gh() {
     esac
     GHTKN_GIT_APP="$app" command ghtkn exec -e "GH_TOKEN:$app" -- gh "$@"
 }
+
+ghq() {
+    emulate -L zsh
+    case "${1:-}" in
+        get|clone)
+            _github_auth_require_apps || return 1
+            # GH_TOKEN is used for GitHub owner completion. Git is launched
+            # directly, so its HTTPS helper also needs the selected App.
+            GHTKN_GIT_APP="$GHTKN_GIT_APP_READ" \
+                command ghtkn exec -e "GH_TOKEN:$GHTKN_GIT_APP_READ" -- ghq "$@"
+            ;;
+        *)
+            command ghq "$@"
+            ;;
+    esac
+}
