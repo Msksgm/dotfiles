@@ -183,6 +183,29 @@ checksum = "sha256:c0902e0fb0f3f248cd86324544851c89a649815cc41772c896380c2c02bda
 url = "https://github.com/anthropics/claude-code/releases/download/v2.1.246/claude-win32-x64.zip"
 url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/529654709"
 
+[[tools."aqua:aws/aws-cli"]]
+version = "2.37.9"
+backend = "aqua:aws/aws-cli"
+
+[tools."aqua:aws/aws-cli"."platforms.linux-arm64"]
+url = "https://awscli.amazonaws.com/awscli-exe-linux-aarch64-2.37.9.zip"
+
+[tools."aqua:aws/aws-cli"."platforms.linux-arm64-musl"]
+url = "https://awscli.amazonaws.com/awscli-exe-linux-aarch64-2.37.9.zip"
+
+[tools."aqua:aws/aws-cli"."platforms.linux-x64"]
+url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.37.9.zip"
+
+[tools."aqua:aws/aws-cli"."platforms.linux-x64-musl"]
+url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.37.9.zip"
+
+[tools."aqua:aws/aws-cli"."platforms.macos-arm64"]
+checksum = "blake3:e3ae5d7f3c5fe6939761fe1dbb3f8b608279b98652e5b94022e87fc530951d14"
+url = "https://awscli.amazonaws.com/AWSCLIV2-2.37.9.pkg"
+
+[tools."aqua:aws/aws-cli"."platforms.macos-x64"]
+url = "https://awscli.amazonaws.com/AWSCLIV2-2.37.9.pkg"
+
 [[tools."aqua:azu/dockerfile-pin"]]
 version = "1.3.0"
 backend = "aqua:azu/dockerfile-pin"
