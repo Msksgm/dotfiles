@@ -102,6 +102,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 |---|---|---|---|
 | `.github_username` | 手動 | `dot_gitconfig.tmpl` | `[data] github_username` → git の `user.name` (GitHub アカウント名) |
 | `.github_email` | 手動 | `dot_gitconfig.tmpl` | `[data] github_email` → git の `user.email` (GitHub に紐づく email) |
+| `.ghtkn_apps` | 手動 (任意) | `dot_config/ghtkn/private_ghtkn.yaml.tmpl` | `[[data.ghtkn_apps]]` の App 名・Client ID。設定したマシンのみ `ghtkn.yaml` を生成 |
 | `.private_tool_repo` | 手動 (任意) | `dot_config/mise/private_config.local.toml.tmpl` | private GitHub repo のツールの `owner/repo`。github バックエンドの tool spec に使用。設定時のみ導入 (hasKey ゲート) |
 | `.private_tool_version` | 手動 (任意) | `dot_config/mise/private_config.local.toml.tmpl` / `run_onchange_after_install-mise-tools.sh.tmpl` | private tool の tool spec のバージョン。repo 名と同様に public repo へ残さないため注入する。バージョンを上げるときはこの値を書き換えて `chezmoi apply` するだけでよい (dotfiles のコミット不要) |
 | `.op_account` | 手動 (任意) | `run_onchange_after_install-mise-tools.sh.tmpl` | op-vault の `OP_ACCOUNT` (1Password アカウント識別子) |
@@ -154,6 +155,22 @@ chezmoi apply
 ```
 
 ## GitHub 認証（ghtkn）
+
+共通設定と説明コメントは `dot_config/ghtkn/private_ghtkn.yaml.tmpl` で管理する。App 名・Client ID は Git 管理対象外の `~/.config/chezmoi/chezmoi.toml` に次の形式で追記する。
+
+```toml
+[[data.ghtkn_apps]]
+name = "example-org/read"
+client_id = "<read App の Client ID>"
+
+[[data.ghtkn_apps]]
+name = "example-org/write"
+client_id = "<write App の Client ID>"
+```
+
+既存設定を移行するときは `apps` の名前・Client ID・並び順を引き継ぐ。App ごとの説明は `chezmoi.toml` の `name` 行に TOML コメントとして残せる。コメントは生成先の YAML には出力されない。先頭の App はデフォルトとして使われる。`ghtkn_apps` が未設定のマシンでは `.chezmoiignore` により設定ファイルを管理対象から外し、既存ファイルを保持する。空の配列を設定した場合はテンプレートの評価をエラーにする。
+
+ローカルデータを設定後、`chezmoi diff ~/.config/ghtkn/ghtkn.yaml` で確認し、ユーザーが `chezmoi apply ~/.config/ghtkn/ghtkn.yaml` を実行する。生成先は `~/.config/ghtkn/ghtkn.yaml` で、`private_` 属性により権限は `0600` となる。生成後の変更は共通設定なら source、App 設定なら `chezmoi.toml` を編集する。
 
 `~/.zsh/github-auth.zsh` の共通関数と `~/.gitconfig` の GitHub HTTPS 用 credential helper を使う。Git は `ghtkn git-credential`、gh は `ghtkn exec` で認証する。GitHub に限って既存 helper を空の設定でリセットし、`useHttpPath = true` でリポジトリの path を helper に渡す。[ghtkn 公式仕様](https://github.com/suzuki-shunsuke/ghtkn/blob/main/docs/git-credential-helper.md)
 

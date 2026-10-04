@@ -14,3 +14,6 @@ _archive/**
 .config/mise/config.local.toml
 {{ end -}}
 .config/mise/mise.local.lock
+{{ if not (hasKey . "ghtkn_apps") -}}
+.config/ghtkn/ghtkn.yaml
+{{ end -}}

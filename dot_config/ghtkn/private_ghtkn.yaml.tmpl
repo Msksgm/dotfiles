@@ -1,0 +1,18 @@
+{{- if hasKey . "ghtkn_apps" -}}
+{{- if not .ghtkn_apps -}}
+{{- fail "ghtkn_apps must contain at least one GitHub App" -}}
+{{- end -}}
+# yaml-language-server: $schema=https://raw.githubusercontent.com/suzuki-shunsuke/ghtkn/v0.4.0/json-schema/ghtkn.json
+# 共通設定は dotfiles、App 名・Client ID は chezmoi.toml の [[data.ghtkn_apps]] で管理。
+clipboard:
+  enable: true
+# 既定は keyring（macOS ではキーチェーン保存）。agent は常駐する ghtkn agent が暗号化して保存
+backend:
+  type: agent
+# トークン取得時に最低限必要な残り有効時間。
+# 7h の場合、発行から約1時間経過後の次回取得時に更新が必要になる。
+# agent の refresh が有効で、有効な refresh token があれば自動更新。
+# 自動更新できなければ取得が失敗し、ghtkn auth が必要。
+min_expiration: 7h
+{{ dict "apps" .ghtkn_apps | toYaml }}
+{{ end -}}
