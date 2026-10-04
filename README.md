@@ -45,7 +45,8 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_agents/skills-local/pair-programming/**` | `~/.agents/skills-local/pair-programming/`（日本語・ヒント中心のペアプロ用 skill。インストーラ経由で `~/.agents/skills/pair-programming/` にも展開。明示呼び出し専用: Codex は `$pair-programming`、Claude Code は `/pair-programming`） |
 | `dot_agents/skills-local/codex-version-update/SKILL.md` | `~/.agents/skills-local/codex-version-update/SKILL.md`（この dotfiles の mise/aqua 管理に沿って Codex CLI の version pin、公式 changelog 確認、lock 同期、導入版検証を進める skill。インストーラ経由で `~/.agents/skills/codex-version-update/` にも展開） |
 | `dot_agents/skills-local/pr-critical-review/**` | `~/.agents/skills-local/pr-critical-review/`（根拠付きの PR トリアージを行う Markdown 専用 skill。未採用の図解仕様は `references/` に保管し、インストーラ経由で `~/.agents/skills/pr-critical-review/` にも展開） |
-| `dot_agents/skills-local/review-io-impact/SKILL.md` | `~/.agents/skills-local/review-io-impact/SKILL.md`（インストーラ経由で `~/.agents/skills/review-io-impact/SKILL.md` にも展開） |
+| `dot_agents/skills-local/review-io-impact/**` | `~/.agents/skills-local/review-io-impact/`（影響調査とテストカバレッジ確認。レポート書式・crit手順は必要時だけ `references/` から読み込む。インストーラ経由で `~/.agents/skills/review-io-impact/` にも展開） |
+| `dot_agents/skills-local/impact-diagram/SKILL.md` | `~/.agents/skills-local/impact-diagram/SKILL.md`（調査済みの影響経路を全体図・入口別図・出口図に分割して描画。インストーラ経由で `~/.agents/skills/impact-diagram/` にも展開） |
 | `dot_agents/skills-local/svg-diagram/**` | `~/.agents/skills-local/svg-diagram/`（SKILL.md + `components/` `examples/` の HTML テンプレート。インストーラ経由で `~/.agents/skills/svg-diagram/` にも展開） |
 
 > **Note (Codex config):** `~/.codex/config.toml` は手動設定と Codex 所有の実行時状態が混在するため、ファイル全体をスナップショットせず `modify_private_config.toml` で管理対象キーだけを置換する。未管理の root key と table はそのまま保持されるので、Codex が project trust・通知先・Desktop 設定・plugin/MCP/hook 状態を更新しても `chezmoi diff` の対象にならない。`~/.codex` には認証情報・会話履歴・shell snapshot もあるため、**ディレクトリ全体を `chezmoi add ~/.codex` しない**。
