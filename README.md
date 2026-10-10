@@ -29,7 +29,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_config/herdr/config.toml` | `~/.config/herdr/config.toml`（キーバインドを `dot_tmux.conf` に合わせた herdr 設定。prefix=`C-j`、分割 `\|`/`-`、ペイン移動 h/j/k/l、タブ移動 `C-h`/`C-l`、デタッチ `prefix+d`、workspace 作成 `prefix+Shift+C`、workspace リネーム `prefix+Space`、pane を新 tab に切り出し `prefix+!`（tmux の break-pane 相当。組み込みアクションが無いため `herdr pane move --new-tab` を shell command で呼ぶ）。加えて `[ui.sidebar.agents]` で左サイドバーの agent 行に pane ID (`wG:pB`) を表示する。この `$pane_id` はカスタムトークンで、**値の供給は `dot_zsh/herdr.zsh` に依存する** — 片方だけ消すと ID が空欄になる） |
 | `dot_config/herdr/executable_rename-workspace.sh` | `~/.config/herdr/rename-workspace.sh`（実行ビット付き。focused workspace を git リポジトリ名にリネームする。tmux の `~/.tmux-rename-session` の herdr 版で、config.toml の `[[keys.command]]` から `prefix+Space` で呼ぶ） |
 | `dot_codex/modify_private_config.toml` | `~/.codex/config.toml`（mode 0600 の chezmoi `modify_` スクリプト。model / reasoning effort / personality / approval / service tier / `.agents`・`.codex`・`.git` 書き込みを含む `workspace-agents-write` permission profile だけを強制し、Codex が書き換える project trust / notify / Desktop / plugin / MCP / hook 等は実ファイルから保持する） |
-| `dot_codex/AGENTS.md.tmpl` | `~/.codex/AGENTS.md`（全プロジェクト共通の Codex 指示。CLI ツール管理ルールを `.chezmoitemplates/cli-tool-management.md` から展開） |
+| `dot_codex/AGENTS.md.tmpl` | `~/.codex/AGENTS.md`（全プロジェクト共通の Codex 指示。非対話シェルの GitHub 認証手順を記載し、CLI ツール管理ルールを `.chezmoitemplates/cli-tool-management.md` から展開） |
 | `dot_claude/modify_settings.json.tmpl` | `~/.claude/settings.json`（chezmoi `modify_` スクリプト。自分が管理するキー（env/permissions/model/hooks/deny 等）だけ強制し、Claude Code が実行時に書き換えるキー（`enabledPlugins`/`extraKnownMarketplaces`/`feedbackSurveyState`）は実ファイルから保持してドリフトを防ぐ。herdr フックパスは `{{ .chezmoi.homeDir }}` で展開） |
 | `dot_claude/hooks/executable_herdr-agent-state.sh` | `~/.claude/hooks/herdr-agent-state.sh`（実行ビット付き。settings.json の SessionStart フックが呼ぶ herdr の Claude 連携スクリプト。**herdr が自動管理し integration 更新時に上書きするため source はスナップショット**。更新時は再 `cp` で同期する） |
 | `dot_claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
@@ -232,6 +232,39 @@ command git remote set-url --push origin https://github.com/example-org/example-
 既存の URL 読み替え設定により保存 URL と実際の接続 URL が異なる場合は、表示された修正案内を使う。保存 URL の置換が必要な場合は `command git config --fixed-value --replace-all ...` を案内し、HTTPS が SSH に読み替えられている場合は `url.*.insteadOf` の修正を案内する。
 
 `gh pr create` も子 Git の push に備えて同じ remote 検査を行う。その他の gh 操作には SSH 検査を追加しない。これらの関数が効くのは読み込み済みの Zsh からの呼び出しだけで、IDE や `command git` などの直接呼び出しには適用されない。`ghq()` が行うのは上記の App 選択であり、SSH 検査は行わない。
+
+### Codex の非対話シェル
+
+`~/.codex/AGENTS.md` に、対象 org の作業ディレクトリで次の形式を使うよう指定する。`mise exec` が環境変数を読み込み、同じ Zsh プロセスで認証関数を明示的に読み込んで実行する。`.zshrc` 全体の読み込みや `~/.local/bin` の認証ラッパーは使わない。
+
+```sh
+MISE_AUTO_INSTALL=0 mise exec -- /bin/zsh -f -c \
+  'source "$HOME/.zsh/github-auth.zsh" || exit $?; "$@"' \
+  github-auth gh repo view --json nameWithOwner
+```
+
+末尾のコマンドと引数を `git`・`gh`・`ghq` の必要な操作に置き換える。読み込みや認証が失敗した場合は停止し、別の認証経路では回避しない。指示は `dot_codex/AGENTS.md.tmpl` で管理し、Claude Code や各プロジェクトの指示ファイルには追加しない。
+
+### 旧ラッパーからの移行
+
+旧ラッパー3ファイルと旧共通スクリプトは `.chezmoiremove` で個別に削除する。ほかの `~/.local/bin` のツールとディレクトリ自体は残す。source からファイルを消すだけでは home のファイルは削除されないため、この移行が必要になる。
+
+以下はユーザーが実行する。存在しない削除対象を明示すると `not managed` になるため、残っているファイルだけを対象に加える。差分を確認してから適用する。
+
+```sh
+set -- "$HOME/.codex/AGENTS.md" "$HOME/.zsh/github-auth.zsh" \
+  "$HOME/.zshenv" "$HOME/.zprofile" "$HOME/.zshrc"
+for target in "$HOME/.local/bin/git" "$HOME/.local/bin/gh" \
+  "$HOME/.local/bin/ghq" "$HOME/.local/libexec/github-auth.zsh"; do
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    set -- "$@" "$target"
+  fi
+done
+chezmoi diff "$@"
+chezmoi apply --parent-dirs "$@"
+```
+
+適用後は新しいシェルと Codex セッションを開始する。対象 org のリポジトリ内で、上記形式の `git ls-remote origin HEAD` と `gh repo view --json nameWithOwner` により読み取り認証を確認する。
 
 ### 適用と読み取り確認
 

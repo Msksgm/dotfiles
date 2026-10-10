@@ -6,3 +6,19 @@
 - 局所最適ではなく全体最適を、短期的解決ではなく長期的視点を優先する。
 
 {{ template "cli-tool-management.md" . }}
+
+# GitHub 認証（個人環境）
+
+非対話シェルでは `.zshrc` の認証関数が自動で読み込まれない。`git`・`gh`・`ghq` は、対象 org のディレクトリを作業ディレクトリとして、次の形式で実行する。末尾の `git fetch origin` を必要なコマンドと引数へ置き換える。
+
+```sh
+MISE_AUTO_INSTALL=0 mise exec -- /bin/zsh -f -c \
+  'source "$HOME/.zsh/github-auth.zsh" || exit $?; "$@"' \
+  github-auth git fetch origin
+```
+
+- `mise exec` で org の `GHTKN_GIT_APP_READ` / `GHTKN_GIT_APP_WRITE` を読み込み、既存の関数に App の選択を任せる。`git -C`・`gh -R` では org の設定は切り替わらないため、先に作業ディレクトリを合わせる。
+- 関数を読み込むのはコマンドを実行する同じ Zsh プロセス内とする。`command git` などで関数を迂回したり、`.zshrc` 全体を読み込んだりしない。
+- 関数の読み込み、mise の環境読み込み、App 設定、認証のいずれかが失敗したら停止し、原因を報告する。通常のコマンドや別の認証方式へ切り替えて回避しない。
+- Git は credential helper、gh / ghq は関数内の `ghtkn exec` を使う。`ghtkn get`・`gh auth token` などでトークンを取得・表示しない。対話認証が必要な場合は、ユーザーに `ghtkn auth` の実行を案内する。
+- この手順は実行方法の指定であり、push・PR 作成などの操作を許可するものではない。個人環境用の手順を各プロジェクトの文書へ転載しない。
