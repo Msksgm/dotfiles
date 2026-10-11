@@ -207,10 +207,67 @@ git() {
     GHTKN_GIT_APP="$app" command git "$@"
 }
 
+# Select by HTTP method, without reading payload files or consuming stdin.
+# GraphQL POSTs (including queries) use WRITE; this is not a GraphQL parser.
+_github_auth_api_is_write() {
+    emulate -L zsh
+    local method='' implicit_method=GET argument short_flags flag value
+    while (( $# )); do
+        argument="$1"
+        shift
+        case "$argument" in
+            --) break ;;
+            --method) method="${1:-}"; (( $# )) && shift ;;
+            --method=*) method="${argument#*=}" ;;
+            --field|--raw-field|--input)
+                implicit_method=POST
+                (( $# )) && shift
+                ;;
+            --field=*|--raw-field=*|--input=*) implicit_method=POST ;;
+            --header|--hostname|--jq|--template|--cache|--preview)
+                (( $# )) && shift
+                ;;
+            --*) ;;
+            -?*)
+                # Support attached values (-XPATCH, -fbody=x) and grouped
+                # short flags (-iX PATCH). Values must not become options.
+                short_flags="${argument#-}"
+                while [[ -n "$short_flags" ]]; do
+                    flag="${short_flags[1]}"
+                    short_flags="${short_flags[2,-1]}"
+                    case "$flag" in
+                        X|f|F|H|q|t|p)
+                            if [[ -n "$short_flags" ]]; then
+                                value="${short_flags#=}"
+                            else
+                                value="${1:-}"
+                                (( $# )) && shift
+                            fi
+                            case "$flag" in
+                                X) method="$value" ;;
+                                f|F) implicit_method=POST ;;
+                            esac
+                            break
+                            ;;
+                    esac
+                done
+                ;;
+        esac
+    done
+    method="${method:-$implicit_method}"
+    case "${method:u}" in
+        GET|HEAD|OPTIONS) return 1 ;;
+        *) return 0 ;;
+    esac
+}
+
 gh() {
     emulate -L zsh
     _github_auth_require_apps || return 1
     local app="$GHTKN_GIT_APP_READ"
+    if [[ "${1:-}" == api ]] && _github_auth_api_is_write "${@:2}"; then
+        app="$GHTKN_GIT_APP_WRITE"
+    fi
     case "${1:-} ${2:-}" in
         'auth login')
             printf '%s\n' '認証には ghtkn auth を使ってください' >&2
