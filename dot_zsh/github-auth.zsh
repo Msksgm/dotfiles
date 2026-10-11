@@ -228,6 +228,10 @@ gh() {
         'pr ready'|'pr lock'|'pr unlock'|'pr revert'|'pr update-branch')
             app="$GHTKN_GIT_APP_WRITE"
             ;;
+        'issue create'|'issue edit'|'issue close'|'issue reopen'|\
+        'issue comment'|'issue delete'|'issue lock'|'issue unlock'|'issue transfer')
+            app="$GHTKN_GIT_APP_WRITE"
+            ;;
         'repo create'|'release create'|'release delete')
             app="$GHTKN_GIT_APP_WRITE"
             ;;
