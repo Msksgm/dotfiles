@@ -224,6 +224,10 @@ gh() {
             _github_auth_check_remotes || return $?
             app="$GHTKN_GIT_APP_WRITE"
             ;;
+        'pr edit'|'pr close'|'pr reopen'|'pr merge'|'pr review'|'pr comment'|\
+        'pr ready'|'pr lock'|'pr unlock'|'pr revert'|'pr update-branch')
+            app="$GHTKN_GIT_APP_WRITE"
+            ;;
         'repo create'|'release create'|'release delete')
             app="$GHTKN_GIT_APP_WRITE"
             ;;

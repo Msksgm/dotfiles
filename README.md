@@ -193,6 +193,7 @@ mise には独自変数の `GHTKN_GIT_APP_READ` / `GHTKN_GIT_APP_WRITE` を設�
 | `git push` | write（`git -C <repo> push` なども対象） |
 | その他の git 操作 | read |
 | `gh repo create` / `gh pr create` / `gh release create` / `gh release delete` | write。子 Git にも同じ App を渡す |
+| `gh pr edit` / `close` / `reopen` / `merge` / `review` / `comment` / `ready` / `lock` / `unlock` / `revert` / `update-branch` | write。子 Git にも同じ App を渡す |
 | `gh auth login` / `gh auth token` | 拒否。認証には `ghtkn auth` を使い、トークンを表示しない |
 | その他の gh 操作 | read。追加の書き込み操作が必要なら関数の分岐を追加する |
 | `ghq get` / `ghq clone`（`--update` を含む） | read。`GH_TOKEN` と、子 Git の credential helper 用 App を渡す |
