@@ -1623,43 +1623,43 @@ url_api = "https://api.github.com/repos/suzuki-shunsuke/pinact/releases/assets/4
 provenance = "github-attestations"
 
 [[tools."aqua:tkuchiki/alp"]]
-version = "1.0.21"
+version = "1.0.22"
 backend = "aqua:tkuchiki/alp"
 
 [tools."aqua:tkuchiki/alp"."platforms.linux-arm64"]
-checksum = "sha256:ce3b82c0279f0439928c892dfb158de9f8c8eba5e4ea992f6a014b9e6c1e790c"
-url = "https://github.com/tkuchiki/alp/releases/download/v1.0.21/alp_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/128704691"
+checksum = "sha256:80fd5bef2cc8097731b49ffe1a5e81c1732fb1bf897696bec986912d6d9e1888"
+url = "https://github.com/tkuchiki/alp/releases/download/v1.0.22/alp_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/591564273"
 
 [tools."aqua:tkuchiki/alp"."platforms.linux-arm64-musl"]
-checksum = "sha256:ce3b82c0279f0439928c892dfb158de9f8c8eba5e4ea992f6a014b9e6c1e790c"
-url = "https://github.com/tkuchiki/alp/releases/download/v1.0.21/alp_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/128704691"
+checksum = "sha256:80fd5bef2cc8097731b49ffe1a5e81c1732fb1bf897696bec986912d6d9e1888"
+url = "https://github.com/tkuchiki/alp/releases/download/v1.0.22/alp_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/591564273"
 
 [tools."aqua:tkuchiki/alp"."platforms.linux-x64"]
-checksum = "sha256:890628b2fe5307b637e4f875fd854a737f787d9ebc73d5f36554cfeaa7acd00d"
-url = "https://github.com/tkuchiki/alp/releases/download/v1.0.21/alp_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/128704707"
+checksum = "sha256:e5830a70ca064aa89b6ed4715a71591e83e0fe9c85284bbec4208b7d949cbc42"
+url = "https://github.com/tkuchiki/alp/releases/download/v1.0.22/alp_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/591564275"
 
 [tools."aqua:tkuchiki/alp"."platforms.linux-x64-musl"]
-checksum = "sha256:890628b2fe5307b637e4f875fd854a737f787d9ebc73d5f36554cfeaa7acd00d"
-url = "https://github.com/tkuchiki/alp/releases/download/v1.0.21/alp_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/128704707"
+checksum = "sha256:e5830a70ca064aa89b6ed4715a71591e83e0fe9c85284bbec4208b7d949cbc42"
+url = "https://github.com/tkuchiki/alp/releases/download/v1.0.22/alp_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/591564275"
 
 [tools."aqua:tkuchiki/alp"."platforms.macos-arm64"]
-checksum = "sha256:cb1106b59f0f6de79499c2000f3fe4b364dbf0f0705276db2d5f90329abf40fc"
-url = "https://github.com/tkuchiki/alp/releases/download/v1.0.21/alp_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/128704685"
+checksum = "sha256:bbf6829ace1c575e62347f5e6db62fc46b8a06623338fc2da849422add4597be"
+url = "https://github.com/tkuchiki/alp/releases/download/v1.0.22/alp_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/591564135"
 
 [tools."aqua:tkuchiki/alp"."platforms.macos-x64"]
-checksum = "sha256:b0bfbbcc7289afa9e8ac7d48200779f3c8203a46ff1b5404f5eea2b6e823a045"
-url = "https://github.com/tkuchiki/alp/releases/download/v1.0.21/alp_darwin_amd64.tar.gz"
-url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/128704708"
+checksum = "sha256:57f75e72272e0aacf2d74efa7f4973ba11a74aaaeac216bb20a79141d856b0b1"
+url = "https://github.com/tkuchiki/alp/releases/download/v1.0.22/alp_darwin_amd64.tar.gz"
+url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/591564278"
 
 [tools."aqua:tkuchiki/alp"."platforms.windows-x64"]
-checksum = "sha256:4e191bf1050f4bc6264217f0959efc8de1a661d80ba59194712c47c603a43104"
-url = "https://github.com/tkuchiki/alp/releases/download/v1.0.21/alp_windows_amd64.tar.gz"
-url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/128704693"
+checksum = "sha256:17131332ecebbdf2cdbffe536ef250ba9f078a4c024ce16a68e677b4a2a3b2c6"
+url = "https://github.com/tkuchiki/alp/releases/download/v1.0.22/alp_windows_amd64.tar.gz"
+url_api = "https://api.github.com/repos/tkuchiki/alp/releases/assets/591564137"
 
 [[tools."aqua:twistedpair/google-cloud-sdk"]]
 version = "562.0.0"
