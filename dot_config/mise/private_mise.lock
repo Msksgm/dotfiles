@@ -845,43 +845,43 @@ url = "https://github.com/k1LoW/deck/releases/download/v1.24.0/deck_v1.24.0_wind
 url_api = "https://api.github.com/repos/k1LoW/deck/releases/assets/435296485"
 
 [[tools."aqua:k1LoW/git-wt"]]
-version = "0.29.0"
+version = "0.30.0"
 backend = "aqua:k1LoW/git-wt"
 
 [tools."aqua:k1LoW/git-wt"."platforms.linux-arm64"]
-checksum = "sha256:bd1074cfa43476ae1ecdc5f15792ba9f5446fc03ffc5bbc4edf102e08abeaf8c"
-url = "https://github.com/k1LoW/git-wt/releases/download/v0.29.0/git-wt_v0.29.0_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/438021395"
+checksum = "sha256:92f63c58bda5b1046df70776570cb61671fc831495f5580d95d09182799019c3"
+url = "https://github.com/k1LoW/git-wt/releases/download/v0.30.0/git-wt_v0.30.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/622546279"
 
 [tools."aqua:k1LoW/git-wt"."platforms.linux-arm64-musl"]
-checksum = "sha256:bd1074cfa43476ae1ecdc5f15792ba9f5446fc03ffc5bbc4edf102e08abeaf8c"
-url = "https://github.com/k1LoW/git-wt/releases/download/v0.29.0/git-wt_v0.29.0_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/438021395"
+checksum = "sha256:92f63c58bda5b1046df70776570cb61671fc831495f5580d95d09182799019c3"
+url = "https://github.com/k1LoW/git-wt/releases/download/v0.30.0/git-wt_v0.30.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/622546279"
 
 [tools."aqua:k1LoW/git-wt"."platforms.linux-x64"]
-checksum = "sha256:5d04c89ce105a63edb38c89c17813bfc902dbc20ca20f27c44948cbfe6b055f8"
-url = "https://github.com/k1LoW/git-wt/releases/download/v0.29.0/git-wt_v0.29.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/438021416"
+checksum = "sha256:6bcd840851d0a1e90b6227139e919266c4340b1d5b0bc6c84f2cea7aa5d3ffd3"
+url = "https://github.com/k1LoW/git-wt/releases/download/v0.30.0/git-wt_v0.30.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/622546272"
 
 [tools."aqua:k1LoW/git-wt"."platforms.linux-x64-musl"]
-checksum = "sha256:5d04c89ce105a63edb38c89c17813bfc902dbc20ca20f27c44948cbfe6b055f8"
-url = "https://github.com/k1LoW/git-wt/releases/download/v0.29.0/git-wt_v0.29.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/438021416"
+checksum = "sha256:6bcd840851d0a1e90b6227139e919266c4340b1d5b0bc6c84f2cea7aa5d3ffd3"
+url = "https://github.com/k1LoW/git-wt/releases/download/v0.30.0/git-wt_v0.30.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/622546272"
 
 [tools."aqua:k1LoW/git-wt"."platforms.macos-arm64"]
-checksum = "sha256:4cf0a9bf8d6b63f75788c60b7d90cb2079c86cd41207d34820ab82d67f08ce8c"
-url = "https://github.com/k1LoW/git-wt/releases/download/v0.29.0/git-wt_v0.29.0_darwin_arm64.zip"
-url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/438021391"
+checksum = "sha256:0c33e54250ebfdd84975f299233299d3d5dd2e61caa5416637fbbf34daab5bab"
+url = "https://github.com/k1LoW/git-wt/releases/download/v0.30.0/git-wt_v0.30.0_darwin_arm64.zip"
+url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/622546217"
 
 [tools."aqua:k1LoW/git-wt"."platforms.macos-x64"]
-checksum = "sha256:c010cbf5d5aeccde6e3f86b2caaeff172fe830e2a8e0a81f5146380fb6b05013"
-url = "https://github.com/k1LoW/git-wt/releases/download/v0.29.0/git-wt_v0.29.0_darwin_amd64.zip"
-url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/438021390"
+checksum = "sha256:a49321661c6b8925a946aaaf0d00fe4a77e470fcb7a9640a0b86aabdd3b2583a"
+url = "https://github.com/k1LoW/git-wt/releases/download/v0.30.0/git-wt_v0.30.0_darwin_amd64.zip"
+url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/622546221"
 
 [tools."aqua:k1LoW/git-wt"."platforms.windows-x64"]
-checksum = "sha256:908a7f73ef7a00323bc7d09037fd0bc6992e16bab79d00c3bd2cfb6873c1a895"
-url = "https://github.com/k1LoW/git-wt/releases/download/v0.29.0/git-wt_v0.29.0_windows_amd64.tar.gz"
-url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/438021415"
+checksum = "sha256:03bd9a2988d7fb28ed05cbdbfb7b20ee3faa49e1842167d5ca777aa3d9f0e4d9"
+url = "https://github.com/k1LoW/git-wt/releases/download/v0.30.0/git-wt_v0.30.0_windows_amd64.tar.gz"
+url_api = "https://api.github.com/repos/k1LoW/git-wt/releases/assets/622546222"
 
 [[tools."aqua:k1LoW/runn"]]
 version = "1.9.4"
