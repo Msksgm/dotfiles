@@ -292,6 +292,10 @@ gh() {
         'repo create'|'release create'|'release delete')
             app="$GHTKN_GIT_APP_WRITE"
             ;;
+        'workflow run'|'workflow enable'|'workflow disable'|\
+        'run rerun'|'run cancel'|'run delete')
+            app="$GHTKN_GIT_APP_WRITE"
+            ;;
     esac
     GHTKN_GIT_APP="$app" command ghtkn exec -e "GH_TOKEN:$app" -- gh "$@"
 }
