@@ -7,6 +7,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | Source | Target |
 |---|---|
 | `dot_zshrc` | `~/.zshrc` |
+| `dot_zsh/codex.zsh` | `~/.zsh/codex.zsh`（ローカルの Codex TUI 起動時に `wt.basedir` の作成先と共有 Git metadata を `--add-dir` で追加する `codex` 関数） |
 | `dot_zshenv` | `~/.zshenv` |
 | `dot_zprofile` | `~/.zprofile` |
 | `dot_p10k.zsh` | `~/.p10k.zsh` |
@@ -50,6 +51,8 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_agents/skills-local/svg-diagram/**` | `~/.agents/skills-local/svg-diagram/`（SKILL.md + `components/` `examples/` の HTML テンプレート。インストーラ経由で `~/.agents/skills/svg-diagram/` にも展開） |
 
 > **Note (Codex config):** `~/.codex/config.toml` は手動設定と Codex 所有の実行時状態が混在するため、ファイル全体をスナップショットせず `modify_private_config.toml` で管理対象キーだけを置換する。未管理の root key と table はそのまま保持されるので、Codex が project trust・通知先・Desktop 設定・plugin/MCP/hook 状態を更新しても `chezmoi diff` の対象にならない。`~/.codex` には認証情報・会話履歴・shell snapshot もあるため、**ディレクトリ全体を `chezmoi add ~/.codex` しない**。
+
+> **Note (Codex と git-wt):** 対話 Zsh の `codex` 関数は、`codex`・`codex resume`・`codex fork` の起動時に対象 checkout の `wt.basedir` を読み、`{gitroot}` と相対パスを元リポジトリ基準で解決して作成先だけを追加で許可する。現在の設定なら `../{gitroot}-worktrees` が対象になる。未作成のディレクトリも指定でき、起動時には作成しない。`--cd` / `-C` を指定した場合はその checkout を使う。別の checkout の会話を再開する場合も `--cd` で対象を明示する。共有 `.git` も許可するため、linked worktree からの起動でも Git 操作ができる。Git の読み取りは org の mise 環境と既存の認証関数を使い、失敗時は起動を停止する。`--remote`、Git checkout 外、ヘルプ、`exec` などの管理・非対話サブコマンド、および `command codex` / バイナリ直接起動は自動追加の対象外。反映はユーザーが `chezmoi apply ~/.zsh/codex.zsh` と `source ~/.zsh/codex.zsh` を実行し、その後 Codex を起動し直す。
 
 > **Note (共通 CLI ツール管理ルール):** `.chezmoitemplates/cli-tool-management.md` を正本とし、`~/.codex/AGENTS.md` と `~/.claude/rules/tool-management.md` の両方へ同じ内容を展開する。ルール変更時は各出力テンプレートではなく共通テンプレートを編集する。
 
