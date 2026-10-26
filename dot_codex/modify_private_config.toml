@@ -169,6 +169,9 @@ description = "Workspace access with agent configuration and Git metadata writab
 extends = ":workspace"
 
 [permissions.workspace-agents-write.filesystem]
+# Match ghq.root so desktop sessions can create sibling git-wt worktrees.
+# This grants access to all repositories under the development workspace.
+"~/workspace" = "write"
 "~/.local" = "write"
 "~/.m2" = "write"
 "~/.gradle" = "write"
