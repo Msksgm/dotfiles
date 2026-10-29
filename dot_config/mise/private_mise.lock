@@ -59,6 +59,50 @@ checksum = "sha256:124510b94b6baa3380d051fdf4650eaa80a302c876d611e9dba0b2e18d874
 url = "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-x86_64-pc-windows-msvc.zip"
 url_api = "https://api.github.com/repos/BurntSushi/ripgrep/releases/assets/307305871"
 
+[[tools."aqua:ByteNess/aws-vault"]]
+version = "7.14.0"
+backend = "aqua:ByteNess/aws-vault"
+
+[tools."aqua:ByteNess/aws-vault"."platforms.linux-arm64"]
+checksum = "sha256:5e40eeb3654f4b4e09b779a43238687b1a2a23a6a8021f58d078d1b3f2db1353"
+url = "https://github.com/ByteNess/aws-vault/releases/download/v7.14.0/aws-vault-linux-arm64"
+url_api = "https://api.github.com/repos/ByteNess/aws-vault/releases/assets/557765307"
+
+[tools."aqua:ByteNess/aws-vault"."platforms.linux-arm64-musl"]
+checksum = "sha256:5e40eeb3654f4b4e09b779a43238687b1a2a23a6a8021f58d078d1b3f2db1353"
+checksum_source = "mise-versions"
+url = "https://github.com/ByteNess/aws-vault/releases/download/v7.14.0/aws-vault-linux-arm64"
+url_api = "https://api.github.com/repos/ByteNess/aws-vault/releases/assets/557765307"
+
+[tools."aqua:ByteNess/aws-vault"."platforms.linux-x64"]
+checksum = "sha256:b12e5e827e5ba500e7117a90b074b731f04571e8dd5b9725302e04e1ecd40f8c"
+checksum_source = "mise-versions"
+url = "https://github.com/ByteNess/aws-vault/releases/download/v7.14.0/aws-vault-linux-amd64"
+url_api = "https://api.github.com/repos/ByteNess/aws-vault/releases/assets/557765303"
+
+[tools."aqua:ByteNess/aws-vault"."platforms.linux-x64-musl"]
+checksum = "sha256:b12e5e827e5ba500e7117a90b074b731f04571e8dd5b9725302e04e1ecd40f8c"
+checksum_source = "mise-versions"
+url = "https://github.com/ByteNess/aws-vault/releases/download/v7.14.0/aws-vault-linux-amd64"
+url_api = "https://api.github.com/repos/ByteNess/aws-vault/releases/assets/557765303"
+
+[tools."aqua:ByteNess/aws-vault"."platforms.macos-arm64"]
+checksum = "sha256:22ec956e968736d8099860b14f8d6be901ccf93fa9daee28b59846525d7f8a15"
+url = "https://github.com/ByteNess/aws-vault/releases/download/v7.14.0/aws-vault-darwin-arm64"
+url_api = "https://api.github.com/repos/ByteNess/aws-vault/releases/assets/557765308"
+
+[tools."aqua:ByteNess/aws-vault"."platforms.macos-x64"]
+checksum = "sha256:a62fc5ce610479a1c9890b60a4b0c7dafbaa8bbc7efa100147c141a6a77edc68"
+checksum_source = "mise-versions"
+url = "https://github.com/ByteNess/aws-vault/releases/download/v7.14.0/aws-vault-darwin-amd64"
+url_api = "https://api.github.com/repos/ByteNess/aws-vault/releases/assets/557765313"
+
+[tools."aqua:ByteNess/aws-vault"."platforms.windows-x64"]
+checksum = "sha256:f13269e21bd4e6af05a2115c91d32b9b69fc032492495dfe90850a17b04fc153"
+checksum_source = "mise-versions"
+url = "https://github.com/ByteNess/aws-vault/releases/download/v7.14.0/aws-vault-windows-amd64.exe"
+url_api = "https://api.github.com/repos/ByteNess/aws-vault/releases/assets/557765302"
+
 [[tools."aqua:ClementTsang/bottom"]]
 version = "0.14.7"
 backend = "aqua:ClementTsang/bottom"
