@@ -1961,36 +1961,36 @@ version = "0.0.0-20260805070807-e18fefd6a776"
 backend = "go:github.com/kohii/slackrun/cmd/slackrun"
 
 [[tools."http:profilecli"]]
-version = "2.0.1"
+version = "2.4.1"
 backend = "http:profilecli"
 
 [tools."http:profilecli"."platforms.linux-arm64"]
-checksum = "sha256:2cee2f7a6b695ac6545ed4b284505290485778c43cf720ad468e42e10e2ce2c9"
-url = "https://github.com/grafana/pyroscope/releases/download/v2.0.1/profilecli_2.0.1_darwin_arm64.tar.gz"
+checksum = "sha256:e2835585b3601ab9db30483ad242e6ff403a8fb55e09f2f82c54d2525d901a44"
+url = "https://github.com/grafana/pyroscope/releases/download/v2.4.1/profilecli_2.4.1_darwin_arm64.tar.gz"
 
 [tools."http:profilecli"."platforms.linux-arm64-musl"]
-checksum = "sha256:2cee2f7a6b695ac6545ed4b284505290485778c43cf720ad468e42e10e2ce2c9"
-url = "https://github.com/grafana/pyroscope/releases/download/v2.0.1/profilecli_2.0.1_darwin_arm64.tar.gz"
+checksum = "sha256:e2835585b3601ab9db30483ad242e6ff403a8fb55e09f2f82c54d2525d901a44"
+url = "https://github.com/grafana/pyroscope/releases/download/v2.4.1/profilecli_2.4.1_darwin_arm64.tar.gz"
 
 [tools."http:profilecli"."platforms.linux-x64"]
-checksum = "sha256:2cee2f7a6b695ac6545ed4b284505290485778c43cf720ad468e42e10e2ce2c9"
-url = "https://github.com/grafana/pyroscope/releases/download/v2.0.1/profilecli_2.0.1_darwin_arm64.tar.gz"
+checksum = "sha256:e2835585b3601ab9db30483ad242e6ff403a8fb55e09f2f82c54d2525d901a44"
+url = "https://github.com/grafana/pyroscope/releases/download/v2.4.1/profilecli_2.4.1_darwin_arm64.tar.gz"
 
 [tools."http:profilecli"."platforms.linux-x64-musl"]
-checksum = "sha256:2cee2f7a6b695ac6545ed4b284505290485778c43cf720ad468e42e10e2ce2c9"
-url = "https://github.com/grafana/pyroscope/releases/download/v2.0.1/profilecli_2.0.1_darwin_arm64.tar.gz"
+checksum = "sha256:e2835585b3601ab9db30483ad242e6ff403a8fb55e09f2f82c54d2525d901a44"
+url = "https://github.com/grafana/pyroscope/releases/download/v2.4.1/profilecli_2.4.1_darwin_arm64.tar.gz"
 
 [tools."http:profilecli"."platforms.macos-arm64"]
-checksum = "sha256:2cee2f7a6b695ac6545ed4b284505290485778c43cf720ad468e42e10e2ce2c9"
-url = "https://github.com/grafana/pyroscope/releases/download/v2.0.1/profilecli_2.0.1_darwin_arm64.tar.gz"
+checksum = "blake3:a49e7e69cf0d96a5fa4359c3ec601a3c17cbe5b4ce628a5cf24b125ee7bc846b"
+url = "https://github.com/grafana/pyroscope/releases/download/v2.4.1/profilecli_2.4.1_darwin_arm64.tar.gz"
 
 [tools."http:profilecli"."platforms.macos-x64"]
-checksum = "sha256:2cee2f7a6b695ac6545ed4b284505290485778c43cf720ad468e42e10e2ce2c9"
-url = "https://github.com/grafana/pyroscope/releases/download/v2.0.1/profilecli_2.0.1_darwin_arm64.tar.gz"
+checksum = "sha256:e2835585b3601ab9db30483ad242e6ff403a8fb55e09f2f82c54d2525d901a44"
+url = "https://github.com/grafana/pyroscope/releases/download/v2.4.1/profilecli_2.4.1_darwin_arm64.tar.gz"
 
 [tools."http:profilecli"."platforms.windows-x64"]
-checksum = "sha256:2cee2f7a6b695ac6545ed4b284505290485778c43cf720ad468e42e10e2ce2c9"
-url = "https://github.com/grafana/pyroscope/releases/download/v2.0.1/profilecli_2.0.1_darwin_arm64.tar.gz"
+checksum = "sha256:e2835585b3601ab9db30483ad242e6ff403a8fb55e09f2f82c54d2525d901a44"
+url = "https://github.com/grafana/pyroscope/releases/download/v2.4.1/profilecli_2.4.1_darwin_arm64.tar.gz"
 
 [[tools.java]]
 version = "temurin-25.0.5+8.0.LTS"
