@@ -5,24 +5,31 @@ version = "22.0"
 backend = "vfox:mise-plugins/vfox-android-sdk"
 
 [tools.android-sdk."platforms.linux-arm64"]
+checksum = "sha256:4e4c464f145a7512b57d088ac6c278c03c9eea610886b35a5e0804e74eedf583"
 url = "https://dl.google.com/android/repository/commandlinetools-linux-15859902_latest.zip"
 
 [tools.android-sdk."platforms.linux-arm64-musl"]
+checksum = "sha256:4e4c464f145a7512b57d088ac6c278c03c9eea610886b35a5e0804e74eedf583"
 url = "https://dl.google.com/android/repository/commandlinetools-linux-15859902_latest.zip"
 
 [tools.android-sdk."platforms.linux-x64"]
+checksum = "sha256:4e4c464f145a7512b57d088ac6c278c03c9eea610886b35a5e0804e74eedf583"
 url = "https://dl.google.com/android/repository/commandlinetools-linux-15859902_latest.zip"
 
 [tools.android-sdk."platforms.linux-x64-musl"]
+checksum = "sha256:4e4c464f145a7512b57d088ac6c278c03c9eea610886b35a5e0804e74eedf583"
 url = "https://dl.google.com/android/repository/commandlinetools-linux-15859902_latest.zip"
 
 [tools.android-sdk."platforms.macos-arm64"]
+checksum = "sha256:835b62a26162b229b441d1f6d4680383815a270809eb33522c0d480fa5002c4e"
 url = "https://dl.google.com/android/repository/commandlinetools-mac_arm64-15859902_latest.zip"
 
 [tools.android-sdk."platforms.macos-x64"]
+checksum = "sha256:c5a6378ab5cf7e0d5701921405115befff13e9ff7417fb588389338f8bd050f3"
 url = "https://dl.google.com/android/repository/commandlinetools-mac_x86_64-15859902_latest.zip"
 
 [tools.android-sdk."platforms.windows-x64"]
+checksum = "sha256:90ae805d20434428bffcb699c290860f19bb5f66a67e6b330067e3de801fb04a"
 url = "https://dl.google.com/android/repository/commandlinetools-win-15859902_latest.zip"
 
 [[tools."aqua:BurntSushi/ripgrep"]]
@@ -31,6 +38,12 @@ backend = "aqua:BurntSushi/ripgrep"
 
 [tools."aqua:BurntSushi/ripgrep"."platforms.linux-arm64"]
 checksum = "sha256:2b661c6ef508e902f388e9098d9c4c5aca72c87b55922d94abdba830b4dc885e"
+url = "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/BurntSushi/ripgrep/releases/assets/307306472"
+
+[tools."aqua:BurntSushi/ripgrep"."platforms.linux-arm64-musl"]
+checksum = "sha256:2b661c6ef508e902f388e9098d9c4c5aca72c87b55922d94abdba830b4dc885e"
+checksum_source = "mise-versions"
 url = "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-aarch64-unknown-linux-gnu.tar.gz"
 url_api = "https://api.github.com/repos/BurntSushi/ripgrep/releases/assets/307306472"
 
@@ -232,15 +245,19 @@ version = "2.37.9"
 backend = "aqua:aws/aws-cli"
 
 [tools."aqua:aws/aws-cli"."platforms.linux-arm64"]
+checksum = "sha256:e7d2cca3622af4765871fe9ce7eeed03acd09dca10a99ebc46e92f79d78765c0"
 url = "https://awscli.amazonaws.com/awscli-exe-linux-aarch64-2.37.9.zip"
 
 [tools."aqua:aws/aws-cli"."platforms.linux-arm64-musl"]
+checksum = "sha256:e7d2cca3622af4765871fe9ce7eeed03acd09dca10a99ebc46e92f79d78765c0"
 url = "https://awscli.amazonaws.com/awscli-exe-linux-aarch64-2.37.9.zip"
 
 [tools."aqua:aws/aws-cli"."platforms.linux-x64"]
+checksum = "sha256:6b3a6a3d7bb3997928f0bdf7b866914224abf242c2e54e1dcebbe84bee64f356"
 url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.37.9.zip"
 
 [tools."aqua:aws/aws-cli"."platforms.linux-x64-musl"]
+checksum = "sha256:6b3a6a3d7bb3997928f0bdf7b866914224abf242c2e54e1dcebbe84bee64f356"
 url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.37.9.zip"
 
 [tools."aqua:aws/aws-cli"."platforms.macos-arm64"]
@@ -248,6 +265,7 @@ checksum = "blake3:e3ae5d7f3c5fe6939761fe1dbb3f8b608279b98652e5b94022e87fc530951
 url = "https://awscli.amazonaws.com/AWSCLIV2-2.37.9.pkg"
 
 [tools."aqua:aws/aws-cli"."platforms.macos-x64"]
+checksum = "sha256:a2fae32b07ca81c4327e3858ea810b1042bdfc91745a97ca30f9d5297e21834c"
 url = "https://awscli.amazonaws.com/AWSCLIV2-2.37.9.pkg"
 
 [[tools."aqua:azu/dockerfile-pin"]]
@@ -1710,15 +1728,19 @@ version = "562.0.0"
 backend = "aqua:twistedpair/google-cloud-sdk"
 
 [tools."aqua:twistedpair/google-cloud-sdk"."platforms.linux-arm64"]
+checksum = "sha256:a9ebaa0f4020ea0487c2c935af3d4566d1b4a1ccae685c6b7141211fc96424ee"
 url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-linux-arm.tar.gz"
 
 [tools."aqua:twistedpair/google-cloud-sdk"."platforms.linux-arm64-musl"]
+checksum = "sha256:a9ebaa0f4020ea0487c2c935af3d4566d1b4a1ccae685c6b7141211fc96424ee"
 url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-linux-arm.tar.gz"
 
 [tools."aqua:twistedpair/google-cloud-sdk"."platforms.linux-x64"]
+checksum = "sha256:016a4b1702f8c97b585f9ae12c6182762758c17ef5302cb8561c7f6be5cc9af3"
 url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-linux-x86_64.tar.gz"
 
 [tools."aqua:twistedpair/google-cloud-sdk"."platforms.linux-x64-musl"]
+checksum = "sha256:016a4b1702f8c97b585f9ae12c6182762758c17ef5302cb8561c7f6be5cc9af3"
 url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-linux-x86_64.tar.gz"
 
 [tools."aqua:twistedpair/google-cloud-sdk"."platforms.macos-arm64"]
@@ -1726,6 +1748,7 @@ checksum = "blake3:eb44524f9569a8e1d5a55e56b825d3591de4211fd947561d6b948ae76ec52
 url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-darwin-arm.tar.gz"
 
 [tools."aqua:twistedpair/google-cloud-sdk"."platforms.macos-x64"]
+checksum = "sha256:3b8cf3dcf9d49a38385b4b7ae0edd23caed70bef196a55c30181e75c1560a8ae"
 url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-562.0.0-darwin-x86_64.tar.gz"
 
 [[tools."aqua:typst/typst"]]
@@ -1773,6 +1796,12 @@ backend = "aqua:typstyle-rs/typstyle"
 
 [tools."aqua:typstyle-rs/typstyle"."platforms.linux-arm64"]
 checksum = "sha256:d782f1fa1704c537542edf131bddb9b6467af72944a50b174709f904a198f3b7"
+url = "https://github.com/typstyle-rs/typstyle/releases/download/v0.15.0/typstyle-aarch64-unknown-linux-gnu"
+url_api = "https://api.github.com/repos/typstyle-rs/typstyle/releases/assets/452868424"
+
+[tools."aqua:typstyle-rs/typstyle"."platforms.linux-arm64-musl"]
+checksum = "sha256:d782f1fa1704c537542edf131bddb9b6467af72944a50b174709f904a198f3b7"
+checksum_source = "mise-versions"
 url = "https://github.com/typstyle-rs/typstyle/releases/download/v0.15.0/typstyle-aarch64-unknown-linux-gnu"
 url_api = "https://api.github.com/repos/typstyle-rs/typstyle/releases/assets/452868424"
 
@@ -2061,21 +2090,27 @@ version = "11.4.1"
 backend = "aqua:npm/cli"
 
 [tools.npm."platforms.linux-arm64"]
+checksum = "sha256:b77388345ae0941ad4226713538c9456c00bf152b4fa47c160e1dce079a97459"
 url = "https://registry.npmjs.org/npm/-/npm-11.4.1.tgz"
 
 [tools.npm."platforms.linux-arm64-musl"]
+checksum = "sha256:b77388345ae0941ad4226713538c9456c00bf152b4fa47c160e1dce079a97459"
 url = "https://registry.npmjs.org/npm/-/npm-11.4.1.tgz"
 
 [tools.npm."platforms.linux-x64"]
+checksum = "sha256:b77388345ae0941ad4226713538c9456c00bf152b4fa47c160e1dce079a97459"
 url = "https://registry.npmjs.org/npm/-/npm-11.4.1.tgz"
 
 [tools.npm."platforms.linux-x64-musl"]
+checksum = "sha256:b77388345ae0941ad4226713538c9456c00bf152b4fa47c160e1dce079a97459"
 url = "https://registry.npmjs.org/npm/-/npm-11.4.1.tgz"
 
 [tools.npm."platforms.macos-arm64"]
+checksum = "sha256:b77388345ae0941ad4226713538c9456c00bf152b4fa47c160e1dce079a97459"
 url = "https://registry.npmjs.org/npm/-/npm-11.4.1.tgz"
 
 [tools.npm."platforms.macos-x64"]
+checksum = "sha256:b77388345ae0941ad4226713538c9456c00bf152b4fa47c160e1dce079a97459"
 url = "https://registry.npmjs.org/npm/-/npm-11.4.1.tgz"
 
 [[tools."npm:takt"]]
