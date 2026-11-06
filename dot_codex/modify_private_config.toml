@@ -172,6 +172,8 @@ extends = ":workspace"
 # Match ghq.root so desktop sessions can create sibling git-wt worktrees.
 # This grants access to all repositories under the development workspace.
 "~/workspace" = "write"
+"~/.cache" = "write"
+"~/.orbstack" = "write"
 "~/.local" = "write"
 "~/.m2" = "write"
 "~/.gradle" = "write"
