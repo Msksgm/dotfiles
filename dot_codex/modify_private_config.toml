@@ -116,11 +116,13 @@ if ! awk '
     order[5] = "model_reasoning_effort"
     order[6] = "service_tier"
     order[7] = "plan_mode_reasoning_effort"
+    order[8] = "model_context_window"
 
     managed["default_permissions"] = "default_permissions = \"workspace-agents-write\""
     managed["approval_policy"] = "approval_policy = \"never\""
     managed["personality"] = "personality = \"pragmatic\""
     managed["model"] = "model = \"gpt-6-astra\""
+    managed["model_context_window"] = "model_context_window = 1050000"
     managed["model_reasoning_effort"] = "model_reasoning_effort = \"low\""
     managed["service_tier"] = "service_tier = \"default\""
     managed["plan_mode_reasoning_effort"] = "plan_mode_reasoning_effort = \"high\""
@@ -143,7 +145,7 @@ if ! awk '
   }
 
   END {
-    for (i = 1; i <= 7; i++) {
+    for (i = 1; i <= 8; i++) {
       key = order[i]
       if (!seen[key]) {
         print managed[key]
