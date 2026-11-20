@@ -1,0 +1,15 @@
+# /bin/kill を単独で実行する場合に、承認なしのサンドボックス外実行を許可する。
+# PID・シグナルは限定しない。シェル全体や他のプロセス操作コマンドは許可しない。
+prefix_rule(
+    pattern = ["/bin/kill"],
+    decision = "allow",
+    match = [
+        "/bin/kill -TERM 12345",
+        "/bin/kill -0 12345",
+    ],
+    not_match = [
+        "/bin/rm example.txt",
+        "/usr/bin/pkill java",
+        "python3 -c 'import os; os.kill(12345, 15)'",
+    ],
+)
