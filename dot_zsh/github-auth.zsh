@@ -261,14 +261,42 @@ _github_auth_api_is_write() {
     esac
 }
 
+# Extract command words only; preserve the original argv for execution.
+# gh api payload/options must remain untouched for HTTP method classification.
+_github_auth_parse_gh_arguments() {
+    emulate -L zsh
+    gh_words=()
+    gh_api_arguments=()
+    while (( $# && ${#gh_words} < 3 )); do
+        case "$1" in
+            -R|--repo|--hostname)
+                shift
+                (( $# )) && shift
+                ;;
+            -R?*|--repo=*|--hostname=*) shift ;;
+            -*) break ;;
+            *)
+                gh_words+=("$1")
+                shift
+                if [[ "${gh_words[1]}" == api ]]; then
+                    gh_api_arguments=("$@")
+                    break
+                fi
+                ;;
+        esac
+    done
+}
+
 gh() {
     emulate -L zsh
     _github_auth_require_apps || return 1
     local app="$GHTKN_GIT_APP_READ"
-    if [[ "${1:-}" == api ]] && _github_auth_api_is_write "${@:2}"; then
+    local -a gh_words gh_api_arguments
+    _github_auth_parse_gh_arguments "$@"
+    if [[ "${gh_words[1]}" == api ]] && _github_auth_api_is_write "${gh_api_arguments[@]}"; then
         app="$GHTKN_GIT_APP_WRITE"
     fi
-    case "${1:-} ${2:-}" in
+    case "${gh_words[1]} ${gh_words[2]}" in
         'auth login')
             printf '%s\n' '認証には ghtkn auth を使ってください' >&2
             return 1
@@ -286,14 +314,38 @@ gh() {
             app="$GHTKN_GIT_APP_WRITE"
             ;;
         'issue create'|'issue edit'|'issue close'|'issue reopen'|\
-        'issue comment'|'issue delete'|'issue lock'|'issue unlock'|'issue transfer')
+        'issue comment'|'issue delete'|'issue lock'|'issue unlock'|'issue transfer'|\
+        'issue pin'|'issue unpin'|'issue develop')
             app="$GHTKN_GIT_APP_WRITE"
             ;;
-        'repo create'|'release create'|'release delete')
+        'repo create'|'repo new'|'repo fork'|'repo sync'|'repo edit'|\
+        'repo rename'|'repo archive'|'repo unarchive'|'repo delete'|\
+        'release create'|'release delete'|'release edit'|'release upload'|\
+        'release delete-asset'|\
+        'label create'|'label edit'|'label delete'|'label clone'|\
+        'secret set'|'secret delete'|'variable set'|'variable delete'|\
+        'discussion create'|'discussion edit'|'discussion comment'|\
+        'project create'|'project copy'|'project edit'|'project close'|\
+        'project delete'|'project field-create'|'project field-delete'|\
+        'project item-add'|'project item-create'|'project item-edit'|\
+        'project item-delete'|'project item-archive'|'project link'|\
+        'project unlink'|'project mark-template'|\
+        'gist create'|'gist edit'|'gist rename'|'gist delete'|\
+        'ssh-key add'|'ssh-key delete'|'gpg-key add'|'gpg-key delete'|\
+        'codespace create'|'codespace edit'|'codespace delete'|\
+        'codespace rebuild'|'codespace stop')
             app="$GHTKN_GIT_APP_WRITE"
             ;;
         'workflow run'|'workflow enable'|'workflow disable'|\
-        'run rerun'|'run cancel'|'run delete')
+        'run rerun'|'run cancel'|'run delete'|'cache delete')
+            app="$GHTKN_GIT_APP_WRITE"
+            ;;
+    esac
+    case "${gh_words[1]} ${gh_words[2]} ${gh_words[3]}" in
+        'repo autolink create'|'repo autolink delete'|\
+        'repo deploy-key add'|'repo deploy-key delete'|\
+        'codespace ports visibility'|\
+        'issue artifact create'|'issue artifact edit'|'issue artifact delete')
             app="$GHTKN_GIT_APP_WRITE"
             ;;
     esac

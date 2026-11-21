@@ -198,9 +198,22 @@ mise には独自変数の `GHTKN_GIT_APP_READ` / `GHTKN_GIT_APP_WRITE` を設�
 | `gh repo create` / `gh pr create` / `gh release create` / `gh release delete` | write。子 Git にも同じ App を渡す |
 | `gh pr edit` / `close` / `reopen` / `merge` / `review` / `comment` / `ready` / `lock` / `unlock` / `revert` / `update-branch` | write。子 Git にも同じ App を渡す |
 | `gh auth login` / `gh auth token` | 拒否。認証には `ghtkn auth` を使い、トークンを表示しない |
-| その他の gh 操作 | read。追加の書き込み操作が必要なら関数の分岐を追加する |
+| `gh repo new/fork/sync/edit/rename/archive/unarchive/delete`、`repo autolink create/delete`、`repo deploy-key add/delete` | write |
+| `gh release edit/upload/delete-asset`、`issue pin/unpin/develop`、`issue artifact create/edit/delete`、`label create/edit/delete/clone` | write |
+| `gh workflow run/enable/disable`、`run rerun/cancel/delete`、`cache delete` | write |
+| `gh secret set/delete`、`variable set/delete`、`discussion create/edit/comment` | write |
+| `gh project` の create/copy/edit/close/delete、field-create/field-delete、item-add/item-create/item-edit/item-delete/item-archive、link/unlink/mark-template | write |
+| `gh gist create/edit/rename/delete`、`ssh-key add/delete`、`gpg-key add/delete` | write |
+| `gh codespace create/edit/delete/rebuild/stop`、`codespace ports visibility` | write |
+| その他の gh 操作（任意の alias / extension を含む） | read。追加の書き込み操作が必要なら関数の分岐を追加する |
 | `ghq get` / `ghq clone`（`--update` を含む） | read。`GH_TOKEN` と、子 Git の credential helper 用 App を渡す |
 | その他の ghq 操作 | 環境変数の確認・App の選択をせず、そのまま実行 |
+
+`gh` の判定ではコマンド前・階層間の `-R` / `--repo` / `--hostname` を読み飛ばし、実行時には元の引数をそのまま渡す。任意の alias や extension の内部処理は解析しない。`gh api` は HTTP メソッドで選択し、GET / HEAD / OPTIONS は read、それ以外は write。GraphQL の POST は query でも write となる（本文や stdin は解析しない）。
+
+write App の選択は GitHub 側の権限を追加しない。作成は Repository creation、push・release 更新は Contents、PR 操作は Pull requests、Issue 操作は Issues、Actions 操作は Actions の書き込み権限を用途に応じて設定する。リポジトリ管理、Secrets / Variables、Projects、アカウント操作などは対象 API・オプションに応じた権限も必要。read App に書き込み権限を追加して回避しない。
+
+分類の回帰検証は `python3 -m unittest discover -s tests -p 'test_github_auth_gh.py'` で実行できる。実際の認証や GitHub への変更は行わない。
 
 `gitw` / `ghw` と mise wrappers は定義しない。App は呼び出し元シェルの環境変数で選ぶので、`git -C` や `gh -R` で別 org を指定しても自動で切り替わらない。対象 org のディレクトリへ移動してから実行する。
 
