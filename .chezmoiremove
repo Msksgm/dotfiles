@@ -9,3 +9,7 @@
 #
 # 全マシンが apply 済みになったらエントリは削除してよい。
 .agents/skills-local/plan-to-html
+
+# CLI ツール管理ルールは ~/.codex/AGENTS.md に一本化し、~/.claude/CLAUDE.md から
+# @~/.codex/AGENTS.md で読み込むようにした。旧 Claude 専用の展開先を取り除く。
+.claude/rules/tool-management.md

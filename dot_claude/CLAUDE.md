@@ -1,8 +1,9 @@
 # Personal Claude Code rules
 
 全プロジェクト共通のコーディング規約と Claude Code 運用ルール。`@`-import で `~/.claude/rules/` 配下を読み込む。
+Codex と共通の個人指示（思考・判断の方針、CLI ツール管理、worktree、GitHub 認証など）は `~/.codex/AGENTS.md` を正本とし、ここから読み込む。
 
-@rules/tool-management.md
+@~/.codex/AGENTS.md
 @rules/coding-general.md
 @rules/coding-ddd.md
 @rules/coding-style.md

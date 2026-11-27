@@ -112,7 +112,7 @@ source 側にファイルが残っていると死蔵されるので、`.chezmoii
 
 ## Claude Code の user-level 設定 (`dot_claude/`)
 
-- `dot_claude/CLAUDE.md` (→ `~/.claude/CLAUDE.md`) — 全プロジェクト共通の指示。`@rules/*.md` で `~/.claude/rules/` 配下を `@`-import する。
+- `dot_claude/CLAUDE.md` (→ `~/.claude/CLAUDE.md`) — 全プロジェクト共通の指示。`@~/.codex/AGENTS.md` で Codex と共通の個人指示（`dot_codex/AGENTS.md.tmpl` が正本）を、`@rules/*.md` で `~/.claude/rules/` 配下を `@`-import する。Codex と共有したい個人ルールは `dot_codex/AGENTS.md.tmpl` 側に書く。
 - `dot_claude/agents/*.md` (→ `~/.claude/agents/*.md`) — user-level subagent (architect / code-reviewer / pm-reviewer / qa-reviewer)。frontmatter に `name` / `description` / `tools` / `model` を持つ通常の Markdown。skills のような symlink/lock 機構の対象外で、ファイルを置くだけで反映される。
 - `dot_claude/rules/*.md` (→ `~/.claude/rules/*.md`) — コーディング規約 docs。`dot_claude/CLAUDE.md` から参照される。
 

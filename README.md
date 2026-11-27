@@ -30,13 +30,12 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 | `dot_config/herdr/config.toml` | `~/.config/herdr/config.toml`（キーバインドを `dot_tmux.conf` に合わせた herdr 設定。prefix=`C-j`、分割 `\|`/`-`、ペイン移動 h/j/k/l、タブ移動 `C-h`/`C-l`、デタッチ `prefix+d`、workspace 作成 `prefix+Shift+C`、workspace リネーム `prefix+Space`、pane を新 tab に切り出し `prefix+!`（tmux の break-pane 相当。組み込みアクションが無いため `herdr pane move --new-tab` を shell command で呼ぶ）。加えて `[ui.sidebar.agents]` で左サイドバーの agent 行に pane ID (`wG:pB`) を表示する。この `$pane_id` はカスタムトークンで、**値の供給は `dot_zsh/herdr.zsh` に依存する** — 片方だけ消すと ID が空欄になる） |
 | `dot_config/herdr/executable_rename-workspace.sh` | `~/.config/herdr/rename-workspace.sh`（実行ビット付き。focused workspace を git リポジトリ名にリネームする。tmux の `~/.tmux-rename-session` の herdr 版で、config.toml の `[[keys.command]]` から `prefix+Space` で呼ぶ） |
 | `dot_codex/modify_private_config.toml` | `~/.codex/config.toml`（mode 0600 の chezmoi `modify_` スクリプト。model / reasoning effort / personality / approval / service tier / `.agents`・`.codex`・`.git` 書き込みを含む `workspace-agents-write` permission profile だけを強制し、Codex が書き換える project trust / notify / Desktop / plugin / MCP / hook 等は実ファイルから保持する） |
-| `dot_codex/AGENTS.md.tmpl` | `~/.codex/AGENTS.md`（全プロジェクト共通の Codex 指示。非対話シェルの GitHub 認証手順を記載し、CLI ツール管理ルールを `.chezmoitemplates/cli-tool-management.md` から展開） |
+| `dot_codex/AGENTS.md.tmpl` | `~/.codex/AGENTS.md`（全プロジェクト共通の Codex 指示。非対話シェルの GitHub 認証手順を記載し、CLI ツール管理ルールを `.chezmoitemplates/cli-tool-management.md` から展開。Claude Code も `~/.claude/CLAUDE.md` から `@~/.codex/AGENTS.md` で読み込む） |
 | `dot_claude/modify_settings.json.tmpl` | `~/.claude/settings.json`（chezmoi `modify_` スクリプト。自分が管理するキー（env/permissions/model/hooks/deny 等）だけ強制し、Claude Code が実行時に書き換えるキー（`enabledPlugins`/`extraKnownMarketplaces`/`feedbackSurveyState`）は実ファイルから保持してドリフトを防ぐ。herdr フックパスは `{{ .chezmoi.homeDir }}` で展開） |
 | `dot_claude/hooks/executable_herdr-agent-state.sh` | `~/.claude/hooks/herdr-agent-state.sh`（実行ビット付き。settings.json の SessionStart フックが呼ぶ herdr の Claude 連携スクリプト。**herdr が自動管理し integration 更新時に上書きするため source はスナップショット**。更新時は再 `cp` で同期する） |
-| `dot_claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
+| `dot_claude/CLAUDE.md` | `~/.claude/CLAUDE.md`（`@~/.codex/AGENTS.md` で Codex と共通の個人指示を、`@rules/*.md` でコーディング規約を読み込む） |
 | `dot_claude/agents/*.md` | `~/.claude/agents/*.md` (user-level subagent) |
 | `dot_claude/rules/*.md` | `~/.claude/rules/*.md` (CLAUDE.md から `@`-import するコーディング規約) |
-| `dot_claude/rules/tool-management.md.tmpl` | `~/.claude/rules/tool-management.md`（Claude Code 用の CLI ツール管理ルール。同じ共通テンプレートから展開） |
 | `dot_claude/rules/golang/*.md` | `~/.claude/rules/golang/*.md` (Go 固有ルール。`@`-import せず参照用) |
 | `dot_claude/rules/kotlin/*.md` | `~/.claude/rules/kotlin/*.md` (Kotlin 固有ルール。`@`-import せず参照用) |
 | `dot_claude/plugins/config.json` | `~/.claude/plugins/config.json` |
@@ -54,7 +53,7 @@ Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/).
 
 > **Note (Codex と git-wt):** 対話 Zsh の `codex` 関数は、`codex`・`codex resume`・`codex fork` の起動時に対象 checkout の `wt.basedir` を読み、`{gitroot}` と相対パスを元リポジトリ基準で解決して作成先だけを追加で許可する。現在の設定なら `../{gitroot}-worktrees` が対象になる。未作成のディレクトリも指定でき、起動時には作成しない。`--cd` / `-C` を指定した場合はその checkout を使う。別の checkout の会話を再開する場合も `--cd` で対象を明示する。共有 `.git` も許可するため、linked worktree からの起動でも Git 操作ができる。Git の読み取りは org の mise 環境と既存の認証関数を使い、失敗時は起動を停止する。`--remote`、Git checkout 外、ヘルプ、`exec` などの管理・非対話サブコマンド、および `command codex` / バイナリ直接起動は自動追加の対象外。反映はユーザーが `chezmoi apply ~/.zsh/codex.zsh` と `source ~/.zsh/codex.zsh` を実行し、その後 Codex を起動し直す。
 
-> **Note (共通 CLI ツール管理ルール):** `.chezmoitemplates/cli-tool-management.md` を正本とし、`~/.codex/AGENTS.md` と `~/.claude/rules/tool-management.md` の両方へ同じ内容を展開する。ルール変更時は各出力テンプレートではなく共通テンプレートを編集する。
+> **Note (共通 CLI ツール管理ルール):** `.chezmoitemplates/cli-tool-management.md` を正本とし、`~/.codex/AGENTS.md` へ展開する。Claude Code は `~/.claude/CLAUDE.md` の `@~/.codex/AGENTS.md` で同じファイルを読むため、Claude 専用の展開先は持たない。ルール変更時は出力テンプレートではなく共通テンプレートを編集する。
 
 > **Note (agent skills):** skill の導入チャネルは2種類ある。① **GitHub lock チャネル**: [`skills`](https://github.com/vercel-labs/skills) CLI で導入する skill の正本は `~/.agents/skills/` (store)。`~/.claude/skills` はそこへの symlink で、Claude Code から同じ skill を共有する。`~/.agents/.skill-lock.json` (どの GitHub ソースから入れたかの記録) を管理対象にしており、これが変わると `run_onchange_after_install-skills.sh` が `chezmoi apply` 時に各 skill を `skills add` で再取得する (Brewfile と同じ仕組み)。skill を追加/削除したら `cp ~/.agents/.skill-lock.json dot_agents/dot_skill-lock.json` で lock を source へ同期してコミットする。② **自作 skill チャネル**: `dot_agents/skills-local/<name>/` に `SKILL.md`（とサポートファイル）を置き、`run_onchange_after_install-local-skills.sh` が `chezmoi apply` 時に `~/.agents/skills/<name>/` へコピーする。GitHub チャネルは lock 外のフォルダを削除しないため両チャネルは共存できる。store 本体 (`~/.agents/skills/**`) は再生成可能なので `.chezmoiignore` で除外（自作スキルの source は `dot_agents/skills-local/` に残る）。自作 skill を**削除**するときは source から消すだけでは足りず、`run_onchange_after_install-local-skills.sh.tmpl` の `REMOVED_SKILLS` 配列（store 側の実体を除去）と `.chezmoiremove`（`~/.agents/skills-local/` 側の残骸を除去。残すと毎回再インストールされる）の2箇所に追記する。
 
@@ -260,7 +259,7 @@ MISE_AUTO_INSTALL=0 mise exec -- /bin/zsh -f -c \
   github-auth gh repo view --json nameWithOwner
 ```
 
-末尾のコマンドと引数を `git`・`gh`・`ghq` の必要な操作に置き換える。読み込みや認証が失敗した場合は停止し、別の認証経路では回避しない。指示は `dot_codex/AGENTS.md.tmpl` で管理し、Claude Code や各プロジェクトの指示ファイルには追加しない。
+末尾のコマンドと引数を `git`・`gh`・`ghq` の必要な操作に置き換える。読み込みや認証が失敗した場合は停止し、別の認証経路では回避しない。指示は `dot_codex/AGENTS.md.tmpl` で管理し、Claude Code は `~/.claude/CLAUDE.md` から `@~/.codex/AGENTS.md` で同じ指示を読む。各プロジェクトの指示ファイルには追加しない。
 
 ### 旧ラッパーからの移行
 
